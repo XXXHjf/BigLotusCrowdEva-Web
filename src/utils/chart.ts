@@ -3,8 +3,8 @@
  */
 
 import type { ChartOption, CrowdDataPoint } from '../types'
-import { CHART_DEFAULTS } from '../constants'
-import { formatDate, DATE_FORMATS } from './date'
+import { CHART_DEFAULTS, DATE_FORMATS } from '../constants'
+import { formatDate } from './date'
 
 /**
  * 创建基础折线图配置
@@ -182,11 +182,17 @@ export function createResponsiveChartOption(baseOption: ChartOption): ChartOptio
       left: isMobile ? '5%' : '3%',
       right: isMobile ? '5%' : '4%',
     },
-    title: {
-      ...baseOption.title,
-      textStyle: {
-        fontSize: isMobile ? 14 : 16,
-      },
-    },
+    title: baseOption.title
+      ? {
+          ...(baseOption.title as Record<string, unknown>),
+          textStyle: {
+            fontSize: isMobile ? 14 : 16,
+          },
+        }
+      : {
+          textStyle: {
+            fontSize: isMobile ? 14 : 16,
+          },
+        },
   }
 }

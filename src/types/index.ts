@@ -62,13 +62,14 @@ export interface CrowdDataPoint {
  * 图表配置项
  */
 export interface ChartOption {
-  title?: string
+  title?: unknown
   xAxis?: unknown
   yAxis?: unknown
   series?: unknown[]
   tooltip?: unknown
   legend?: unknown
   grid?: unknown
+  visualMap?: unknown
 }
 
 /**

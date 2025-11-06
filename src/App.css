@@ -1,42 +1,162 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+/**
+ * 应用样式
+ */
+
+.app-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f5f7fa 0%, #e8ecf1 100%);
+}
+
+.app-main {
+  max-width: 100%;
+  margin: 0;
+  padding: 12px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 280px;
+  grid-template-rows: 1fr 1fr;
+  gap: 12px;
+  height: 100%;
+}
+
+.chart-card {
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 8px;
+  transition: box-shadow 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* 热力图：左上，占据较大空间 */
+.chart-heatmap {
+  grid-row: 1;
+  grid-column: 1;
+}
+
+/* 折线图：右上 */
+.chart-line {
+  grid-row: 1;
+  grid-column: 2;
+}
+
+/* 关系图：左下 */
+.chart-graph {
+  grid-row: 2;
+  grid-column: 1;
+}
+
+/* 子图：右下 */
+.chart-subgraph {
+  grid-row: 2;
+  grid-column: 2;
+}
+
+/* 控制面板：右侧，占据整列 */
+.chart-control {
+  grid-row: 1 / 3;
+  grid-column: 3;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 系统标题展示块 */
+.system-title {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid #e0e0e0;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.system-title-main {
+  font-size: 13px;
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 4px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.system-title-sub {
+  font-size: 10px;
+  color: #7f8c8d;
+  font-weight: 300;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+/* 响应式设计 */
+@media (max-width: 1400px) {
+  .app-main {
+    padding: 10px;
+  }
+
+  .chart-grid {
+    gap: 10px;
+    grid-template-columns: 1fr 1fr 260px;
   }
 }
 
-.card {
-  padding: 2em;
+@media (max-width: 1200px) {
+  .chart-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .chart-heatmap {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .chart-line {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .chart-graph {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .chart-subgraph {
+    grid-row: 2;
+    grid-column: 2;
+  }
+
+  .chart-control {
+    grid-row: 3;
+    grid-column: 1 / 3;
+  }
 }
 
-.read-the-docs {
-  color: #888;
+@media (max-width: 768px) {
+  .app-main {
+    padding: 8px;
+    height: 100vh;
+  }
+
+  .chart-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 8px;
+  }
+
+  .chart-heatmap,
+  .chart-line,
+  .chart-graph,
+  .chart-subgraph,
+  .chart-control {
+    grid-row: auto;
+    grid-column: 1;
+  }
+
+  .chart-card {
+    padding: 8px;
+  }
 }
