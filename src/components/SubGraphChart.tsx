@@ -12,7 +12,7 @@ interface SubGraphChartProps {
   centerNodeLabel?: string
 }
 
-export function SubGraphChart({ nodes, edges, centerNodeId, centerNodeLabel }: SubGraphChartProps) {
+export function SubGraphChart({ nodes, edges, centerNodeId }: SubGraphChartProps) {
   if (nodes.length === 0) {
     return (
       <div

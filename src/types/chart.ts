@@ -37,24 +37,27 @@ export interface ModelPrediction {
  */
 export interface GraphNode {
   id: string
-  name: string
+  name?: string
   label: string
   value: number // 当前人流量
   x?: number
   y?: number
   category?: number
+  level?: 'safe' | 'warning' | 'danger' | 'normal'
+  style?: string
 }
 
 /**
  * 关系图边
  */
 export interface GraphEdge {
-  id: string
+  id?: string
   source: string
   target: string
   value: number // 关系强度或影响系数
   label?: string
   type?: 'flow' | 'influence' // 流向关系或影响关系
+  style?: string
 }
 
 /**

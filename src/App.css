@@ -1,162 +1,90 @@
-/**
- * 应用样式
- */
-
-.app-container {
-  min-height: 100vh;
-  background: linear-gradient(to bottom, #f5f7fa 0%, #e8ecf1 100%);
+/* 全局共用的展示样式 */
+.chart-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--muted);
+  border: 1px dashed rgba(76, 195, 255, 0.25);
+  border-radius: 10px;
 }
 
-.app-main {
-  max-width: 100%;
-  margin: 0;
-  padding: 12px;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.chart-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 280px;
-  grid-template-rows: 1fr 1fr;
-  gap: 12px;
+.page-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   height: 100%;
 }
 
-.chart-card {
-  background: #fff;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  padding: 8px;
-  transition: box-shadow 0.3s ease;
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.page-title {
+  margin: 0;
+  color: #e8f4ff !important;
+}
+
+.page-subtitle {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.panel-card {
+  background: var(--bg-panel);
+  border: 1px solid rgba(76, 195, 255, 0.12) !important;
+  box-shadow: 0 20px 40px rgba(4, 9, 30, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.panel-card .ant-card-head {
+  border-color: rgba(76, 195, 255, 0.12);
+}
+
+.panel-card .ant-card-head-title {
+  color: #e8f4ff;
+  font-weight: 600;
+}
+
+.panel-card .ant-card-body {
+  color: #d8e6ff;
+}
+
+.kpi-card {
+  position: relative;
   overflow: hidden;
+  background: linear-gradient(135deg, rgba(76, 195, 255, 0.12), rgba(126, 87, 194, 0.08));
+}
+
+.kpi-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.14), transparent 45%);
+}
+
+.kpi-card .ant-statistic-title {
+  color: var(--muted);
+}
+
+.kpi-card .ant-statistic-content {
+  color: #e8f4ff;
+}
+
+.kpi-meta {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
 }
 
-.chart-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+.chart-card-body {
+  padding: 0 !important;
+  height: 100%;
 }
 
-/* 热力图：左上，占据较大空间 */
-.chart-heatmap {
-  grid-row: 1;
-  grid-column: 1;
-}
-
-/* 折线图：右上 */
-.chart-line {
-  grid-row: 1;
-  grid-column: 2;
-}
-
-/* 关系图：左下 */
-.chart-graph {
-  grid-row: 2;
-  grid-column: 1;
-}
-
-/* 子图：右下 */
-.chart-subgraph {
-  grid-row: 2;
-  grid-column: 2;
-}
-
-/* 控制面板：右侧，占据整列 */
-.chart-control {
-  grid-row: 1 / 3;
-  grid-column: 3;
-  display: flex;
-  flex-direction: column;
-}
-
-/* 系统标题展示块 */
-.system-title {
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid #e0e0e0;
-  text-align: center;
-}
-
-.system-title-main {
-  font-size: 13px;
-  font-weight: 500;
-  color: #2c3e50;
-  margin-bottom: 4px;
-}
-
-.system-title-sub {
-  font-size: 10px;
-  color: #7f8c8d;
-  font-weight: 300;
-}
-
-/* 响应式设计 */
-@media (max-width: 1400px) {
-  .app-main {
-    padding: 10px;
-  }
-
-  .chart-grid {
-    gap: 10px;
-    grid-template-columns: 1fr 1fr 260px;
-  }
-}
-
-@media (max-width: 1200px) {
-  .chart-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto;
-  }
-
-  .chart-heatmap {
-    grid-row: 1;
-    grid-column: 1;
-  }
-
-  .chart-line {
-    grid-row: 1;
-    grid-column: 2;
-  }
-
-  .chart-graph {
-    grid-row: 2;
-    grid-column: 1;
-  }
-
-  .chart-subgraph {
-    grid-row: 2;
-    grid-column: 2;
-  }
-
-  .chart-control {
-    grid-row: 3;
-    grid-column: 1 / 3;
-  }
-}
-
-@media (max-width: 768px) {
-  .app-main {
-    padding: 8px;
-    height: 100vh;
-  }
-
-  .chart-grid {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    gap: 8px;
-  }
-
-  .chart-heatmap,
-  .chart-line,
-  .chart-graph,
-  .chart-subgraph,
-  .chart-control {
-    grid-row: auto;
-    grid-column: 1;
-  }
-
-  .chart-card {
-    padding: 8px;
-  }
-}

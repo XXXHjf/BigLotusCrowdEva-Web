@@ -1,0 +1,96 @@
+/* src/layouts/MainLayout.css */
+.main-layout {
+  min-height: 100vh;
+  background: transparent;
+}
+
+.main-sider {
+  background: rgba(10, 19, 43, 0.96) !important;
+  border-right: 1px solid rgba(76, 195, 255, 0.08);
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.35);
+}
+
+.main-sider .ant-menu {
+  background: transparent;
+}
+
+.logo-vertical {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0f2a4d 0%, #0b1c36 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.6px;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.logo-text {
+  transition: opacity 0.3s;
+  margin-left: 12px;
+  color: #e8f4ff;
+}
+
+.main-header {
+  background: transparent !important;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-right: 20px;
+}
+
+.header-subtitle {
+  color: rgba(232, 244, 255, 0.75);
+  font-size: 12px;
+  letter-spacing: 0.4px;
+}
+
+.trigger-btn {
+  font-size: 16px;
+  width: 64px;
+  height: 64px;
+}
+
+.main-content {
+  margin: 24px 16px;
+  padding: 24px;
+  min-height: 280px;
+  background: linear-gradient(145deg, rgba(15, 28, 61, 0.92), rgba(9, 17, 35, 0.88));
+  border: 1px solid rgba(76, 195, 255, 0.08);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  overflow: auto;
+  position: relative;
+}
+
+.main-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(76, 195, 255, 0.08), transparent 35%);
+  pointer-events: none;
+}
+
+.main-content > * {
+  position: relative;
+  z-index: 1;
+}

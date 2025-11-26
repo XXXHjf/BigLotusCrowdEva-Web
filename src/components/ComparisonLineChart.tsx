@@ -11,7 +11,7 @@ interface ComparisonLineChartProps {
   zoneLabel?: string
 }
 
-export function ComparisonLineChart({ predictions, zoneLabel }: ComparisonLineChartProps) {
+export function ComparisonLineChart({ predictions }: ComparisonLineChartProps) {
   if (predictions.length === 0) {
     return (
       <div
