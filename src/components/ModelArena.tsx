@@ -27,7 +27,7 @@ const ModelArena = ({ data }: ModelArenaProps) => {
 
   return (
     <Card className="panel-card" bordered={false}>
-      <Title level={4}>模型准确率竞技场</Title>
+      <Title level={4}>模型准确率雷达</Title>
       <Row gutter={[32, 16]} align="middle">
         <Col span={16}>
           <Row>

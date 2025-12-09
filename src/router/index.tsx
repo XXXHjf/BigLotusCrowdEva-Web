@@ -1,5 +1,6 @@
 // src/router/index.tsx
 import type { ReactElement } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   createBrowserRouter,
   RouterProvider,
@@ -14,6 +15,10 @@ import OverviewPage from '../pages/dashboard/OverviewPage'
 import MonitorPage from '../pages/dashboard/MonitorPage'
 import PredictionPage from '../pages/dashboard/PredictionPage'
 import SimulationPage from '../pages/dashboard/SimulationPage'
+import {
+  ThemeModeContext,
+  type ThemeMode,
+} from '../context/ThemeContext'
 
 // 私有路由组件
 const PrivateRoute = ({ children }: { children: ReactElement }) => {
@@ -56,55 +61,90 @@ const router = createBrowserRouter([
   },
 ])
 
-const AppRouter = () => {
-  const cockpitTheme = {
-    algorithm: antdTheme.darkAlgorithm,
+const buildTheme = (mode: ThemeMode) => {
+  const isDark = mode === 'dark'
+  return {
+    algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
     token: {
       colorPrimary: '#4cc3ff',
       colorInfo: '#4cc3ff',
-      colorBgBase: '#070f1f',
-      colorBgContainer: 'rgba(15, 28, 61, 0.9)',
-      colorBorder: '#1f2d4d',
-      colorTextBase: '#d8e6ff',
-      colorTextSecondary: '#9fb3d9',
+      colorBgBase: isDark ? '#070f1f' : '#f5f7fb',
+      colorBgContainer: isDark ? 'rgba(15, 28, 61, 0.9)' : '#ffffff',
+      colorBorder: isDark ? '#1f2d4d' : '#dce4f2',
+      colorTextBase: isDark ? '#d8e6ff' : '#1f2d3d',
+      colorTextSecondary: isDark ? '#9fb3d9' : '#4a5a73',
       fontFamily:
         "'DIN Alternate', 'Segoe UI', 'HarmonyOS Sans', 'PingFang SC', sans-serif",
       borderRadius: 12,
     },
     components: {
       Layout: {
-        bodyBg: '#070f1f',
-        headerBg: 'rgba(15, 28, 61, 0.95)',
-        siderBg: 'rgba(10, 19, 43, 0.96)',
+        bodyBg: isDark ? '#070f1f' : '#eef2f8',
+        headerBg: isDark ? 'rgba(15, 28, 61, 0.95)' : '#ffffff',
+        siderBg: isDark ? 'rgba(10, 19, 43, 0.96)' : '#ffffff',
       },
       Card: {
-        colorBgContainer: 'rgba(15, 28, 61, 0.9)',
+        colorBgContainer: isDark ? 'rgba(15, 28, 61, 0.9)' : '#ffffff',
         borderRadiusLG: 14,
-        colorBorderSecondary: '#1f2d4d',
+        colorBorderSecondary: isDark ? '#1f2d4d' : '#dce4f2',
       },
       Menu: {
-        itemColor: '#9fb3d9',
+        itemColor: isDark ? '#9fb3d9' : '#4a5a73',
         itemSelectedColor: '#4cc3ff',
         itemBg: 'transparent',
-        itemSelectedBg: 'rgba(76, 195, 255, 0.12)',
-        itemHoverColor: '#e6f4ff',
+        itemSelectedBg: isDark ? 'rgba(76, 195, 255, 0.12)' : '#e6f4ff',
+        itemHoverColor: isDark ? '#e6f4ff' : '#1f2d3d',
       },
       Button: {
         controlHeight: 40,
         colorBorder: '#4cc3ff',
       },
       Typography: {
-        colorTextHeading: '#e8f4ff',
+        colorTextHeading: isDark ? '#e8f4ff' : '#1f2d3d',
       },
     },
   }
+}
 
+const AppRouter = () => {
+  const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
+    const stored = localStorage.getItem('themeMode') as ThemeMode | null
+    const initial = stored || 'light'
+    // 设置初始 data-theme，避免浅色模式首次渲染时的颜色闪烁
+    if (typeof document !== 'undefined') {
+      document.documentElement.setAttribute('data-theme', initial)
+    }
+    return initial
+  })
+
+  const toggleMode = useCallback(() => {
+    setThemeMode((prev) => {
+      const next = prev === 'dark' ? 'light' : 'dark'
+      localStorage.setItem('themeMode', next)
+      return next
+    })
+  }, [])
+
+  const cockpitTheme = useMemo(() => buildTheme(themeMode), [themeMode])
+  const themeContextValue = useMemo(
+    () => ({
+      mode: themeMode,
+      toggleMode,
+    }),
+    [themeMode, toggleMode],
+  )
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', themeMode)
+  }, [themeMode])
   return (
-    <ConfigProvider locale={zhCN} theme={cockpitTheme}>
-      <AntdApp style={{ height: '100%' }}>
-        <RouterProvider router={router} />
-      </AntdApp>
-    </ConfigProvider>
+    <ThemeModeContext.Provider value={themeContextValue}>
+      <ConfigProvider locale={zhCN} theme={cockpitTheme}>
+        <AntdApp style={{ height: '100%' }}>
+          <RouterProvider router={router} />
+        </AntdApp>
+      </ConfigProvider>
+    </ThemeModeContext.Provider>
   )
 }
 

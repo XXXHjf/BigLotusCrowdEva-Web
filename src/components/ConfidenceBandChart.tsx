@@ -1,6 +1,7 @@
 // src/components/ConfidenceBandChart.tsx
 import ReactECharts from 'echarts-for-react'
 import type { EChartsOption } from 'echarts'
+import { useThemeMode } from '../context/ThemeContext'
 
 interface ConfidenceBandChartProps {
   data: {
@@ -12,6 +13,11 @@ interface ConfidenceBandChartProps {
 }
 
 const ConfidenceBandChart = ({ data }: ConfidenceBandChartProps) => {
+  const { mode } = useThemeMode()
+  const textColor = mode === 'dark' ? '#d8e6ff' : '#1f2d3d'
+  const axisColor = mode === 'dark' ? '#9fb3d9' : '#4a5a73'
+  const gridColor = mode === 'dark' ? 'rgba(76, 195, 255, 0.2)' : '#e2e8f2'
+
   // 防御性守卫，确保数据有效
   if (!data || !data.historyData || !data.predictionData) {
     return null; // 或者返回一个加载中的提示
@@ -32,7 +38,7 @@ const ConfidenceBandChart = ({ data }: ConfidenceBandChartProps) => {
     },
     legend: {
       data: ['历史数据', '预测数据', '置信区间'],
-      textStyle: { color: '#d8e6ff' },
+      textStyle: { color: textColor },
     },
     grid: {
       left: '3%',
@@ -45,8 +51,8 @@ const ConfidenceBandChart = ({ data }: ConfidenceBandChartProps) => {
         type: 'category',
         boundaryGap: false,
         data: xAxisData,
-        axisLine: { lineStyle: { color: 'rgba(76, 195, 255, 0.35)' } },
-        axisLabel: { color: '#9fb3d9' },
+        axisLine: { lineStyle: { color: axisColor } },
+        axisLabel: { color: axisColor },
         splitLine: { show: false },
       },
     ],
@@ -54,10 +60,10 @@ const ConfidenceBandChart = ({ data }: ConfidenceBandChartProps) => {
       {
         type: 'value',
         name: '人流量',
-        axisLine: { lineStyle: { color: 'rgba(76, 195, 255, 0.35)' } },
-        axisLabel: { color: '#9fb3d9' },
+        axisLine: { lineStyle: { color: axisColor } },
+        axisLabel: { color: axisColor },
         splitLine: {
-          lineStyle: { color: 'rgba(255, 255, 255, 0.05)' },
+          lineStyle: { color: gridColor },
         },
       },
     ],

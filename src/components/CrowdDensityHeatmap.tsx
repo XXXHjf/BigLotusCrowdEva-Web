@@ -2,6 +2,7 @@
 import { useMemo } from 'react'
 import ReactECharts from 'echarts-for-react'
 import type { EChartsOption } from 'echarts'
+import { useThemeMode } from '../context/ThemeContext'
 
 const zones = [
   { id: 'north', label: '北广场' },
@@ -35,6 +36,15 @@ const generateMockData = (times: Date[]) => {
 }
 
 const CrowdDensityHeatmap = () => {
+  const { mode } = useThemeMode()
+  const textColor = mode === 'dark' ? '#d8e6ff' : '#1f2d3d'
+  const axisColor = mode === 'dark' ? '#9fb3d9' : '#4a5a73'
+  const gridLineColor = mode === 'dark' ? 'rgba(76, 195, 255, 0.35)' : '#dce4f2'
+  const visualColors =
+    mode === 'dark'
+      ? ['#0a1c36', '#0f5b9c', '#4cc3ff', '#7ef6ff', '#ff9f7f']
+      : ['#d7e9ff', '#8ecbff', '#4cc3ff', '#ffb48f', '#ff7f7f']
+
   const times = useMemo(() => buildTimeline(), [])
   const data = useMemo(() => generateMockData(times), [times])
 
@@ -66,10 +76,10 @@ const CrowdDensityHeatmap = () => {
         ).padStart(2, '0')}`
       }),
       axisLabel: {
-        color: '#9fb3d9',
+        color: axisColor,
       },
       axisLine: {
-        lineStyle: { color: 'rgba(76, 195, 255, 0.35)' },
+        lineStyle: { color: gridLineColor },
       },
       splitArea: { show: false },
     },
@@ -77,10 +87,10 @@ const CrowdDensityHeatmap = () => {
       type: 'category',
       data: zones.map((z) => z.label),
       axisLabel: {
-        color: '#d8e6ff',
+        color: textColor,
       },
       axisLine: {
-        lineStyle: { color: 'rgba(76, 195, 255, 0.35)' },
+        lineStyle: { color: gridLineColor },
       },
       splitArea: { show: false },
     },
@@ -92,10 +102,10 @@ const CrowdDensityHeatmap = () => {
       right: 0,
       top: 'middle',
       inRange: {
-        color: ['#0a1c36', '#0f5b9c', '#4cc3ff', '#7ef6ff', '#ff9f7f'],
+        color: visualColors,
       },
       text: ['高', '低'],
-      textStyle: { color: '#d8e6ff' },
+      textStyle: { color: textColor },
       itemHeight: 140,
       itemWidth: 12,
       borderColor: 'rgba(76, 195, 255, 0.25)',

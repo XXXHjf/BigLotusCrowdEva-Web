@@ -25,7 +25,7 @@
 
 .page-title {
   margin: 0;
-  color: #e8f4ff !important;
+  color: var(--text-strong, #e8f4ff) !important;
 }
 
 .page-subtitle {
@@ -41,23 +41,36 @@
   backdrop-filter: blur(4px);
 }
 
+:root[data-theme='light'] .panel-card {
+  border: 1px solid #dce4f2 !important;
+  box-shadow: 0 16px 36px rgba(31, 45, 61, 0.12);
+}
+
 .panel-card .ant-card-head {
   border-color: rgba(76, 195, 255, 0.12);
 }
 
+:root[data-theme='light'] .panel-card .ant-card-head {
+  border-color: #e6ecf5;
+}
+
 .panel-card .ant-card-head-title {
-  color: #e8f4ff;
+  color: var(--text-strong, #e8f4ff);
   font-weight: 600;
 }
 
 .panel-card .ant-card-body {
-  color: #d8e6ff;
+  color: var(--text-base, #d8e6ff);
 }
 
 .kpi-card {
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, rgba(76, 195, 255, 0.12), rgba(126, 87, 194, 0.08));
+}
+
+:root[data-theme='light'] .kpi-card {
+  background: linear-gradient(135deg, rgba(76, 195, 255, 0.12), rgba(22, 119, 255, 0.08));
 }
 
 .kpi-card::after {
@@ -73,7 +86,7 @@
 }
 
 .kpi-card .ant-statistic-content {
-  color: #e8f4ff;
+  color: var(--text-strong, #e8f4ff);
 }
 
 .kpi-meta {
@@ -87,4 +100,3 @@
   padding: 0 !important;
   height: 100%;
 }
-

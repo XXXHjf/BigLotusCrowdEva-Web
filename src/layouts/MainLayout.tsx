@@ -1,6 +1,6 @@
 // src/layouts/MainLayout.tsx
 import { useState } from 'react'
-import { Layout, Menu, Button, theme, Typography, Avatar } from 'antd'
+import { Layout, Menu, Button, theme, Typography, Avatar, Tooltip } from 'antd'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import {
   MenuFoldOutlined,
@@ -10,8 +10,11 @@ import {
   DotChartOutlined,
   LineChartOutlined,
   ExperimentOutlined,
+  MoonOutlined,
+  SunOutlined,
 } from '@ant-design/icons'
 import './MainLayout.css'
+import { useThemeMode } from '../context/ThemeContext'
 
 const { Header, Sider, Content } = Layout
 const { Title } = Typography
@@ -43,6 +46,7 @@ const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false)
   const navigate = useNavigate()
   const location = useLocation()
+  const { mode, toggleMode } = useThemeMode()
 
   const {
     token: { borderRadiusLG },
@@ -58,14 +62,19 @@ const MainLayout = () => {
   }
 
   return (
-    <Layout className="main-layout">
-      <Sider trigger={null} collapsible collapsed={collapsed} className="main-sider">
+    <Layout className={`main-layout ${mode}-mode`}>
+      <Sider
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        className={`main-sider ${mode}-mode`}
+      >
         <div className="logo-vertical">
           <Avatar shape="square" size="large" src="/vite.svg" />
           {!collapsed && <span className="logo-text">BigLotus</span>}
         </div>
         <Menu
-          theme="dark"
+          theme={mode === 'dark' ? 'dark' : 'light'}
           mode="inline"
           selectedKeys={[location.pathname]}
           items={menuItems}
@@ -73,7 +82,7 @@ const MainLayout = () => {
         />
       </Sider>
       <Layout>
-        <Header className="main-header" style={{ padding: 0 }}>
+        <Header className={`main-header ${mode}-mode`} style={{ padding: 0 }}>
           <div className="header-content">
             <Button
               type="text"
@@ -87,6 +96,16 @@ const MainLayout = () => {
                   智慧场馆人群态势感知系统
                 </Title>
               </div>
+              <Tooltip title={mode === 'dark' ? '切换为浅色' : '切换为深色'}>
+                <Button
+                  type="text"
+                  icon={mode === 'dark' ? <SunOutlined /> : <MoonOutlined />}
+                  onClick={toggleMode}
+                  style={{ marginRight: 8 }}
+                >
+                  {mode === 'dark' ? '浅色' : '深色'}
+                </Button>
+              </Tooltip>
               <Button
                 type="text"
                 icon={<LogoutOutlined />}
@@ -97,7 +116,10 @@ const MainLayout = () => {
             </div>
           </div>
         </Header>
-        <Content className="main-content" style={{ borderRadius: borderRadiusLG }}>
+        <Content
+          className={`main-content ${mode}-mode`}
+          style={{ borderRadius: borderRadiusLG }}
+        >
           <Outlet />
         </Content>
       </Layout>

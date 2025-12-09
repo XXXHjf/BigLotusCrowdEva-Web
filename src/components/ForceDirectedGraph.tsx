@@ -2,6 +2,7 @@
 import ReactECharts from 'echarts-for-react'
 import type { EChartsOption } from 'echarts'
 import type { GraphNode, GraphEdge } from '../types/chart'
+import { useThemeMode } from '../context/ThemeContext'
 
 interface ForceDirectedGraphProps {
   nodes: GraphNode[]
@@ -16,6 +17,9 @@ const ForceDirectedGraph = ({
   onNodeClick,
   selectedNodeId,
 }: ForceDirectedGraphProps) => {
+  const { mode } = useThemeMode()
+  const labelColor = mode === 'dark' ? '#e8f4ff' : '#1f2d3d'
+
   const colorMap: { [key: string]: string } = {
     safe: '#52C41A', // 绿色
     warning: '#FAAD14', // 黄色
@@ -38,7 +42,7 @@ const ForceDirectedGraph = ({
       show: true,
       position: 'inside' as const,
       formatter: '{b}', // 显示节点名称
-      color: '#fff',
+      color: labelColor,
       fontWeight: 700,
     },
     draggable: true, // 允许拖拽

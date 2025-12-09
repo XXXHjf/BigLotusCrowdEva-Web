@@ -1,6 +1,7 @@
 // src/components/SankeyFlowChart.tsx
 import ReactECharts from 'echarts-for-react'
 import type { EChartsOption, SankeySeriesOption } from 'echarts'
+import { useThemeMode } from '../context/ThemeContext'
 
 interface SankeyFlowChartProps {
   data: {
@@ -10,6 +11,9 @@ interface SankeyFlowChartProps {
 }
 
 const SankeyFlowChart = ({ data }: SankeyFlowChartProps) => {
+  const { mode } = useThemeMode()
+  const textColor = mode === 'dark' ? '#e8f4ff' : '#1f2d3d'
+
   const getNodeColor = (name: string) => {
     if (name.includes('入口')) return '#4cc3ff'
     if (name.includes('通道')) return '#8a7dff'
@@ -61,7 +65,7 @@ const SankeyFlowChart = ({ data }: SankeyFlowChartProps) => {
       width: 12,
     },
     label: {
-      color: '#e8f4ff',
+      color: textColor,
       position: 'left',
       align: 'right',
       fontWeight: 600,
@@ -94,7 +98,7 @@ const SankeyFlowChart = ({ data }: SankeyFlowChartProps) => {
       },
       backgroundColor: 'rgba(7, 15, 31, 0.9)',
       borderColor: '#1f2d4d',
-      textStyle: { color: '#e8f4ff' },
+      textStyle: { color: textColor },
     },
     series: [sankeySeries],
   }

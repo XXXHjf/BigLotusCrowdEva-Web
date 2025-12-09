@@ -1,6 +1,7 @@
 // src/components/SimulationGraph.tsx
 import ReactECharts from 'echarts-for-react'
 import type { GraphNode, GraphEdge } from '../types/chart'
+import { useThemeMode } from '../context/ThemeContext'
 
 interface SimulationGraphProps {
   nodes: GraphNode[]
@@ -15,6 +16,11 @@ export function SimulationGraph({
   onNodeClick,
   selectedNodeId,
 }: SimulationGraphProps) {
+  const { mode } = useThemeMode()
+  const textColor = mode === 'dark' ? '#e8f4ff' : '#1f2d3d'
+  const tooltipText = mode === 'dark' ? '#e8f4ff' : '#1f2d3d'
+  const edgeBase = mode === 'dark' ? '#6a7a99' : '#8aa0bf'
+
   const echartsNodes = nodes.map((node) => ({
     id: node.id,
     name: node.label,
@@ -38,7 +44,7 @@ export function SimulationGraph({
     target: edge.target,
     lineStyle: {
       width: Math.max(1, edge.value / 10),
-      color: edge.style === 'dashed' ? '#ff6b6b' : '#6a7a99',
+      color: edge.style === 'dashed' ? '#ff6b6b' : edgeBase,
       type: edge.style === 'dashed' ? 'dashed' : 'solid',
       curveness: 0.2,
     },
@@ -53,6 +59,7 @@ export function SimulationGraph({
           return `${params.name}<br/>当前人流量: ${params.value || 0}`
         }
       },
+      textStyle: { color: tooltipText },
     },
     series: [
       {
@@ -68,7 +75,7 @@ export function SimulationGraph({
         label: {
           show: true,
           position: 'inside',
-          color: '#e8f4ff',
+          color: textColor,
           fontWeight: 'bold',
         },
         emphasis: {

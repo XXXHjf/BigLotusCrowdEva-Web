@@ -94,3 +94,46 @@
   position: relative;
   z-index: 1;
 }
+
+/* Light mode overrides */
+.light-mode.main-layout {
+  background: #eef2f8;
+}
+
+.light-mode .main-sider {
+  background: #ffffff !important;
+  border-right: 1px solid #dce4f2;
+  box-shadow: 8px 0 22px rgba(31, 45, 61, 0.08);
+}
+
+.light-mode .logo-vertical {
+  background: linear-gradient(135deg, #f5f9ff 0%, #eef2f8 100%);
+  color: #1f2d3d;
+}
+
+.light-mode .logo-text {
+  color: #1f2d3d;
+}
+
+.light-mode .main-header {
+  background: #ffffff !important;
+  border-bottom: 1px solid #dce4f2;
+}
+
+.light-mode .header-subtitle {
+  color: #5c6b82;
+}
+
+.light-mode .main-content {
+  background: #ffffff;
+  border: 1px solid #dce4f2;
+  box-shadow: 0 16px 40px rgba(31, 45, 61, 0.12);
+}
+
+.light-mode .main-content::before {
+  background: radial-gradient(circle at 80% 20%, rgba(76, 195, 255, 0.05), transparent 35%);
+}
+
+.light-mode .trigger-btn {
+  color: #1f2d3d;
+}

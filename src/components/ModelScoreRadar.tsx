@@ -1,6 +1,7 @@
 // src/components/ModelScoreRadar.tsx
 import ReactECharts from 'echarts-for-react'
 import type { EChartsOption } from 'echarts'
+import { useThemeMode } from '../context/ThemeContext'
 
 interface ModelScoreRadarProps {
   modelName: string
@@ -8,6 +9,18 @@ interface ModelScoreRadarProps {
 }
 
 const ModelScoreRadar = ({ modelName, scores }: ModelScoreRadarProps) => {
+  const { mode } = useThemeMode()
+  const textColor = mode === 'dark' ? '#d8e6ff' : '#1f2d3d'
+  const axisColor = mode === 'dark' ? 'rgba(76, 195, 255, 0.4)' : '#8aa0bf'
+  const splitLineColor =
+    mode === 'dark'
+      ? ['rgba(76, 195, 255, 0.25)', 'rgba(126, 87, 194, 0.2)']
+      : ['rgba(76, 195, 255, 0.18)', 'rgba(126, 87, 194, 0.12)']
+  const splitAreaColor =
+    mode === 'dark'
+      ? ['rgba(76, 195, 255, 0.05)', 'rgba(126, 87, 194, 0.04)']
+      : ['rgba(76, 195, 255, 0.08)', 'rgba(126, 87, 194, 0.06)']
+
   const option: EChartsOption = {
     backgroundColor: 'transparent',
     tooltip: { trigger: 'item' },
@@ -20,22 +33,22 @@ const ModelScoreRadar = ({ modelName, scores }: ModelScoreRadarProps) => {
       radius: '80%',
       center: ['50%', '60%'],
       axisName: {
-        color: '#d8e6ff',
+        color: textColor,
         fontWeight: 600,
         fontSize: 12,
       },
       axisLine: {
-        lineStyle: { color: 'rgba(76, 195, 255, 0.4)' },
+        lineStyle: { color: axisColor },
       },
       splitLine: {
         lineStyle: {
-          color: ['rgba(76, 195, 255, 0.25)', 'rgba(126, 87, 194, 0.2)'],
+          color: splitLineColor,
           type: 'dashed',
         },
       },
       splitArea: {
         areaStyle: {
-          color: ['rgba(76, 195, 255, 0.05)', 'rgba(126, 87, 194, 0.04)'],
+          color: splitAreaColor,
         },
       },
     },
