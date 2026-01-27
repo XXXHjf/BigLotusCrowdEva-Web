@@ -1,17 +1,17 @@
 # Nginx 配置示例
-# 复制到 /etc/nginx/sites-available/biglotuscrowdeva
-# 然后创建软链接: sudo ln -s /etc/nginx/sites-available/biglotuscrowdeva /etc/nginx/sites-enabled/
+# 复制到 /etc/nginx/sites-available/cfeva
+# 然后创建软链接: sudo ln -s /etc/nginx/sites-available/cfeva /etc/nginx/sites-enabled/
 
 server {
     listen 80;
     server_name your-domain.com;  # 替换为你的域名或IP地址
 
-    root /var/www/biglotuscrowdeva;
+    root /var/www/cfeva;
     index index.html;
 
     # 日志文件
-    access_log /var/log/nginx/biglotuscrowdeva-access.log;
-    error_log /var/log/nginx/biglotuscrowdeva-error.log;
+    access_log /var/log/nginx/cfeva-access.log;
+    error_log /var/log/nginx/cfeva-error.log;
 
     # Gzip 压缩
     gzip on;
@@ -75,7 +75,7 @@ server {
 #     ssl_prefer_server_ciphers on;
 #     
 #     # 其他配置同上
-#     root /var/www/biglotuscrowdeva;
+#     root /var/www/cfeva;
 #     index index.html;
 #     
 #     location / {

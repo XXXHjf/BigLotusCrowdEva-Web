@@ -6,11 +6,18 @@
   min-height: 100vh;
   padding: 48px 32px;
   background:
-    radial-gradient(circle at 20% 20%, rgba(76, 195, 255, 0.18), transparent 35%),
-    radial-gradient(circle at 80% 0%, rgba(126, 87, 194, 0.2), transparent 32%),
+    radial-gradient(circle at 20% 20%, rgba(76, 195, 255, 0.14), transparent 35%),
+    radial-gradient(circle at 80% 0%, rgba(126, 87, 194, 0.16), transparent 32%),
     linear-gradient(135deg, #040915 0%, #081228 100%);
   overflow: hidden;
   position: relative;
+}
+
+:root[data-theme='light'] .login-page-container {
+  background:
+    radial-gradient(circle at 18% 22%, rgba(76, 195, 255, 0.16), transparent 36%),
+    radial-gradient(circle at 78% 6%, rgba(22, 119, 255, 0.18), transparent 32%),
+    linear-gradient(135deg, #f5f7fb 0%, #eef2f8 55%, #e8edf5 100%);
 }
 
 .login-grid-overlay {
@@ -24,6 +31,15 @@
   background-size: 120px 120px, 120px 120px;
   opacity: 0.4;
   pointer-events: none;
+}
+
+:root[data-theme='light'] .login-grid-overlay {
+  background-image: linear-gradient(
+      rgba(31, 45, 61, 0.06) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(31, 45, 61, 0.06) 1px, transparent 1px);
+  opacity: 0.35;
 }
 
 .login-inner {
@@ -47,9 +63,19 @@
   gap: 12px;
 }
 
+:root[data-theme='light'] .login-graphic-panel {
+  border: 1px solid #dce4f2;
+  background: linear-gradient(135deg, rgba(76, 195, 255, 0.14), rgba(22, 119, 255, 0.1));
+  box-shadow: 0 22px 44px rgba(31, 45, 61, 0.12);
+}
+
 .login-graphic-caption {
   color: rgba(216, 230, 255, 0.78);
   letter-spacing: 0.4px;
+}
+
+:root[data-theme='light'] .login-graphic-caption {
+  color: #4a5a73;
 }
 
 .login-form-panel {
@@ -78,6 +104,17 @@
   color: #fff;
   font-size: 26px;
   box-shadow: 0 10px 30px rgba(76, 195, 255, 0.35);
+}
+
+:root[data-theme='light'] .login-icon {
+  box-shadow: 0 10px 26px rgba(76, 195, 255, 0.25);
+}
+
+.login-theme-toggle {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
 }
 
 @media (max-width: 992px) {

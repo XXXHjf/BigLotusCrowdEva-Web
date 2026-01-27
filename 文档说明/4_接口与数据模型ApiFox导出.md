@@ -1,6 +1,6 @@
 # 大莲花
 
-根据《BigLotus CrowdEva · 后端数据类型设计》整理的接口规范，本系统用于对场馆人流进行监控、预测和应急推演，可直接导入 Apifox 使用。字段与原始 TypeScript 定义保持一致。
+根据《重要场所人群疏散可视化分析系统（CFEVA）· 后端数据类型设计》整理的接口规范，本系统用于对场馆人流进行监控、预测和应急推演，可直接导入 Apifox 使用。字段与原始 TypeScript 定义保持一致。
 
 Base URLs:
 
@@ -1610,4 +1610,3 @@ and
 |---|---|---|---|---|---|
 |*anonymous*|object|false|none||沙盘推演结果返回结构，data 为 SimulationImpact。|
 |» data|[SimulationImpact](#schemasimulationimpact)|false|none||沙盘推演结果。|
-

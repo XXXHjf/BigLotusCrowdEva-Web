@@ -2,7 +2,7 @@
 
 ## 项目概览
 
-这是一个基于 React 和 TypeScript 的**智慧场馆人群态势感知系统**。项目名称为 `biglotuscrowdeva`，旨在将传统的“数据展示屏”升级为“智慧场馆指挥中枢”。
+这是一个基于 React 和 TypeScript 的**重要场所人群疏散可视化分析系统**（Critical Facility Evacuation Visual Analytics System，简称 CFEVA）。项目名称为 `cfeva`，旨在将传统的“数据展示屏”升级为“应急指挥可视化中枢”。
 
 系统利用 Vite 进行构建，UI 基于 Ant Design 组件库，图表部分则使用 ECharts 实现。设计上采用深色驾驶舱模式，以蓝、白、灰为基调，突出数据可视化的科技感。
 

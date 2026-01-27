@@ -71,7 +71,7 @@ const MainLayout = () => {
       >
         <div className="logo-vertical">
           <Avatar shape="square" size="large" src="/vite.svg" />
-          {!collapsed && <span className="logo-text">BigLotus</span>}
+          {!collapsed && <span className="logo-text">CFEVA</span>}
         </div>
         <Menu
           theme={mode === 'dark' ? 'dark' : 'light'}
@@ -93,7 +93,7 @@ const MainLayout = () => {
             <div className="header-right">
               <div className="header-titles">
                 <Title level={5} style={{ margin: 0 }}>
-                  智慧场馆人群态势感知系统
+                  重要场所人群疏散可视化分析系统
                 </Title>
               </div>
               <Tooltip title={mode === 'dark' ? '切换为浅色' : '切换为深色'}>

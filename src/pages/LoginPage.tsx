@@ -1,14 +1,22 @@
 // src/pages/LoginPage.tsx
-import { Card, Form, Input, Button, message, Typography, Space } from 'antd'
+import { Card, Form, Input, Button, message, Typography, Space, Tooltip } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { UserOutlined, LockOutlined, BarChartOutlined } from '@ant-design/icons'
+import {
+  UserOutlined,
+  LockOutlined,
+  BarChartOutlined,
+  MoonOutlined,
+  SunOutlined,
+} from '@ant-design/icons'
 import LoginGraphic from '../components/LoginGraphic'
 import './LoginPage.css'
+import { useThemeMode } from '../context/ThemeContext'
 
 const { Title, Text } = Typography
 
 const LoginPage = () => {
   const navigate = useNavigate()
+  const { mode, toggleMode } = useThemeMode()
 
   const onFinish = (values: any) => {
     // 硬编码的登录逻辑
@@ -24,6 +32,17 @@ const LoginPage = () => {
   return (
     <div className="login-page-container">
       <div className="login-grid-overlay" />
+      <div className="login-theme-toggle">
+        <Tooltip title={mode === 'dark' ? '切换为浅色' : '切换为深色'}>
+          <Button
+            type="text"
+            icon={mode === 'dark' ? <SunOutlined /> : <MoonOutlined />}
+            onClick={toggleMode}
+          >
+            {mode === 'dark' ? '浅色' : '深色'}
+          </Button>
+        </Tooltip>
+      </div>
       <div className="login-inner">
         <div className="login-graphic-panel">
           <LoginGraphic />
@@ -39,8 +58,8 @@ const LoginPage = () => {
                   <BarChartOutlined />
                 </div>
                 <div>
-                  <Title level={3} style={{ margin: 0 }}>
-                    人群走势预测系统
+                  <Title level={5} style={{ margin: 0 }}>
+                    重要场所人群疏散可视化分析系统
                   </Title>
                   <Text type="secondary">智慧场馆 · 指挥中枢</Text>
                 </div>

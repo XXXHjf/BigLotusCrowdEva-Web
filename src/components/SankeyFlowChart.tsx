@@ -13,6 +13,8 @@ interface SankeyFlowChartProps {
 const SankeyFlowChart = ({ data }: SankeyFlowChartProps) => {
   const { mode } = useThemeMode()
   const textColor = mode === 'dark' ? '#e8f4ff' : '#1f2d3d'
+  const tooltipBg = mode === 'dark' ? 'rgba(7, 15, 31, 0.9)' : '#ffffff'
+  const tooltipBorder = mode === 'dark' ? '#1f2d4d' : '#dce4f2'
 
   const getNodeColor = (name: string) => {
     if (name.includes('入口')) return '#4cc3ff'
@@ -89,15 +91,31 @@ const SankeyFlowChart = ({ data }: SankeyFlowChartProps) => {
       trigger: 'item',
       triggerOn: 'mousemove',
       formatter: (params: any) => {
-        if (params.data.source && params.data.target) {
-          return `${params.data.source} → ${params.data.target}<br/>流量: ${params.data.value} 人`
-        } else if (params.data.name) {
-          return `${params.data.name}`
+        // Edge tooltip
+        if (params.dataType === 'edge' || (params.data && params.data.source)) {
+          const source = params.data?.source ?? params.data?.name ?? params.name ?? ''
+          const target = params.data?.target ?? ''
+          const value = params.data?.value ?? params.value ?? ''
+          return `${source} → ${target}<br/>流量: ${value || 0} 人`
         }
-        return ''
+        // Node tooltip
+        if (params.dataType === 'node' || params.data?.name) {
+          const nodeName = params.data?.name ?? ''
+          const totalOut =
+            data.links
+              .filter((l) => l.source === nodeName)
+              .reduce((sum, l) => sum + l.value, 0) || 0
+          const totalIn =
+            data.links
+              .filter((l) => l.target === nodeName)
+              .reduce((sum, l) => sum + l.value, 0) || 0
+          const total = totalIn + totalOut
+          return `${nodeName}<br/>总流量: ${total} 人<br/>流入: ${totalIn} 人<br/>流出: ${totalOut} 人`
+        }
+        return params.name || '数据加载中'
       },
-      backgroundColor: 'rgba(7, 15, 31, 0.9)',
-      borderColor: '#1f2d4d',
+      backgroundColor: tooltipBg,
+      borderColor: tooltipBorder,
       textStyle: { color: textColor },
     },
     series: [sankeySeries],

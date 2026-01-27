@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# BigLotusCrowdEva 部署脚本
+# CFEVA 部署脚本
 # 使用方法: ./deploy.sh [服务器用户] [服务器IP] [部署路径]
 
 set -e  # 遇到错误立即退出
@@ -8,10 +8,10 @@ set -e  # 遇到错误立即退出
 # 配置（可以通过参数覆盖）
 SERVER_USER=${1:-"root"}
 SERVER_IP=${2:-"your-server-ip"}
-DEPLOY_PATH=${3:-"/var/www/biglotuscrowdeva"}
+DEPLOY_PATH=${3:-"/var/www/cfeva"}
 
 echo "=========================================="
-echo "开始部署 BigLotusCrowdEva"
+echo "开始部署 CFEVA"
 echo "=========================================="
 
 # 1. 检查 Node.js 和 npm
@@ -92,4 +92,3 @@ echo "=========================================="
 echo "访问地址: http://${SERVER_IP}"
 echo "部署路径: ${DEPLOY_PATH}"
 echo ""
-

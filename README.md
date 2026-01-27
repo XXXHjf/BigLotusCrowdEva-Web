@@ -1,4 +1,4 @@
-# BigLotus CrowdEva · 智慧场馆人群态势驾驶舱
+# 重要场所人群疏散可视化分析系统（Critical Facility Evacuation Visual Analytics System, CFEVA）
 
 React + TypeScript 构建的深色驾驶舱界面，围绕“人群态势感知、趋势研判、应急沙盘”四大场景，提供实时可视化与推演能力。
 
