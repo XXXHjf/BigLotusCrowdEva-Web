@@ -10,6 +10,7 @@ import {
   DotChartOutlined,
   LineChartOutlined,
   ExperimentOutlined,
+  ApartmentOutlined,
   MoonOutlined,
   SunOutlined,
 } from '@ant-design/icons'
@@ -23,23 +24,29 @@ const menuItems = [
   {
     key: '/dashboard/overview',
     icon: <DashboardOutlined />,
-    label: '全域态势',
+    label: '全局看板',
+  },
+  {
+    key: '/dashboard/causal-detection',
+    icon: <ApartmentOutlined />,
+    label: '模式解析',
   },
   {
     key: '/dashboard/monitor',
     icon: <DotChartOutlined />,
-    label: '聚类监控',
+    label: '人流监控',
   },
   {
     key: '/dashboard/prediction',
     icon: <LineChartOutlined />,
-    label: '趋势研判',
+    label: '趋势预测',
   },
   {
     key: '/dashboard/simulation',
     icon: <ExperimentOutlined />,
-    label: '应急沙盘',
+    label: '沙盘推演',
   },
+  
 ]
 
 const MainLayout = () => {
@@ -70,7 +77,7 @@ const MainLayout = () => {
         className={`main-sider ${mode}-mode`}
       >
         <div className="logo-vertical">
-          <Avatar shape="square" size="large" src="/vite.svg" />
+          <Avatar shape="square" size="large" src="/杭州标识.png" />
           {!collapsed && <span className="logo-text">CFEVA</span>}
         </div>
         <Menu

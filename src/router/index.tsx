@@ -15,6 +15,7 @@ import OverviewPage from '../pages/dashboard/OverviewPage'
 import MonitorPage from '../pages/dashboard/MonitorPage'
 import PredictionPage from '../pages/dashboard/PredictionPage'
 import SimulationPage from '../pages/dashboard/SimulationPage'
+import CausalDetectionPage from '../pages/dashboard/CausalDetectionPage'
 import {
   ThemeModeContext,
   type ThemeMode,
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
           { path: 'monitor', element: <MonitorPage /> },
           { path: 'prediction', element: <PredictionPage /> },
           { path: 'simulation', element: <SimulationPage /> },
+          { path: 'causal-detection', element: <CausalDetectionPage /> },
         ],
       },
     ],
