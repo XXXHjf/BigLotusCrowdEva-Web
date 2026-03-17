@@ -4,3 +4,4 @@
 
 export * from './request'
 export * from './crowd'
+export * from './dataService'

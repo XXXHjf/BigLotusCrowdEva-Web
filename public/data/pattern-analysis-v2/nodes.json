@@ -1,0 +1,408 @@
+{
+  "nodes": [
+    {
+      "id": "cluster_109",
+      "lng": 120.22602975,
+      "lat": 30.23292175,
+      "label": "cluster_109",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_110",
+      "lng": 120.221823,
+      "lat": 30.2310565,
+      "label": "cluster_110",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_12",
+      "lng": 120.22550683333333,
+      "lat": 30.23027666666667,
+      "label": "cluster_12",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_136",
+      "lng": 120.2220965,
+      "lat": 30.23036125,
+      "label": "cluster_136",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_156",
+      "lng": 120.22179133333331,
+      "lat": 30.230514,
+      "label": "cluster_156",
+      "tags": [
+        "key_node"
+      ],
+      "extra": {
+        "score": 0.2829,
+        "rank": 27
+      }
+    },
+    {
+      "id": "cluster_169",
+      "lng": 120.22327275,
+      "lat": 30.23034425,
+      "label": "cluster_169",
+      "tags": [
+        "normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_193",
+      "lng": 120.22333077777778,
+      "lat": 30.23073611111111,
+      "label": "cluster_193",
+      "tags": [
+        "normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_198",
+      "lng": 120.227313,
+      "lat": 30.2277398,
+      "label": "cluster_198",
+      "tags": [
+        "chain_node"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_2",
+      "lng": 120.2268758,
+      "lat": 30.2276858,
+      "label": "cluster_2",
+      "tags": [
+        "surrounding_context"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_203",
+      "lng": 120.2220375,
+      "lat": 30.231158,
+      "label": "cluster_203",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_237",
+      "lng": 120.22318566666668,
+      "lat": 30.23055933333333,
+      "label": "cluster_237",
+      "tags": [
+        "normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_262",
+      "lng": 120.22370675,
+      "lat": 30.230302,
+      "label": "cluster_262",
+      "tags": [
+        "normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_269",
+      "lng": 120.2221796,
+      "lat": 30.2310226,
+      "label": "cluster_269",
+      "tags": [
+        "key_node"
+      ],
+      "extra": {
+        "score": 0.2885,
+        "rank": 18
+      }
+    },
+    {
+      "id": "cluster_313",
+      "lng": 120.22336775,
+      "lat": 30.23048,
+      "label": "cluster_313",
+      "tags": [
+        "normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_321",
+      "lng": 120.2223105,
+      "lat": 30.230972,
+      "label": "cluster_321",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_377",
+      "lng": 120.224140125,
+      "lat": 30.231209,
+      "label": "cluster_377",
+      "tags": [
+        "normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_378",
+      "lng": 120.22748744444444,
+      "lat": 30.22803111111111,
+      "label": "cluster_378",
+      "tags": [
+        "surrounding_context"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_388",
+      "lng": 120.22702766666669,
+      "lat": 30.227676666666667,
+      "label": "cluster_388",
+      "tags": [
+        "chain_node"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_403",
+      "lng": 120.22198966666669,
+      "lat": 30.23029933333333,
+      "label": "cluster_403",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_406",
+      "lng": 120.2253452,
+      "lat": 30.230195400000003,
+      "label": "cluster_406",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_429",
+      "lng": 120.22212542857145,
+      "lat": 30.23073171428572,
+      "label": "cluster_429",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_44",
+      "lng": 120.22309066666666,
+      "lat": 30.23042333333333,
+      "label": "cluster_44",
+      "tags": [
+        "normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_440",
+      "lng": 120.22576022222223,
+      "lat": 30.230254111111112,
+      "label": "cluster_440",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_469",
+      "lng": 120.22725857142858,
+      "lat": 30.227398857142852,
+      "label": "cluster_469",
+      "tags": [
+        "surrounding_context"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_475",
+      "lng": 120.22236966666668,
+      "lat": 30.231180666666663,
+      "label": "cluster_475",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_502",
+      "lng": 120.22352428571428,
+      "lat": 30.230518857142854,
+      "label": "cluster_502",
+      "tags": [
+        "hub"
+      ],
+      "extra": {
+        "influenceCount": 9
+      }
+    },
+    {
+      "id": "cluster_507",
+      "lng": 120.22196575,
+      "lat": 30.230175,
+      "label": "cluster_507",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_576",
+      "lng": 120.223463,
+      "lat": 30.230276714285715,
+      "label": "cluster_576",
+      "tags": [
+        "normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_604",
+      "lng": 120.22717025,
+      "lat": 30.22763175,
+      "label": "cluster_604",
+      "tags": [
+        "chain_node"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_650",
+      "lng": 120.225911,
+      "lat": 30.232481,
+      "label": "cluster_650",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_67",
+      "lng": 120.225566,
+      "lat": 30.230429,
+      "label": "cluster_67",
+      "tags": [
+        "key_node"
+      ],
+      "extra": {
+        "score": 0.3198,
+        "rank": 3
+      }
+    },
+    {
+      "id": "cluster_679",
+      "lng": 120.2270752,
+      "lat": 30.2282418,
+      "label": "cluster_679",
+      "tags": [
+        "surrounding_context"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_695",
+      "lng": 120.2267665,
+      "lat": 30.233091,
+      "label": "cluster_695",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_701",
+      "lng": 120.2270755,
+      "lat": 30.227767,
+      "label": "cluster_701",
+      "tags": [
+        "chain_node"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_722",
+      "lng": 120.2261628,
+      "lat": 30.232881,
+      "label": "cluster_722",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_738",
+      "lng": 120.227075,
+      "lat": 30.227835,
+      "label": "cluster_738",
+      "tags": [
+        "surrounding_context"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_767",
+      "lng": 120.22522966666666,
+      "lat": 30.230333,
+      "label": "cluster_767",
+      "tags": [
+        "influenced_normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_80",
+      "lng": 120.2236295,
+      "lat": 30.230107,
+      "label": "cluster_80",
+      "tags": [
+        "normal"
+      ],
+      "extra": {}
+    },
+    {
+      "id": "cluster_92",
+      "lng": 120.22654075,
+      "lat": 30.232803,
+      "label": "cluster_92",
+      "tags": [
+        "key_node"
+      ],
+      "extra": {
+        "score": 0.3499,
+        "rank": 1
+      }
+    }
+  ]
+}

@@ -27,70 +27,6 @@
   overflow: hidden;
 }
 
-.pulse-marker {
-  position: relative;
-  width: 16px;
-  height: 16px;
-  transform: translate(-50%, -50%);
-}
-
-.pulse-dot {
-  width: 14px;
-  height: 14px;
-  background: var(--pulse-color, #4cc3ff);
-  border-radius: 50%;
-  box-shadow: 0 0 8px rgba(76, 195, 255, 0.8);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.pulse-ring {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 2px solid rgba(76, 195, 255, 0.6);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: pulse 1.6s infinite;
-}
-
-.pulse-label {
-  position: absolute;
-  white-space: nowrap;
-  top: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #d8e6ff;
-  font-size: 11px;
-  background: rgba(7, 15, 31, 0.7);
-  padding: 2px 6px;
-  border-radius: 6px;
-  border: 1px solid rgba(76, 195, 255, 0.35);
-}
-
-/* 选中高亮时给更强的光晕 */
-.pulse-active .pulse-dot {
-  box-shadow: 0 0 12px rgba(76, 195, 255, 1);
-}
-
-@keyframes pulse {
-  0% {
-    transform: translate(-50%, -50%) scale(0.7);
-    opacity: 0.9;
-  }
-  70% {
-    transform: translate(-50%, -50%) scale(1.8);
-    opacity: 0;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 .legend-dot {
   width: 10px;
   height: 10px;
@@ -120,6 +56,38 @@
   align-items: center;
   justify-content: center;
   height: 200px;
+}
+
+.mode-panel-shell {
+  position: relative;
+}
+
+.mode-hint-trigger {
+  position: absolute;
+  top: 2px;
+  right: 3px;
+  z-index: 4;
+  font-size: 14px;
+  line-height: 1;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #4cc3ff;
+  border: 1px solid rgba(76, 195, 255, 0.35);
+  background: rgba(7, 15, 31, 0.6);
+  cursor: pointer;
+  user-select: none;
+}
+
+.mode-hint-content {
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
 }
 
 .mode-help-text {

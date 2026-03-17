@@ -2,7 +2,6 @@
 import { Row, Col, Card } from 'antd'
 import CrowdDensityHeatmap from '../../components/CrowdDensityHeatmap'
 import KpiCard from '../../components/KpiCard'
-import AlarmList from '../../components/AlarmList'
 import {
   UserOutlined,
   DashboardOutlined,
@@ -53,7 +52,7 @@ const OverviewPage = () => {
       </Row>
 
       <Row gutter={[16, 16]} style={{ flex: 1 }}>
-        <Col lg={18} xs={24} style={{ height: '100%' }}>
+        <Col lg={24} xs={24} style={{ height: '100%' }}>
           <Card
             title="分区拥堵热力矩阵"
             className="panel-card"
@@ -62,16 +61,6 @@ const OverviewPage = () => {
             bodyStyle={{ height: 'calc(100% - 58px)', padding: 0 }}
           >
             <CrowdDensityHeatmap />
-          </Card>
-        </Col>
-        <Col lg={6} xs={24} style={{ height: '100%' }}>
-          <Card
-            title="实时报警"
-            bordered={false}
-            className="panel-card"
-            style={{ height: '100%' }}
-          >
-            <AlarmList />
           </Card>
         </Col>
       </Row>

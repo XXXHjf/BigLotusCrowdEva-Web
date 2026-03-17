@@ -7,7 +7,6 @@ import {
   MenuUnfoldOutlined,
   LogoutOutlined,
   DashboardOutlined,
-  DotChartOutlined,
   LineChartOutlined,
   ExperimentOutlined,
   ApartmentOutlined,
@@ -30,11 +29,6 @@ const menuItems = [
     key: '/dashboard/causal-detection',
     icon: <ApartmentOutlined />,
     label: '模式解析',
-  },
-  {
-    key: '/dashboard/monitor',
-    icon: <DotChartOutlined />,
-    label: '人流监控',
   },
   {
     key: '/dashboard/prediction',

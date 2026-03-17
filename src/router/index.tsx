@@ -12,7 +12,6 @@ import zhCN from 'antd/locale/zh_CN'
 import LoginPage from '../pages/LoginPage'
 import MainLayout from '../layouts/MainLayout'
 import OverviewPage from '../pages/dashboard/OverviewPage'
-import MonitorPage from '../pages/dashboard/MonitorPage'
 import PredictionPage from '../pages/dashboard/PredictionPage'
 import SimulationPage from '../pages/dashboard/SimulationPage'
 import CausalDetectionPage from '../pages/dashboard/CausalDetectionPage'
@@ -49,7 +48,7 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Navigate to="/dashboard/overview" replace /> },
           { path: 'overview', element: <OverviewPage /> },
-          { path: 'monitor', element: <MonitorPage /> },
+          { path: 'monitor', element: <Navigate to="/dashboard/overview" replace /> },
           { path: 'prediction', element: <PredictionPage /> },
           { path: 'simulation', element: <SimulationPage /> },
           { path: 'causal-detection', element: <CausalDetectionPage /> },

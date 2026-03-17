@@ -1,0 +1,100 @@
+{
+  "strategies": [
+    { "key": "baseline", "label": "Baseline" },
+    { "key": "random", "label": "Random" },
+    { "key": "randomDrop", "label": "Random Drop" },
+    { "key": "featNoise", "label": "Feat Noise" },
+    { "key": "kncBasic", "label": "KNC (Basic)" },
+    { "key": "hccOurs", "label": "HCC (Ours)" }
+  ],
+  "models": [
+    {
+      "name": "GCN",
+      "metrics": {
+        "baseline": { "mae": 2.2673, "rmse": 4.1595 },
+        "random": { "mae": 2.3966, "rmse": 4.3730 },
+        "randomDrop": { "mae": 2.2939, "rmse": 4.2097 },
+        "featNoise": { "mae": 2.2857, "rmse": 4.0886 },
+        "kncBasic": { "mae": 2.2460, "rmse": 4.2146 },
+        "hccOurs": { "mae": 2.1202, "rmse": 4.0352 }
+      }
+    },
+    {
+      "name": "GAT",
+      "metrics": {
+        "baseline": { "mae": 1.9695, "rmse": 3.4864 },
+        "random": { "mae": 1.8034, "rmse": 3.2225 },
+        "randomDrop": { "mae": 2.0422, "rmse": 3.5367 },
+        "featNoise": { "mae": 1.9541, "rmse": 3.3801 },
+        "kncBasic": { "mae": 1.7292, "rmse": 3.4320 },
+        "hccOurs": { "mae": 1.8685, "rmse": 2.9240 }
+      }
+    },
+    {
+      "name": "GraphSAGE",
+      "metrics": {
+        "baseline": { "mae": 1.1654, "rmse": 2.4218 },
+        "random": { "mae": 1.1818, "rmse": 2.4293 },
+        "randomDrop": { "mae": 1.1812, "rmse": 2.4128 },
+        "featNoise": { "mae": 1.1779, "rmse": 2.3828 },
+        "kncBasic": { "mae": 1.1184, "rmse": 2.3442 },
+        "hccOurs": { "mae": 1.0535, "rmse": 2.1949 }
+      }
+    },
+    {
+      "name": "STGCN",
+      "metrics": {
+        "baseline": { "mae": 2.1571, "rmse": 3.9741 },
+        "random": { "mae": 2.2635, "rmse": 4.1752 },
+        "randomDrop": { "mae": 2.2152, "rmse": 4.0240 },
+        "featNoise": { "mae": 2.1609, "rmse": 3.8978 },
+        "kncBasic": { "mae": 2.1738, "rmse": 4.0237 },
+        "hccOurs": { "mae": 2.0449, "rmse": 3.8499 }
+      }
+    },
+    {
+      "name": "ASTGCN",
+      "metrics": {
+        "baseline": { "mae": 2.2122, "rmse": 4.0824 },
+        "random": { "mae": 2.3123, "rmse": 4.2982 },
+        "randomDrop": { "mae": 2.2664, "rmse": 4.1487 },
+        "featNoise": { "mae": 2.1752, "rmse": 4.0138 },
+        "kncBasic": { "mae": 2.1877, "rmse": 4.0220 },
+        "hccOurs": { "mae": 1.9930, "rmse": 3.9560 }
+      }
+    },
+    {
+      "name": "GMAN",
+      "metrics": {
+        "baseline": { "mae": 1.8625, "rmse": 3.2673 },
+        "random": { "mae": 2.0199, "rmse": 3.3440 },
+        "randomDrop": { "mae": 1.9484, "rmse": 3.3545 },
+        "featNoise": { "mae": 1.8910, "rmse": 3.1757 },
+        "kncBasic": { "mae": 1.8998, "rmse": 3.2189 },
+        "hccOurs": { "mae": 1.7688, "rmse": 3.1008 }
+      }
+    },
+    {
+      "name": "AGCRN",
+      "metrics": {
+        "baseline": { "mae": 2.1945, "rmse": 4.0422 },
+        "random": { "mae": 2.3181, "rmse": 4.2552 },
+        "randomDrop": { "mae": 2.2517, "rmse": 4.1229 },
+        "featNoise": { "mae": 2.2033, "rmse": 4.0651 },
+        "kncBasic": { "mae": 2.1286, "rmse": 3.9088 },
+        "hccOurs": { "mae": 2.0423, "rmse": 3.9177 }
+      }
+    },
+    {
+      "name": "Average",
+      "metrics": {
+        "baseline": { "mae": 1.9755, "rmse": 3.6334 },
+        "random": { "mae": 2.0422, "rmse": 3.7282 },
+        "randomDrop": { "mae": 2.0284, "rmse": 3.6870 },
+        "featNoise": { "mae": 1.9783, "rmse": 3.5720 },
+        "kncBasic": { "mae": 1.9262, "rmse": 3.5949 },
+        "hccOurs": { "mae": 1.8416, "rmse": 3.4255 }
+      }
+    }
+  ]
+}

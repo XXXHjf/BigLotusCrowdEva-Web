@@ -1,0 +1,22 @@
+{
+  "points": [
+    { "time": "19:00", "actual": 820, "predicted": 792, "lower": 758, "upper": 826 },
+    { "time": "19:05", "actual": 845, "predicted": 812, "lower": 777, "upper": 847 },
+    { "time": "19:10", "actual": 872, "predicted": 836, "lower": 800, "upper": 872 },
+    { "time": "19:15", "actual": 906, "predicted": 864, "lower": 827, "upper": 901 },
+    { "time": "19:20", "actual": 940, "predicted": 896, "lower": 858, "upper": 934 },
+    { "time": "19:25", "actual": 968, "predicted": 924, "lower": 885, "upper": 963 },
+    { "time": "19:30", "actual": 995, "predicted": 952, "lower": 912, "upper": 992 },
+    { "time": "19:35", "actual": 1018, "predicted": 980, "lower": 940, "upper": 1020 },
+    { "time": "19:40", "actual": 1036, "predicted": 1006, "lower": 966, "upper": 1046 },
+    { "time": "19:45", "actual": 1048, "predicted": 1022, "lower": 983, "upper": 1061 },
+    { "time": "19:50", "actual": 1056, "predicted": 1032, "lower": 994, "upper": 1070 },
+    { "time": "19:55", "actual": 1050, "predicted": 1026, "lower": 988, "upper": 1064 },
+    { "time": "20:00", "actual": 1030, "predicted": 1012, "lower": 975, "upper": 1049 },
+    { "time": "20:05", "actual": 1008, "predicted": 994, "lower": 958, "upper": 1030 },
+    { "time": "20:10", "actual": 980, "predicted": 970, "lower": 935, "upper": 1005 },
+    { "time": "20:15", "actual": 952, "predicted": 946, "lower": 912, "upper": 980 },
+    { "time": "20:20", "actual": 926, "predicted": 922, "lower": 889, "upper": 955 },
+    { "time": "20:25", "actual": 900, "predicted": 898, "lower": 866, "upper": 930 }
+  ]
+}

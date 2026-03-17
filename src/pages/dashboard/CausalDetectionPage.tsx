@@ -1,492 +1,436 @@
-// src/pages/dashboard/CausalDetectionPage.tsx
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { Card, Col, Empty, Row, Typography, Segmented, Space, Tag, Divider } from 'antd'
+import { Card, Col, Empty, Row, Typography, Space, Tag, Divider, Tooltip } from 'antd'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import ReactECharts from 'echarts-for-react'
-import * as echarts from 'echarts'
 import type { EChartsOption, GraphSeriesOption } from 'echarts'
 import './CausalDetectionPage.css'
 import { useThemeMode } from '../../context/ThemeContext'
+import {
+  getPatternEdges,
+  getPatternModeGraphs,
+  getPatternModeMembership,
+  getPatternNodes,
+} from '../../api/dataService'
 
-// 运行时从 CDN 注入 maplibre-gl，供 ECharts mapbox 坐标系使用
 declare global {
   interface Window {
-    mapboxgl?: unknown
-    maplibregl?: unknown
+    AMap?: any
   }
-}
-
-type MajorNodeId = 'major-a' | 'major-b' | 'major-c' | 'major-d'
-
-interface MajorNode {
-  id: MajorNodeId
-  label: string
-  lng: number
-  lat: number
-}
-
-interface MajorEdge {
-  source: MajorNodeId
-  target: MajorNodeId
-  value: number
-}
-
-interface HexCell {
-  id: string
-  label: string
-  lng: number
-  lat: number
-  majorNodeId: MajorNodeId
-  volume: number
 }
 
 type ModeType = 'causalChain' | 'hubNode' | 'community' | 'keyNode'
 
+interface PatternNode {
+  id: string
+  lng: number
+  lat: number
+  label?: string
+  tags?: string[]
+}
+
+interface PatternEdge {
+  id: string
+  source: string
+  target: string
+  weight?: number
+  relationType?: string
+  modes?: string[]
+}
+
+interface NodeMembership {
+  nodeId: string
+  modes: ModeType[]
+  isAnchor: boolean
+}
+
+interface ModeGraphNode {
+  id: string
+  role: string
+}
+
+interface ModeGraphEdge {
+  source: string
+  target: string
+  weight?: number
+}
+
+interface ModeGraphScenario {
+  description: string
+  anchors: string[]
+  source?: string
+  extra?: Record<string, unknown>
+  graph: {
+    nodes: ModeGraphNode[]
+    edges: ModeGraphEdge[]
+  }
+}
+
+interface PatternNodesResponse {
+  nodes: PatternNode[]
+}
+
+interface PatternEdgesResponse {
+  edges: PatternEdge[]
+}
+
+interface PatternMembershipResponse {
+  memberships: NodeMembership[]
+}
+
+interface PatternModeGraphsResponse {
+  modeGraphs: Partial<Record<ModeType, ModeGraphScenario>>
+}
+
 const { Text } = Typography
 
-// 拟真演出时段，晚高峰入场/离场窗口
-const timeSlots = ['18:00-18:10', '18:10-18:20', '18:20-18:35', '18:35-18:50']
-
-// 主要结点（带经纬度，用于线条/高光）
-const majorNodes: MajorNode[] = [
-  { id: 'major-a', label: '东入口枢纽', lng: 120.1763, lat: 30.2759 },
-  { id: 'major-b', label: '北看台集散', lng: 120.1606, lat: 30.2921 },
-  { id: 'major-c', label: '中央大厅', lng: 120.1528, lat: 30.2724 },
-  { id: 'major-d', label: '南出口集散', lng: 120.1522, lat: 30.2572 },
-]
-
-const majorNodeColor: Record<MajorNodeId, string> = {
-  'major-a': '#4cc3ff',
-  'major-b': '#7e57c2',
-  'major-c': '#5ad8a6',
-  'major-d': '#ffa940',
+const modeTitleMap: Record<ModeType, string> = {
+  causalChain: '因果链',
+  hubNode: '枢纽节点',
+  community: '社区结构',
+  keyNode: '关键节点',
 }
 
-const majorEdgesByTime: Record<string, MajorEdge[]> = {
-  '18:00-18:10': [
-    { source: 'major-a', target: 'major-b', value: 180 },
-    { source: 'major-b', target: 'major-c', value: 120 },
-    { source: 'major-c', target: 'major-d', value: 65 },
-    { source: 'major-a', target: 'major-c', value: 70 },
-    { source: 'major-b', target: 'major-d', value: 40 },
-  ],
-  '18:10-18:20': [
-    { source: 'major-a', target: 'major-b', value: 160 },
-    { source: 'major-b', target: 'major-c', value: 140 },
-    { source: 'major-c', target: 'major-d', value: 90 },
-    { source: 'major-b', target: 'major-d', value: 58 },
-  ],
-  '18:20-18:35': [
-    { source: 'major-a', target: 'major-c', value: 130 },
-    { source: 'major-b', target: 'major-c', value: 115 },
-    { source: 'major-c', target: 'major-d', value: 100 },
-    { source: 'major-b', target: 'major-d', value: 72 },
-  ],
-  '18:35-18:50': [
-    { source: 'major-a', target: 'major-b', value: 80 },
-    { source: 'major-b', target: 'major-d', value: 95 },
-    { source: 'major-c', target: 'major-d', value: 120 },
-  ],
+const modeColors: Record<ModeType, string> = {
+  causalChain: '#4cc3ff',
+  hubNode: '#5ad8a6',
+  community: '#ffa940',
+  keyNode: '#ff7875',
 }
 
-// 原始点位，已添加经纬度（取西湖文化广场附近一圈，方便展示）
-const hexCells: HexCell[] = [
-  { id: 'raw-1', label: '东门A通道', lng: 120.1781, lat: 30.2762, majorNodeId: 'major-a', volume: 320 },
-  { id: 'raw-2', label: '东门B通道', lng: 120.1889, lat: 30.2683, majorNodeId: 'major-a', volume: 280 },
-  { id: 'raw-3', label: '东侧检票口', lng: 120.2012, lat: 30.2574, majorNodeId: 'major-a', volume: 190 },
-  { id: 'raw-4', label: '北看台1区', lng: 120.1586, lat: 30.3124, majorNodeId: 'major-b', volume: 260 },
-  { id: 'raw-5', label: '北看台2区', lng: 120.1633, lat: 30.2985, majorNodeId: 'major-b', volume: 235 },
-  { id: 'raw-6', label: '北看台3区', lng: 120.1497, lat: 30.3031, majorNodeId: 'major-b', volume: 210 },
-  { id: 'raw-7', label: '大厅东侧', lng: 120.1429, lat: 30.2791, majorNodeId: 'major-c', volume: 340 },
-  { id: 'raw-8', label: '大厅西侧', lng: 120.1292, lat: 30.2720, majorNodeId: 'major-c', volume: 305 },
-  { id: 'raw-9', label: '中央补给点', lng: 120.1520, lat: 30.2689, majorNodeId: 'major-c', volume: 220 },
-  { id: 'raw-10', label: '南出口走廊', lng: 120.1467, lat: 30.2444, majorNodeId: 'major-d', volume: 260 },
-  { id: 'raw-11', label: '南门检票区', lng: 120.1689, lat: 30.2383, majorNodeId: 'major-d', volume: 280 },
-  { id: 'raw-12', label: '南门候梯区', lng: 120.1320, lat: 30.2339, majorNodeId: 'major-d', volume: 230 },
-  { id: 'raw-13', label: '应急集结点', lng: 120.1106, lat: 30.2617, majorNodeId: 'major-a', volume: 160 },
-  { id: 'raw-14', label: '临时疏导口', lng: 120.1211, lat: 30.2878, majorNodeId: 'major-b', volume: 175 },
-  { id: 'raw-15', label: '核心补给仓', lng: 120.0957, lat: 30.2744, majorNodeId: 'major-c', volume: 145 },
-  { id: 'raw-16', label: '环路联控点', lng: 120.2120, lat: 30.2920, majorNodeId: 'major-a', volume: 165 },
-  { id: 'raw-17', label: '滨江换乘', lng: 120.2022, lat: 30.2280, majorNodeId: 'major-d', volume: 205 },
-  { id: 'raw-18', label: '西山步道', lng: 120.0700, lat: 30.2810, majorNodeId: 'major-c', volume: 155 },
-]
-
-// 模式子图示例数据（真实接入时按后端返回替换）
-const modeGraphs: Record<MajorNodeId, Record<ModeType, GraphSeriesOption>> = {
-  'major-a': {
-    causalChain: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 36,
-      edgeSymbol: ['none', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '入口-时序1', x: 10, y: 60 },
-        { name: '入口-时序2', x: 80, y: 60 },
-        { name: '入口-时序3', x: 150, y: 60 },
-      ],
-      links: [
-        { source: '入口-时序1', target: '入口-时序2' },
-        { source: '入口-时序2', target: '入口-时序3' },
-      ],
-    },
-    hubNode: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 28,
-      edgeSymbol: ['circle', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '枢纽H', x: 100, y: 70 },
-        { name: '看台A', x: 30, y: 30 },
-        { name: '看台B', x: 170, y: 30 },
-        { name: '走廊C', x: 30, y: 120 },
-        { name: '走廊D', x: 170, y: 120 },
-      ],
-      links: [
-        { source: '枢纽H', target: '看台A' },
-        { source: '枢纽H', target: '看台B' },
-        { source: '枢纽H', target: '走廊C' },
-        { source: '枢纽H', target: '走廊D' },
-      ],
-    },
-    community: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 22,
-      data: [
-        { name: '社区1', x: 40, y: 50 },
-        { name: '社区2', x: 90, y: 30 },
-        { name: '社区3', x: 140, y: 50 },
-        { name: '社区4', x: 70, y: 100 },
-        { name: '社区5', x: 120, y: 100 },
-      ],
-      links: [
-        { source: '社区1', target: '社区2' },
-        { source: '社区2', target: '社区3' },
-        { source: '社区3', target: '社区5' },
-        { source: '社区1', target: '社区4' },
-        { source: '社区4', target: '社区5' },
-      ],
-    },
-    keyNode: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 26,
-      edgeSymbol: ['circle', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '关键K', x: 100, y: 80 },
-        { name: '连通1', x: 40, y: 40 },
-        { name: '连通2', x: 160, y: 40 },
-        { name: '连通3', x: 40, y: 140 },
-        { name: '连通4', x: 160, y: 140 },
-      ],
-      links: [
-        { source: '关键K', target: '连通1' },
-        { source: '关键K', target: '连通2' },
-        { source: '关键K', target: '连通3' },
-        { source: '关键K', target: '连通4' },
-      ],
-    },
+const modeHintMap: Record<
+  ModeType,
+  { origin: string; shape: string; why: string }
+> = {
+  causalChain: {
+    origin: '基于局部时序先后关系与方向一致性，估计“起因->后续影响”路径。',
+    shape: '单向链式（最多 3 层）。',
+    why: '用于解释影响如何逐步传递。',
   },
-  'major-b': {
-    causalChain: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 36,
-      edgeSymbol: ['none', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '看台-时序1', x: 10, y: 60 },
-        { name: '看台-时序2', x: 80, y: 60 },
-        { name: '看台-时序3', x: 150, y: 60 },
-      ],
-      links: [
-        { source: '看台-时序1', target: '看台-时序2' },
-        { source: '看台-时序2', target: '看台-时序3' },
-      ],
-    },
-    hubNode: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 28,
-      edgeSymbol: ['circle', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '枢纽H', x: 100, y: 70 },
-        { name: '北梯A', x: 40, y: 30 },
-        { name: '北梯B', x: 160, y: 30 },
-        { name: '北梯C', x: 40, y: 120 },
-        { name: '北梯D', x: 160, y: 120 },
-        { name: '看台补给', x: 100, y: 130 },
-      ],
-      links: [
-        { source: '枢纽H', target: '北梯A' },
-        { source: '枢纽H', target: '北梯B' },
-        { source: '枢纽H', target: '北梯C' },
-        { source: '枢纽H', target: '北梯D' },
-        { source: '枢纽H', target: '看台补给' },
-      ],
-    },
-    community: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 22,
-      data: [
-        { name: '看台社区1', x: 50, y: 40 },
-        { name: '看台社区2', x: 100, y: 20 },
-        { name: '看台社区3', x: 150, y: 40 },
-        { name: '看台社区4', x: 70, y: 110 },
-        { name: '看台社区5', x: 130, y: 110 },
-      ],
-      links: [
-        { source: '看台社区1', target: '看台社区2' },
-        { source: '看台社区2', target: '看台社区3' },
-        { source: '看台社区3', target: '看台社区5' },
-        { source: '看台社区1', target: '看台社区4' },
-        { source: '看台社区4', target: '看台社区5' },
-      ],
-    },
-    keyNode: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 26,
-      edgeSymbol: ['circle', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '关键K', x: 100, y: 80 },
-        { name: '通道1', x: 40, y: 40 },
-        { name: '通道2', x: 160, y: 40 },
-        { name: '应急1', x: 40, y: 140 },
-        { name: '应急2', x: 160, y: 140 },
-      ],
-      links: [
-        { source: '关键K', target: '通道1' },
-        { source: '通道1', target: '通道2' },
-        { source: '关键K', target: '应急1' },
-        { source: '应急1', target: '应急2' },
-      ],
-    },
+  hubNode: {
+    origin: '基于出度集中度与局部控制力，识别中心向外的辐射点。',
+    shape: '单层有向星型（中心->外层）。',
+    why: '用于解释一个结点对多个对象的集中影响。',
   },
-  'major-c': {
-    causalChain: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 36,
-      edgeSymbol: ['none', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '大厅-时序1', x: 10, y: 60 },
-        { name: '大厅-时序2', x: 80, y: 60 },
-        { name: '大厅-时序3', x: 150, y: 60 },
-      ],
-      links: [
-        { source: '大厅-时序1', target: '大厅-时序2' },
-        { source: '大厅-时序2', target: '大厅-时序3' },
-      ],
-    },
-    hubNode: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 28,
-      edgeSymbol: ['circle', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '枢纽H', x: 100, y: 70 },
-        { name: '扶梯A', x: 50, y: 20 },
-        { name: '扶梯B', x: 150, y: 20 },
-        { name: '检票C', x: 30, y: 120 },
-        { name: '检票D', x: 170, y: 120 },
-      ],
-      links: [
-        { source: '枢纽H', target: '扶梯A' },
-        { source: '枢纽H', target: '扶梯B' },
-        { source: '枢纽H', target: '检票C' },
-        { source: '枢纽H', target: '检票D' },
-      ],
-    },
-    community: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 22,
-      data: [
-        { name: '大厅区1', x: 40, y: 60 },
-        { name: '大厅区2', x: 100, y: 30 },
-        { name: '大厅区3', x: 160, y: 60 },
-        { name: '大厅区4', x: 70, y: 110 },
-        { name: '大厅区5', x: 130, y: 110 },
-      ],
-      links: [
-        { source: '大厅区1', target: '大厅区2' },
-        { source: '大厅区2', target: '大厅区3' },
-        { source: '大厅区1', target: '大厅区4' },
-        { source: '大厅区3', target: '大厅区5' },
-        { source: '大厅区4', target: '大厅区5' },
-      ],
-    },
-    keyNode: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 26,
-      edgeSymbol: ['circle', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '关键K', x: 100, y: 80 },
-        { name: '连接1', x: 40, y: 40 },
-        { name: '连接2', x: 160, y: 40 },
-        { name: '连接3', x: 40, y: 140 },
-        { name: '连接4', x: 160, y: 140 },
-      ],
-      links: [
-        { source: '关键K', target: '连接1' },
-        { source: '连接2', target: '关键K' },
-        { source: '关键K', target: '连接3' },
-        { source: '连接3', target: '连接4' },
-      ],
-    },
+  community: {
+    origin: '基于局部互联强度与双向交互频次，抽取高内聚子群。',
+    shape: '局部稠密网状/环状结构。',
+    why: '用于解释群体内协同演化与强关联。',
   },
-  'major-d': {
-    causalChain: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 36,
-      edgeSymbol: ['none', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '出口-时序1', x: 10, y: 60 },
-        { name: '出口-时序2', x: 80, y: 60 },
-        { name: '出口-时序3', x: 150, y: 60 },
-      ],
-      links: [
-        { source: '出口-时序1', target: '出口-时序2' },
-        { source: '出口-时序2', target: '出口-时序3' },
-      ],
-    },
-    hubNode: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 28,
-      edgeSymbol: ['circle', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '枢纽H', x: 100, y: 70 },
-        { name: '疏散1', x: 40, y: 30 },
-        { name: '疏散2', x: 160, y: 30 },
-        { name: '疏散3', x: 40, y: 120 },
-        { name: '疏散4', x: 160, y: 120 },
-        { name: '服务点', x: 100, y: 130 },
-      ],
-      links: [
-        { source: '疏散1', target: '枢纽H' },
-        { source: '疏散2', target: '枢纽H' },
-        { source: '疏散3', target: '枢纽H' },
-        { source: '疏散4', target: '枢纽H' },
-        { source: '服务点', target: '枢纽H' },
-      ],
-    },
-    community: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 22,
-      data: [
-        { name: '出口区1', x: 50, y: 50 },
-        { name: '出口区2', x: 120, y: 40 },
-        { name: '出口区3', x: 160, y: 80 },
-        { name: '出口区4', x: 90, y: 110 },
-      ],
-      links: [
-        { source: '出口区1', target: '出口区2' },
-        { source: '出口区2', target: '出口区3' },
-        { source: '出口区3', target: '出口区4' },
-        { source: '出口区4', target: '出口区1' },
-      ],
-    },
-    keyNode: {
-      type: 'graph',
-      layout: 'none',
-      symbolSize: 26,
-      edgeSymbol: ['circle', 'arrow'],
-      edgeSymbolSize: 10,
-      data: [
-        { name: '关键K', x: 100, y: 80 },
-        { name: '出口N1', x: 40, y: 40 },
-        { name: '出口N2', x: 160, y: 40 },
-        { name: '出口N3', x: 40, y: 140 },
-        { name: '出口N4', x: 160, y: 140 },
-      ],
-      links: [
-        { source: '出口N1', target: '关键K' },
-        { source: '关键K', target: '出口N2' },
-        { source: '关键K', target: '出口N3' },
-        { source: '出口N3', target: '出口N4' },
-      ],
-    },
+  keyNode: {
+    origin: '基于桥接介数与路径通过率，定位跨区域连接咽喉点。',
+    shape: '三层桥接（流入层->中心->流出层）。',
+    why: '用于解释全局流转控制与连通维持作用。',
   },
 }
 
-const buildModeOption = (
-  modeTitle: string,
-  series: GraphSeriesOption | undefined,
+function buildModeCardOption(
+  title: string,
+  scenario: ModeGraphScenario,
+  selectedNodeId: string,
   textColor: string,
-): EChartsOption => {
-  const baseSeries: GraphSeriesOption =
-    series ||
-    ({
-      type: 'graph',
-      data: [],
-      links: [],
-    } as GraphSeriesOption)
+): EChartsOption {
+  const nodeCount = scenario.graph.nodes.length
+  const radius = 120
+
+  const nodes = scenario.graph.nodes.map((node, index) => {
+    if (node.id === selectedNodeId) {
+      return {
+        id: node.id,
+        name: node.id,
+        x: 0,
+        y: 0,
+        symbolSize: 54,
+        itemStyle: {
+          color: '#4cc3ff',
+          borderColor: '#ffffff',
+          borderWidth: 1,
+          shadowBlur: 16,
+          shadowColor: '#4cc3ff',
+        },
+      }
+    }
+
+    const angle = (Math.PI * 2 * index) / Math.max(nodeCount, 1)
+    return {
+      id: node.id,
+      name: node.id,
+      x: radius * Math.cos(angle),
+      y: radius * Math.sin(angle),
+      symbolSize: 34,
+      itemStyle: {
+        color: '#7e57c2',
+        borderColor: '#4cc3ff',
+        borderWidth: 1,
+      },
+    }
+  })
+
+  const series: GraphSeriesOption = {
+    type: 'graph',
+    layout: 'none',
+    roam: true,
+    edgeSymbol: ['none', 'arrow'],
+    edgeSymbolSize: 10,
+    data: nodes,
+    links: scenario.graph.edges.map((edge) => ({
+      source: edge.source,
+      target: edge.target,
+      value: edge.weight ?? 1,
+    })),
+    label: {
+      show: true,
+      color: textColor,
+      fontSize: 11,
+    },
+    lineStyle: {
+      color: '#4cc3ff',
+      width: 2,
+      opacity: 0.9,
+      curveness: 0.15,
+    },
+    emphasis: {
+      focus: 'adjacency',
+    },
+  }
 
   return {
     backgroundColor: 'transparent',
     title: {
-      text: modeTitle,
+      text: title,
       left: 'center',
-      top: 6,
-      textStyle: { color: textColor, fontSize: 13, fontWeight: 600 },
-    },
-    tooltip: { show: false },
-    series: [
-      {
-        ...baseSeries,
-        lineStyle: {
-          color: '#4cc3ff',
-          width: 2,
-          opacity: 0.85,
-        },
-        itemStyle: {
-          color: '#7e57c2',
-          borderColor: '#4cc3ff',
-        },
-        label: {
-          show: true,
-          color: textColor,
-          fontSize: 12,
-        },
+      top: 2,
+      textStyle: {
+        color: textColor,
+        fontSize: 13,
+        fontWeight: 600,
       },
-    ],
+    },
+    tooltip: {
+      formatter: (params: any) => {
+        if (params.dataType === 'node') return `结点：${params.data.id}`
+        if (params.dataType === 'edge') return `相关流向：${params.data.source} → ${params.data.target}`
+        return ''
+      },
+    },
+    series: [series],
     grid: { containLabel: true },
+  }
+}
+
+function normalizeModeScenario(
+  modeKey: ModeType,
+  scenario: ModeGraphScenario,
+  selectedNodeId: string,
+): ModeGraphScenario {
+  const sourceNodes = scenario.graph.nodes
+  const sourceEdges = scenario.graph.edges
+  const nodeSet = new Set(sourceNodes.map((n) => n.id))
+  const fallbackStart = scenario.anchors[0] || sourceNodes[0]?.id || selectedNodeId
+  const center = nodeSet.has(selectedNodeId) ? selectedNodeId : fallbackStart
+
+  if (!center) return scenario
+
+  const pickNodes = (ids: string[]) => {
+    const idSet = new Set(ids)
+    return sourceNodes.filter((node) => idSet.has(node.id))
+  }
+
+  if (modeKey === 'causalChain') {
+    const chainNodeIds: string[] = [center]
+    const chainEdges: ModeGraphEdge[] = []
+    const visited = new Set<string>([center])
+    let cursor = center
+
+    while (chainNodeIds.length < 3) {
+      const next = sourceEdges.find((edge) => edge.source === cursor && !visited.has(edge.target))
+      if (!next) break
+      chainEdges.push(next)
+      chainNodeIds.push(next.target)
+      visited.add(next.target)
+      cursor = next.target
+    }
+
+    return {
+      ...scenario,
+      graph: {
+        nodes: pickNodes(chainNodeIds),
+        edges: chainEdges,
+      },
+    }
+  }
+
+  if (modeKey === 'hubNode') {
+    const starEdges = sourceEdges.filter((edge) => edge.source === center).slice(0, 8)
+    const targetIds = Array.from(new Set(starEdges.map((edge) => edge.target)))
+    const nodeIds = [center, ...targetIds]
+    return {
+      ...scenario,
+      graph: {
+        nodes: pickNodes(nodeIds),
+        edges: starEdges,
+      },
+    }
+  }
+
+  if (modeKey === 'community') {
+    // 社区结构：优先“局部稠密/环状”，只保留核心局部子群，不向外扩展。
+    const incident = sourceEdges.filter((edge) => edge.source === center || edge.target === center)
+    const neighborIds = new Set<string>()
+    incident.forEach((edge) => {
+      if (edge.source !== center) neighborIds.add(edge.source)
+      if (edge.target !== center) neighborIds.add(edge.target)
+    })
+
+    const scored = Array.from(neighborIds).map((id) => {
+      const internalDegree = sourceEdges.filter(
+        (edge) =>
+          (edge.source === id && (neighborIds.has(edge.target) || edge.target === center)) ||
+          (edge.target === id && (neighborIds.has(edge.source) || edge.source === center)),
+      ).length
+      return { id, score: internalDegree }
+    })
+
+    const topNeighborIds = scored
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 6)
+      .map((item) => item.id)
+
+    const communityIds = new Set<string>([center, ...topNeighborIds])
+    const denseEdges = sourceEdges.filter(
+      (edge) => communityIds.has(edge.source) && communityIds.has(edge.target),
+    )
+
+    const nodeIds = Array.from(communityIds)
+    return {
+      ...scenario,
+      graph: {
+        nodes: pickNodes(nodeIds),
+        edges: denseEdges,
+      },
+    }
+  }
+
+  // keyNode: 三层桥接结构（流入层 -> 中心 -> 流出层），不向外扩展。
+  const incoming = sourceEdges.filter((edge) => edge.target === center).slice(0, 4)
+  const outgoing = sourceEdges.filter((edge) => edge.source === center).slice(0, 4)
+  const bridgeEdges = [...incoming, ...outgoing]
+  const nodeIds = new Set<string>([center])
+  bridgeEdges.forEach((edge) => {
+    nodeIds.add(edge.source)
+    nodeIds.add(edge.target)
+  })
+
+  return {
+    ...scenario,
+    graph: {
+      nodes: pickNodes(Array.from(nodeIds)),
+      edges: bridgeEdges,
+    },
   }
 }
 
 const CausalDetectionPage = () => {
   const { mode } = useThemeMode()
-  const [selectedMajorNodeId, setSelectedMajorNodeId] = useState<MajorNodeId | null>(null)
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>(timeSlots[0])
-  const [mapReady, setMapReady] = useState<boolean>(false)
+
+  const [nodes, setNodes] = useState<PatternNode[]>([])
+  const [edges, setEdges] = useState<PatternEdge[]>([])
+  const [memberships, setMemberships] = useState<NodeMembership[]>([])
+  const [modeGraphs, setModeGraphs] = useState<Partial<Record<ModeType, ModeGraphScenario>>>({})
+
+  const [selectedClusterId, setSelectedClusterId] = useState<string | null>(null)
   const [mapError, setMapError] = useState<string | null>(null)
+  const [dataError, setDataError] = useState<string | null>(null)
+  const [mapReady, setMapReady] = useState<boolean>(false)
+
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
   const mapInstanceRef = useRef<any>(null)
-  const markersRef = useRef<Array<{ marker: any; majorId: MajorNodeId }>>([])
+  const markersRef = useRef<Array<{ marker: any; nodeId: string }>>([])
+  const hoverInfoWindowRef = useRef<any>(null)
+
   const amapKey = import.meta.env.VITE_AMAP_KEY as string | undefined
   const amapSecurity = import.meta.env.VITE_AMAP_SECURITY as string | undefined
 
   const textColor = mode === 'dark' ? '#d8e6ff' : '#1f2d3d'
   const mutedColor = mode === 'dark' ? '#9fb3d9' : '#4a5a73'
-  const panelBg = mode === 'dark' ? 'rgba(76, 195, 255, 0.12)' : '#e6f4ff'
-  const borderColor = mode === 'dark' ? '#1f2d4d' : '#dce4f2'
 
-  // 加载高德地图 JSAPI 并绘制动效标记
+  useEffect(() => {
+    let mounted = true
+
+    Promise.all([
+      getPatternNodes<PatternNodesResponse>(),
+      getPatternEdges<PatternEdgesResponse>(),
+      getPatternModeMembership<PatternMembershipResponse>(),
+      getPatternModeGraphs<PatternModeGraphsResponse>(),
+    ])
+      .then(([nodeRes, edgeRes, membershipRes, modeGraphRes]) => {
+        if (!mounted) return
+        setNodes(nodeRes.nodes || [])
+        setEdges(edgeRes.edges || [])
+        setMemberships(membershipRes.memberships || [])
+        setModeGraphs(modeGraphRes.modeGraphs || {})
+      })
+      .catch(() => {
+        if (!mounted) return
+        setDataError('模式解析数据加载失败，请检查 /public/data/pattern-analysis-v2/*')
+      })
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const nodeById = useMemo(() => {
+    const map = new Map<string, PatternNode>()
+    nodes.forEach((node) => map.set(node.id, node))
+    return map
+  }, [nodes])
+
+  const membershipByNodeId = useMemo(() => {
+    const map = new Map<string, NodeMembership>()
+    memberships.forEach((item) => map.set(item.nodeId, item))
+    return map
+  }, [memberships])
+
+  const selectedNode = useMemo(() => {
+    if (!selectedClusterId) return null
+    return nodeById.get(selectedClusterId) || null
+  }, [nodeById, selectedClusterId])
+
+  const relatedEdges = useMemo(() => {
+    if (!selectedClusterId) return []
+    return edges.filter((edge) => edge.source === selectedClusterId || edge.target === selectedClusterId)
+  }, [edges, selectedClusterId])
+
+  const relatedNodes = useMemo(() => {
+    if (!selectedClusterId) return []
+    const idSet = new Set<string>([selectedClusterId])
+    relatedEdges.forEach((edge) => {
+      idSet.add(edge.source)
+      idSet.add(edge.target)
+    })
+    return nodes.filter((node) => idSet.has(node.id))
+  }, [nodes, relatedEdges, selectedClusterId])
+
+  const selectedModes = selectedClusterId ? membershipByNodeId.get(selectedClusterId)?.modes || [] : []
+  const selectedModeCount = selectedModes.length
+
+  const selectedModeColor =
+    selectedModeCount >= 3
+      ? modeColors.community
+      : selectedModeCount === 2
+        ? modeColors.hubNode
+        : selectedModeCount === 1
+          ? modeColors.causalChain
+          : mutedColor
+
+  const resolveMarkerColor = (nodeId: string) => {
+    const modeCount = membershipByNodeId.get(nodeId)?.modes.length || 0
+    if (modeCount >= 3) return '#ffa940'
+    if (modeCount === 2) return '#5ad8a6'
+    if (modeCount === 1) return '#4cc3ff'
+    return '#8aa0bf'
+  }
+
   useEffect(() => {
     if (typeof window === 'undefined') return
     if (!amapKey) {
@@ -495,43 +439,30 @@ const CausalDetectionPage = () => {
     }
 
     const buildMap = () => {
-      const AMap = (window as any).AMap
-      if (!AMap || mapInstanceRef.current) return
+      const AMap = window.AMap
+      if (!AMap || mapInstanceRef.current || !mapContainerRef.current) return
+
+      const defaultCenter = nodes.length ? [nodes[0].lng, nodes[0].lat] : [120.2235, 30.2305]
 
       const map = new AMap.Map(mapContainerRef.current, {
         viewMode: '3D',
-        zoom: 12.5,
-        center: [120.16, 30.27],
+        zoom: 16,
+        center: defaultCenter,
         mapStyle: mode === 'dark' ? 'amap://styles/darkblue' : 'amap://styles/whitesmoke',
         dragEnable: true,
         zoomEnable: true,
-        pitch: 35,
+        pitch: 30,
       })
+
       mapInstanceRef.current = map
-
-      // 清空旧标记
-      markersRef.current.forEach(({ marker }) => marker.setMap(null))
-      markersRef.current = []
-
-      hexCells.forEach((cell) => {
-        const color = majorNodeColor[cell.majorNodeId]
-        const marker = new AMap.Marker({
-          position: [cell.lng, cell.lat],
-          offset: new AMap.Pixel(-12, -12),
-          anchor: 'center',
-          title: cell.label,
-          content: `<div class="pulse-marker" data-major="${cell.majorNodeId}" style="--pulse-color:${color}"><div class="pulse-dot"></div><div class="pulse-ring"></div><div class="pulse-label">${cell.label}</div></div>`,
-        })
-        marker.on('click', () => setSelectedMajorNodeId(cell.majorNodeId))
-        marker.setMap(map)
-        markersRef.current.push({ marker, majorId: cell.majorNodeId })
+      hoverInfoWindowRef.current = new AMap.InfoWindow({
+        offset: new AMap.Pixel(0, -18),
+        closeWhenClickMap: true,
       })
-
       setMapReady(true)
     }
 
-    // 如果 SDK 已经存在，直接建图
-    if ((window as any).AMap) {
+    if (window.AMap) {
       buildMap()
       return
     }
@@ -543,7 +474,6 @@ const CausalDetectionPage = () => {
     const scriptId = 'amap-sdk'
     const existing = document.getElementById(scriptId)
     if (existing) {
-      // 说明脚本正在或已加载，等待稍后构建地图
       const onLoad = () => buildMap()
       existing.addEventListener('load', onLoad)
       return () => existing.removeEventListener('load', onLoad)
@@ -561,25 +491,64 @@ const CausalDetectionPage = () => {
       if (mapInstanceRef.current) {
         mapInstanceRef.current.destroy()
         mapInstanceRef.current = null
+        setMapReady(false)
       }
+      hoverInfoWindowRef.current = null
       markersRef.current.forEach(({ marker }) => marker.setMap(null))
       markersRef.current = []
     }
-  }, [amapKey, amapSecurity, mapError, mode])
+  }, [amapKey, amapSecurity, mode, nodes])
 
-  // 选中结点时同步高德标记的明暗
   useEffect(() => {
-    markersRef.current.forEach(({ marker, majorId }) => {
-      const active = !selectedMajorNodeId || majorId === selectedMajorNodeId
-      if (active) {
-        marker.show?.()
-      } else {
-        marker.hide?.()
-      }
-    })
-  }, [selectedMajorNodeId])
+    const map = mapInstanceRef.current
+    const AMap = window.AMap
+    if (!map || !AMap || !mapReady) return
 
-  // 主题变化时切换高德内置样式
+    markersRef.current.forEach(({ marker }) => marker.setMap(null))
+    markersRef.current = []
+
+    nodes.forEach((node) => {
+      const active = selectedClusterId === node.id
+      const marker = new AMap.Marker({
+        position: [node.lng, node.lat],
+        anchor: 'center',
+        title: node.id,
+      })
+
+      marker.setMap(map)
+      marker.setIcon(
+        new AMap.Icon({
+          size: new AMap.Size(active ? 18 : 14, active ? 18 : 14),
+          image:
+            'data:image/svg+xml;utf8,' +
+            encodeURIComponent(
+              `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"${active ? 18 : 14}\" height=\"${active ? 18 : 14}\" viewBox=\"0 0 20 20\"><circle cx=\"10\" cy=\"10\" r=\"${active ? 7 : 5.5}\" fill=\"${resolveMarkerColor(node.id)}\" stroke=\"#ffffff\" stroke-width=\"1.2\"/></svg>`,
+            ),
+          imageSize: new AMap.Size(active ? 18 : 14, active ? 18 : 14),
+        }),
+      )
+
+      marker.on('click', () => setSelectedClusterId(node.id))
+      marker.on('mouseover', () => {
+        const mapIns = mapInstanceRef.current
+        const info = hoverInfoWindowRef.current
+        if (!mapIns || !info) return
+        info.setContent(
+          `<div style="padding:4px 8px;color:#d8e6ff;background:rgba(7,15,31,0.92);border:1px solid rgba(76,195,255,0.55);border-radius:6px;font-size:12px;">${node.id}</div>`,
+        )
+        info.open(mapIns, [node.lng, node.lat])
+      })
+      marker.on('mouseout', () => {
+        hoverInfoWindowRef.current?.close()
+      })
+      markersRef.current.push({ marker, nodeId: node.id })
+    })
+
+    if (selectedNode) {
+      map.setCenter([selectedNode.lng, selectedNode.lat])
+    }
+  }, [mapReady, nodes, selectedClusterId, selectedNode, membershipByNodeId])
+
   useEffect(() => {
     if (mapInstanceRef.current) {
       mapInstanceRef.current.setMapStyle(
@@ -588,83 +557,64 @@ const CausalDetectionPage = () => {
     }
   }, [mode])
 
-  const edgeSet = useMemo(
-    () => majorEdgesByTime[selectedTimeSlot] || majorEdgesByTime[timeSlots[0]],
-    [selectedTimeSlot],
-  )
-
-  const selectedNode = selectedMajorNodeId
-    ? majorNodes.find((node) => node.id === selectedMajorNodeId)
-    : null
-
-  const selectedFlow = useMemo(() => {
-    if (!selectedMajorNodeId) return null
-    const relatedEdges = edgeSet.filter(
-      (edge) => edge.source === selectedMajorNodeId || edge.target === selectedMajorNodeId,
-    )
-    const total = relatedEdges.reduce((sum, edge) => sum + edge.value, 0)
-    return { total, count: relatedEdges.length }
-  }, [edgeSet, selectedMajorNodeId])
-
-  const directedGraphOption: EChartsOption = useMemo(() => {
-    // 预设圆形布局，保持节点位置稳定
-    const radius = 160
-    const centerX = 0
-    const centerY = 0
-
-    const nodes = majorNodes.map((node, idx) => {
-      const angle = (Math.PI * 2 * idx) / majorNodes.length
-      const x = centerX + radius * Math.cos(angle)
-      const y = centerY + radius * Math.sin(angle)
+  const centeredGraphOption: EChartsOption = useMemo(() => {
+    if (!selectedClusterId || !relatedNodes.length) {
       return {
-        id: node.id,
-        name: node.label,
-        value: selectedTimeSlot,
-        symbolSize: 48,
+        backgroundColor: 'transparent',
+        title: {
+          text: '点击左侧聚类结点查看关联时空图',
+          left: 'center',
+          top: 'middle',
+          textStyle: {
+            color: mutedColor,
+            fontSize: 14,
+            fontWeight: 500,
+          },
+        },
+      }
+    }
+
+    const neighbors = relatedNodes.filter((node) => node.id !== selectedClusterId)
+    const radius = 200
+
+    const graphNodes = [
+      {
+        id: selectedClusterId,
+        name: selectedClusterId,
+        x: 0,
+        y: 0,
+        symbolSize: 62,
         itemStyle: {
-          color: node.id === selectedMajorNodeId ? '#4cc3ff' : majorNodeColor[node.id],
-          shadowColor: node.id === selectedMajorNodeId ? '#4cc3ff' : 'transparent',
-          shadowBlur: node.id === selectedMajorNodeId ? 16 : 0,
+          color: '#4cc3ff',
+          shadowBlur: 20,
+          shadowColor: '#4cc3ff',
         },
-        label: {
-          color: textColor,
-          formatter: '{b}',
-        },
-        x,
-        y,
-      }
-    })
-
-    const links = edgeSet.map((edge) => {
-      const isActive =
-        selectedMajorNodeId !== null &&
-        (edge.source === selectedMajorNodeId || edge.target === selectedMajorNodeId)
-      return {
-        source: edge.source,
-        target: edge.target,
-        value: edge.value,
-        lineStyle: {
-          color: isActive ? '#4cc3ff' : mutedColor,
-          width: isActive ? 3 : 2,
-          opacity: isActive ? 0.95 : 0.45,
-        },
-        emphasis: {
-          lineStyle: { width: 4 },
-        },
-      }
-    })
+        label: { color: textColor },
+      },
+      ...neighbors.map((node, index) => {
+        const angle = (Math.PI * 2 * index) / Math.max(neighbors.length, 1)
+        return {
+          id: node.id,
+          name: node.id,
+          x: radius * Math.cos(angle),
+          y: radius * Math.sin(angle),
+          symbolSize: 40,
+          itemStyle: {
+            color: '#7e57c2',
+            borderColor: '#4cc3ff',
+            borderWidth: 1,
+          },
+          label: { color: textColor },
+        }
+      }),
+    ]
 
     return {
       backgroundColor: 'transparent',
       tooltip: {
         formatter: (params: any) => {
-          if (params.dataType === 'node') {
-            const node = majorNodes.find((n) => n.id === params.data.id)
-            return node?.label || ''
-          }
-          if (params.dataType === 'edge') {
-            return `流向：${params.data.source} → ${params.data.target}<br/>流量：${params.data.value}`
-          }
+          if (params.dataType === 'node') return `聚类结点：${params.data.id}`
+          if (params.dataType === 'edge') return `相关流向：${params.data.source} → ${params.data.target}`
           return ''
         },
       },
@@ -674,43 +624,88 @@ const CausalDetectionPage = () => {
           layout: 'none',
           roam: true,
           edgeSymbol: ['circle', 'arrow'],
-          edgeSymbolSize: 12,
-          label: { show: true, color: textColor },
-          data: nodes,
-          links,
+          edgeSymbolSize: 10,
+          label: {
+            show: true,
+            color: textColor,
+            fontSize: 12,
+          },
+          data: graphNodes,
+          links: relatedEdges.map((edge) => ({
+            source: edge.source,
+            target: edge.target,
+            value: edge.weight ?? 1,
+            lineStyle: {
+              color: '#4cc3ff',
+              width: 2.5,
+              opacity: 0.9,
+            },
+          })),
           lineStyle: { curveness: 0.2 },
           emphasis: { focus: 'adjacency' },
         },
       ],
     }
-  }, [edgeSet, mutedColor, selectedMajorNodeId, selectedTimeSlot, textColor])
-
-  const handleNodeSelect = (nodeId: MajorNodeId) => {
-    setSelectedMajorNodeId(nodeId)
-  }
+  }, [mutedColor, relatedEdges, relatedNodes, selectedClusterId, textColor])
 
   const onGraphEvents = {
     click: (params: any) => {
       if (params.dataType === 'node' && params.data?.id) {
-        handleNodeSelect(params.data.id as MajorNodeId)
+        setSelectedClusterId(params.data.id as string)
       }
     },
   }
 
-  const renderModePanel = (modeKey: ModeType, title: string) => {
-    if (!selectedMajorNodeId) {
+  const renderModePanel = (modeKey: ModeType) => {
+    const title = modeTitleMap[modeKey]
+    const modeGraph = modeGraphs[modeKey]
+    const isEnabled = selectedClusterId && selectedModes.includes(modeKey)
+    const hint = modeHintMap[modeKey]
+
+    if (!selectedClusterId || !isEnabled || !modeGraph) {
       return (
-        <div className="mode-card-empty">
-          <Empty description="点击中间主要结点以加载模式子图" />
+        <div className="mode-panel-shell">
+          <Tooltip
+            title={
+              <div className="mode-hint-content">
+                <div><strong>算法由来</strong>：{hint.origin}</div>
+                <div><strong>外形约束</strong>：{hint.shape}</div>
+                <div><strong>解释目标</strong>：{hint.why}</div>
+              </div>
+            }
+            placement="topRight"
+          >
+            <span className="mode-hint-trigger" aria-label={`${title}说明`}>
+              <InfoCircleOutlined />
+            </span>
+          </Tooltip>
+          <div className="mode-card-empty">
+            <Empty description={`当前结点未识别出${title}模式`} />
+          </div>
         </div>
       )
     }
 
-    const series = modeGraphs[selectedMajorNodeId]?.[modeKey]
-    const option = buildModeOption(title, series, textColor)
-
+    const normalizedModeGraph = normalizeModeScenario(modeKey, modeGraph, selectedClusterId)
+    const option = buildModeCardOption(title, normalizedModeGraph, selectedClusterId, textColor)
     return (
-      <ReactECharts option={option} style={{ width: '100%', height: '220px' }} />
+      <div className="mode-panel-shell">
+        <Tooltip
+          title={
+            <div className="mode-hint-content">
+              <div><strong>算法由来</strong>：{hint.origin}</div>
+              <div><strong>外形约束</strong>：{hint.shape}</div>
+              <div><strong>解释目标</strong>：{hint.why}</div>
+            </div>
+          }
+          placement="topRight"
+        >
+          <span className="mode-hint-trigger" aria-label={`${title}说明`}>
+            <InfoCircleOutlined />
+          </span>
+        </Tooltip>
+        <ReactECharts option={option} style={{ width: '100%', height: '220px' }} />
+      </div>
     )
   }
 
@@ -718,102 +713,94 @@ const CausalDetectionPage = () => {
     <div className="page-shell">
       <div className="time-control">
         <Space size="middle">
-          <Text type="secondary">时间窗口</Text>
-          <Segmented
-            options={timeSlots}
-            value={selectedTimeSlot}
-            onChange={(val) => setSelectedTimeSlot(val as string)}
-            size="middle"
-          />
-          {selectedNode && selectedFlow && (
+          <Text type="secondary">模式解析（图模型数据驱动）</Text>
+          {selectedNode ? (
             <Tag color="blue">
-              {selectedNode.label} · {selectedTimeSlot} · 总流量 {selectedFlow.total}
-              {selectedFlow.count ? ` / 边 ${selectedFlow.count}` : ''}
+              选中 {selectedNode.id} · 相关结点 {relatedNodes.length} · 相关边 {relatedEdges.length} · 可识别模式 {selectedModeCount}
             </Tag>
+          ) : (
+            <Tag>未选中聚类结点</Tag>
           )}
-          <Text type="secondary">点击节点联动时间片结果</Text>
         </Space>
       </div>
+
       <Row gutter={[16, 16]}>
         <Col xs={24} lg={7}>
           <Card
-            title="原始地图（经纬度六边形）"
+            title="结点底图"
             className="panel-card"
             bordered={false}
             bodyStyle={{ height: '520px', padding: 4, overflow: 'hidden' }}
           >
             <div className="map-legend">
-              <div className="legend-dot" style={{ background: majorNodeColor['major-a'] }} /> 入场初始点
-              <div className="legend-dot" style={{ background: majorNodeColor['major-b'] }} /> 看台初始点
-              <div className="legend-dot" style={{ background: majorNodeColor['major-c'] }} /> 中央初始点
-              <div className="legend-dot" style={{ background: majorNodeColor['major-d'] }} /> 出口初始点
+              <div className="legend-dot" style={{ background: '#4cc3ff' }} /> 1 种模式
+              <div className="legend-dot" style={{ background: '#5ad8a6' }} /> 2 种模式
+              <div className="legend-dot" style={{ background: '#ffa940' }} /> 3+ 种模式
+              <div className="legend-dot" style={{ background: '#8aa0bf' }} /> 0 种模式
             </div>
-            {mapError && (
-              <div className="map-error">{mapError}</div>
-            )}
-            <div
-              ref={mapContainerRef}
-              className="amap-container"
-              aria-label="amap-container"
-            />
+
+            {mapError && <div className="map-error">{mapError}</div>}
+            {dataError && <div className="map-error">{dataError}</div>}
+
+            <div ref={mapContainerRef} className="amap-container" aria-label="amap-container" />
           </Card>
         </Col>
+
         <Col xs={24} lg={9}>
           <Card
-            title="时空图数据"
+            title="关联图"
             className="panel-card"
             bordered={false}
             bodyStyle={{ height: '520px', padding: 0 }}
           >
             <ReactECharts
-              option={directedGraphOption}
+              option={centeredGraphOption}
               style={{ width: '100%', height: '100%' }}
               onEvents={onGraphEvents}
             />
           </Card>
         </Col>
+
         <Col xs={24} lg={8}>
-          <Card
-            title="模式子图"
-            className="panel-card"
-            bordered={false}
-          >
+          <Card title="模式子图" className="panel-card" bordered={false}>
             <Row gutter={[12, 12]}>
               <Col span={12}>
                 <Card size="small" className="mode-card" bordered>
-                  {renderModePanel('causalChain', '因果链')}
+                  {renderModePanel('causalChain')}
                 </Card>
               </Col>
               <Col span={12}>
                 <Card size="small" className="mode-card" bordered>
-                  {renderModePanel('hubNode', '枢纽节点')}
+                  {renderModePanel('hubNode')}
                 </Card>
               </Col>
               <Col span={12}>
                 <Card size="small" className="mode-card" bordered>
-                  {renderModePanel('community', '社区结构')}
+                  {renderModePanel('community')}
                 </Card>
               </Col>
               <Col span={12}>
                 <Card size="small" className="mode-card" bordered>
-                  {renderModePanel('keyNode', '关键节点')}
+                  {renderModePanel('keyNode')}
                 </Card>
               </Col>
             </Row>
-            {!selectedMajorNodeId && (
+
+            {!selectedClusterId && (
               <div className="mode-help-text">
                 <Text type="secondary">
-                  点击地图或中间节点，联动左侧原始点位高亮与右侧四种模式子图。
+                  点击左侧地图或中间时空图中的任意聚类结点，右侧会显示该结点可识别的 0-4 种模式。
                 </Text>
               </div>
             )}
-            {selectedMajorNodeId && (
+
+            {selectedClusterId && (
               <>
                 <Divider style={{ margin: '8px 0' }} />
                 <div className="mode-stat">
-                  <Text type="secondary">当前主枢纽</Text>
-                  <Text strong style={{ color: majorNodeColor[selectedMajorNodeId] }}>
-                    {selectedNode?.label}
+                  <Text type="secondary">当前聚类结点</Text>
+                  <Text strong style={{ color: selectedModeColor }}>
+                    {selectedClusterId}
                   </Text>
                 </div>
               </>
