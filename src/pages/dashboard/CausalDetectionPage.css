@@ -47,6 +47,10 @@
   min-height: 230px;
 }
 
+.mode-card .ant-card-body {
+  padding: 0;
+}
+
 :root[data-theme='light'] .mode-card {
   border-color: #dce4f2;
 }
@@ -55,18 +59,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 200px;
+  height: 172px;
+  padding-top: 20px;
 }
 
 .mode-panel-shell {
   position: relative;
 }
 
-.mode-hint-trigger {
+.mode-panel-title {
   position: absolute;
-  top: 2px;
-  right: 3px;
-  z-index: 4;
+  top: 8px;
+  left: 10px;
+  z-index: 2;
+  color: #4cc3ff;
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.mode-hint-trigger {
   font-size: 14px;
   line-height: 1;
   width: 22px;
@@ -82,12 +94,28 @@
   user-select: none;
 }
 
+.mode-hint-trigger-global {
+  position: static;
+}
+
 .mode-hint-content {
   max-width: 320px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
   font-size: 12px;
+}
+
+.mode-hint-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mode-hint-title {
+  color: #4cc3ff;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .mode-help-text {

@@ -1,0 +1,1561 @@
+{
+  "results": [
+    {
+      "nodeId": "zone_1",
+      "limitPercent": 0,
+      "summary": "关闭 '北侧入口' 后，其下游 7 个节点受到直接影响。人流降幅最大的是 '北侧入口'（-865）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 55
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 666
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 551
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 500
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 812
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 441
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 417
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 294
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_1",
+          "target": "zone_2",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_1",
+      "limitPercent": 50,
+      "summary": "对 '北侧入口' 限流至 50% 后，下游通行能力收缩、上游可能出现回压。人流降幅最大的是 '北侧入口'（-460）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 460
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1073
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 656
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 595
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 966
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 491
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 463
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 327
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_1",
+          "target": "zone_2",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_1",
+      "limitPercent": 80,
+      "summary": "对 '北侧入口' 限流至 80% 后，下游通行能力收缩、上游可能出现回压。人流降幅最大的是 '北侧入口'（-184）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 736
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1317
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 718
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 652
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1058
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 520
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 491
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 347
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_1",
+          "target": "zone_2",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_1",
+      "limitPercent": 120,
+      "summary": "对 '北侧入口' 提升至 120% 后，主路径通行能力增强。人流增量最大的是 '北侧入口'（+184）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1104
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1604
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 792
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 719
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1167
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 555
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 524
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 370
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_1",
+      "limitPercent": 150,
+      "summary": "对 '北侧入口' 提升至 150% 后，主路径通行能力增强。人流增量最大的是 '北侧入口'（+460）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1380
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1791
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 840
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 762
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1238
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 578
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 546
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 385
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_1",
+      "limitPercent": 200,
+      "summary": "对 '北侧入口' 提升至 200% 后，主路径通行能力增强。人流增量最大的是 '北侧入口'（+920）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1840
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 2102
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 920
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 835
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1355
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 616
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 581
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 410
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_2",
+      "limitPercent": 0,
+      "summary": "关闭 '主安检厅' 后，其下游 6 个节点受到直接影响。人流增量最大的是 '北侧入口'（+322）。人流降幅最大的是 '主安检厅'（-1391）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1242
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 89
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 342
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 310
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 504
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 392
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 370
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 261
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_2",
+          "target": "zone_3",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_2",
+          "target": "zone_4",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_2",
+          "target": "zone_5",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_2",
+      "limitPercent": 50,
+      "summary": "对 '主安检厅' 限流至 50% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '北侧入口'（+161）。人流降幅最大的是 '主安检厅'（-740）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1081
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 740
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 551
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 500
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 812
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 466
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 440
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 311
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_2",
+          "target": "zone_3",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_2",
+          "target": "zone_4",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_2",
+          "target": "zone_5",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_2",
+      "limitPercent": 80,
+      "summary": "对 '主安检厅' 限流至 80% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '北侧入口'（+64）。人流降幅最大的是 '主安检厅'（-296）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 984
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1184
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 676
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 614
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 997
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 510
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 482
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 340
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_2",
+          "target": "zone_3",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_2",
+          "target": "zone_4",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_2",
+          "target": "zone_5",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_2",
+      "limitPercent": 120,
+      "summary": "对 '主安检厅' 提升至 120% 后，主路径通行能力增强。人流增量最大的是 '主安检厅'（+296）。人流降幅最大的是 '北侧入口'（-33）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 887
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1776
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 824
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 748
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1214
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 563
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 531
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 375
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_2",
+      "limitPercent": 150,
+      "summary": "对 '主安检厅' 提升至 150% 后，主路径通行能力增强。人流增量最大的是 '主安检厅'（+740）。人流降幅最大的是 '北侧入口'（-83）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 837
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 2220
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 920
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 835
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1355
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 597
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 564
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 398
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_2",
+      "limitPercent": 200,
+      "summary": "对 '主安检厅' 提升至 200% 后，主路径通行能力增强。人流增量最大的是 '主安检厅'（+1480）。人流降幅最大的是 '北侧入口'（-166）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 754
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 2960
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 1079
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 980
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1590
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 653
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 617
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 436
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_3",
+      "limitPercent": 0,
+      "summary": "关闭 '东通道' 后，其下游 1 个节点受到直接影响。人流增量最大的是 '主安检厅'（+518）。人流降幅最大的是 '东通道'（-714）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1081
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1998
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 46
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 243
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_3",
+          "target": "zone_6",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_3",
+      "limitPercent": 50,
+      "summary": "对 '东通道' 限流至 50% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '主安检厅'（+259）。人流降幅最大的是 '东通道'（-380）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1000
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1739
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 380
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 392
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_3",
+          "target": "zone_6",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_3",
+      "limitPercent": 80,
+      "summary": "对 '东通道' 限流至 80% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '主安检厅'（+104）。人流降幅最大的是 '东通道'（-152）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 952
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1584
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 608
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 481
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_3",
+          "target": "zone_6",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_3",
+      "limitPercent": 120,
+      "summary": "对 '东通道' 提升至 120% 后，主路径通行能力增强。人流增量最大的是 '东通道'（+152）。人流降幅最大的是 '主安检厅'（-53）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 903
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1427
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 912
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 585
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_3",
+      "limitPercent": 150,
+      "summary": "对 '东通道' 提升至 150% 后，主路径通行能力增强。人流增量最大的是 '东通道'（+380）。人流降幅最大的是 '主安检厅'（-133）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 879
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1347
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 1140
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 653
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_3",
+      "limitPercent": 200,
+      "summary": "对 '东通道' 提升至 200% 后，主路径通行能力增强。人流增量最大的是 '东通道'（+760）。人流降幅最大的是 '主安检厅'（-266）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 837
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1214
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 1520
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 767
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_4",
+      "limitPercent": 0,
+      "summary": "关闭 '西通道' 后，其下游 1 个节点受到直接影响。人流增量最大的是 '主安检厅'（+518）。人流降幅最大的是 '西通道'（-649）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1081
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1998
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 41
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 229
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_4",
+          "target": "zone_7",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_4",
+      "limitPercent": 50,
+      "summary": "对 '西通道' 限流至 50% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '主安检厅'（+259）。人流降幅最大的是 '西通道'（-345）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1000
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1739
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 345
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 370
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_4",
+          "target": "zone_7",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_4",
+      "limitPercent": 80,
+      "summary": "对 '西通道' 限流至 80% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '主安检厅'（+104）。人流降幅最大的是 '西通道'（-138）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 952
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1584
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 552
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 454
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_4",
+          "target": "zone_7",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_4",
+      "limitPercent": 120,
+      "summary": "对 '西通道' 提升至 120% 后，主路径通行能力增强。人流增量最大的是 '西通道'（+138）。人流降幅最大的是 '主安检厅'（-53）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 903
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1427
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 828
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 553
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_4",
+      "limitPercent": 150,
+      "summary": "对 '西通道' 提升至 150% 后，主路径通行能力增强。人流增量最大的是 '西通道'（+345）。人流降幅最大的是 '主安检厅'（-133）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 879
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1347
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 1035
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 617
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_4",
+      "limitPercent": 200,
+      "summary": "对 '西通道' 提升至 200% 后，主路径通行能力增强。人流增量最大的是 '西通道'（+690）。人流降幅最大的是 '主安检厅'（-266）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 837
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1214
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 1380
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 724
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_5",
+      "limitPercent": 0,
+      "summary": "关闭 '中央集散区' 后，其下游 3 个节点受到直接影响。人流增量最大的是 '主安检厅'（+518）。人流降幅最大的是 '中央集散区'（-1053）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1081
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1998
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 67
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 243
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 229
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 162
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_5",
+          "target": "zone_6",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_5",
+          "target": "zone_7",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_5",
+          "target": "zone_8",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_5",
+      "limitPercent": 50,
+      "summary": "对 '中央集散区' 限流至 50% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '主安检厅'（+259）。人流降幅最大的是 '中央集散区'（-560）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1000
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1739
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 560
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 392
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 370
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 261
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_5",
+          "target": "zone_6",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_5",
+          "target": "zone_7",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_5",
+          "target": "zone_8",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_5",
+      "limitPercent": 80,
+      "summary": "对 '中央集散区' 限流至 80% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '主安检厅'（+104）。人流降幅最大的是 '中央集散区'（-224）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 952
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1584
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 896
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 481
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 454
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 320
+        }
+      ],
+      "edgeUpdates": [
+        {
+          "source": "zone_5",
+          "target": "zone_6",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_5",
+          "target": "zone_7",
+          "style": "dashed"
+        },
+        {
+          "source": "zone_5",
+          "target": "zone_8",
+          "style": "dashed"
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_5",
+      "limitPercent": 120,
+      "summary": "对 '中央集散区' 提升至 120% 后，主路径通行能力增强。人流增量最大的是 '中央集散区'（+224）。人流降幅最大的是 '主安检厅'（-53）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 903
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1427
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1344
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 585
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 553
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 390
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_5",
+      "limitPercent": 150,
+      "summary": "对 '中央集散区' 提升至 150% 后，主路径通行能力增强。人流增量最大的是 '中央集散区'（+560）。人流降幅最大的是 '主安检厅'（-133）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 879
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1347
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1680
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 653
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 617
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 436
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_5",
+      "limitPercent": 200,
+      "summary": "对 '中央集散区' 提升至 200% 后，主路径通行能力增强。人流增量最大的是 '中央集散区'（+1120）。人流降幅最大的是 '主安检厅'（-266）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 837
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1214
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 2240
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 767
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 724
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 511
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_6",
+      "limitPercent": 0,
+      "summary": "关闭 '北出口' 后，其下游 0 个节点受到直接影响。人流增量最大的是 '中央集散区'（+392）。人流降幅最大的是 '北出口'（-508）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1027
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1739
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 1026
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1512
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 32
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_6",
+      "limitPercent": 50,
+      "summary": "对 '北出口' 限流至 50% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '中央集散区'（+196）。人流降幅最大的是 '北出口'（-270）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 974
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1609
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 893
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1316
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 270
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_6",
+      "limitPercent": 80,
+      "summary": "对 '北出口' 限流至 80% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '中央集散区'（+78）。人流降幅最大的是 '北出口'（-108）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 941
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1532
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 813
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1198
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 432
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_6",
+      "limitPercent": 120,
+      "summary": "对 '北出口' 提升至 120% 后，主路径通行能力增强。人流增量最大的是 '北出口'（+108）。人流降幅最大的是 '中央集散区'（-40）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 909
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1453
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 733
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1080
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 648
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_6",
+      "limitPercent": 150,
+      "summary": "对 '北出口' 提升至 150% 后，主路径通行能力增强。人流增量最大的是 '北出口'（+270）。人流降幅最大的是 '中央集散区'（-101）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 892
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1413
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 692
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1019
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 810
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_6",
+      "limitPercent": 200,
+      "summary": "对 '北出口' 提升至 200% 后，主路径通行能力增强。人流增量最大的是 '北出口'（+540）。人流降幅最大的是 '中央集散区'（-202）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 865
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1347
+        },
+        {
+          "nodeId": "zone_3",
+          "value": 623
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 918
+        },
+        {
+          "nodeId": "zone_6",
+          "value": 1080
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_7",
+      "limitPercent": 0,
+      "summary": "关闭 '南出口' 后，其下游 0 个节点受到直接影响。人流增量最大的是 '中央集散区'（+392）。人流降幅最大的是 '南出口'（-479）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1027
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1739
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 932
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1512
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 31
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_7",
+      "limitPercent": 50,
+      "summary": "对 '南出口' 限流至 50% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '中央集散区'（+196）。人流降幅最大的是 '南出口'（-255）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 974
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1609
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 811
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1316
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 255
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_7",
+      "limitPercent": 80,
+      "summary": "对 '南出口' 限流至 80% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '中央集散区'（+78）。人流降幅最大的是 '南出口'（-102）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 941
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1532
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 738
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1198
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 408
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_7",
+      "limitPercent": 120,
+      "summary": "对 '南出口' 提升至 120% 后，主路径通行能力增强。人流增量最大的是 '南出口'（+102）。人流降幅最大的是 '中央集散区'（-40）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 909
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1453
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 665
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1080
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 612
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_7",
+      "limitPercent": 150,
+      "summary": "对 '南出口' 提升至 150% 后，主路径通行能力增强。人流增量最大的是 '南出口'（+255）。人流降幅最大的是 '中央集散区'（-101）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 892
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1413
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 628
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1019
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 765
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_7",
+      "limitPercent": 200,
+      "summary": "对 '南出口' 提升至 200% 后，主路径通行能力增强。人流增量最大的是 '南出口'（+510）。人流降幅最大的是 '中央集散区'（-202）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 865
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1347
+        },
+        {
+          "nodeId": "zone_4",
+          "value": 566
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 918
+        },
+        {
+          "nodeId": "zone_7",
+          "value": 1020
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_8",
+      "limitPercent": 0,
+      "summary": "关闭 'VIP 区' 后，其下游 0 个节点受到直接影响。人流增量最大的是 '中央集散区'（+392）。人流降幅最大的是 'VIP 区'（-338）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 1027
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1739
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1512
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 22
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_8",
+      "limitPercent": 50,
+      "summary": "对 'VIP 区' 限流至 50% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '中央集散区'（+196）。人流降幅最大的是 'VIP 区'（-180）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 974
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1609
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1316
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 180
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_8",
+      "limitPercent": 80,
+      "summary": "对 'VIP 区' 限流至 80% 后，下游通行能力收缩、上游可能出现回压。人流增量最大的是 '中央集散区'（+78）。人流降幅最大的是 'VIP 区'（-72）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 941
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1532
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1198
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 288
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_8",
+      "limitPercent": 120,
+      "summary": "对 'VIP 区' 提升至 120% 后，主路径通行能力增强。人流增量最大的是 'VIP 区'（+72）。人流降幅最大的是 '中央集散区'（-40）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 909
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1453
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1080
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 432
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_8",
+      "limitPercent": 150,
+      "summary": "对 'VIP 区' 提升至 150% 后，主路径通行能力增强。人流增量最大的是 'VIP 区'（+180）。人流降幅最大的是 '中央集散区'（-101）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 892
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1413
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 1019
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 540
+        }
+      ]
+    },
+    {
+      "nodeId": "zone_8",
+      "limitPercent": 200,
+      "summary": "对 'VIP 区' 提升至 200% 后，主路径通行能力增强。人流增量最大的是 'VIP 区'（+360）。人流降幅最大的是 '中央集散区'（-202）。",
+      "nodeUpdates": [
+        {
+          "nodeId": "zone_1",
+          "value": 865
+        },
+        {
+          "nodeId": "zone_2",
+          "value": 1347
+        },
+        {
+          "nodeId": "zone_5",
+          "value": 918
+        },
+        {
+          "nodeId": "zone_8",
+          "value": 720
+        }
+      ]
+    }
+  ]
+}

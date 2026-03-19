@@ -5,11 +5,20 @@ import { useState } from 'react'
 
 interface NodeControlPanelProps {
   node: GraphNode | null
-  onAction: (nodeId: string, actionType: 'CLOSE' | 'LIMIT', limitPercent?: number) => void
+  onAction: (nodeId: string, actionType: 'LIMIT', limitPercent?: number) => void
+}
+
+const limitMarks = {
+  0: '0',
+  50: '50',
+  80: '80',
+  120: '120',
+  150: '150',
+  200: '200',
 }
 
 const NodeControlPanel = ({ node, onAction }: NodeControlPanelProps) => {
-  const [limitPercent, setLimitPercent] = useState(100)
+  const [limitPercent, setLimitPercent] = useState<number>(80)
 
   if (!node) {
     return (
@@ -29,26 +38,26 @@ const NodeControlPanel = ({ node, onAction }: NodeControlPanelProps) => {
       <div style={{ marginTop: '24px' }}>
         <Space direction="vertical" style={{ width: '100%' }}>
           <Button
-            type="primary"
-            danger
             block
-            onClick={() => onAction(node.id, 'CLOSE')}
+            type="primary"
+            danger={limitPercent === 0}
+            onClick={() => onAction(node.id, 'LIMIT', limitPercent)}
           >
-            [关闭] 通道
+            {limitPercent === 0 ? '关闭通道' : '应用限流'}
           </Button>
           <div>
-            <Typography.Text>限流比例 (50% - 200%)</Typography.Text>
+            <Typography.Text>限流比例</Typography.Text>
             <Slider
-              min={50}
+              min={0}
               max={200}
+              step={null}
               value={limitPercent}
-              onChange={(val) => setLimitPercent(val)}
-              marks={{ 50: '50%', 100: '100%', 150: '150%', 200: '200%' }}
-              tooltip={{ formatter: (v) => `${v}%` }}
+              onChange={(val) => setLimitPercent(val as number)}
+              marks={limitMarks}
+              tooltip={{
+                formatter: (v) => (v === 0 ? '关闭通道' : `${v}%`),
+              }}
             />
-            <Button block onClick={() => onAction(node.id, 'LIMIT', limitPercent)}>
-              应用限流
-            </Button>
           </div>
         </Space>
       </div>

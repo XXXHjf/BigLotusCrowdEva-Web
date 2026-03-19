@@ -37,7 +37,21 @@ const toScore = (values: number[]): number[] => {
 }
 
 const ModelArena = ({ data }: ModelArenaProps) => {
-  if (!data.models.length || !data.strategies.length) {
+  const modelOptions = data.models.map((model) => ({ value: model.name, label: model.name }))
+  const defaultModelName =
+    modelOptions.find((item) => item.value === 'Average')?.value || modelOptions[0]?.value || ''
+  const [selectedModelName, setSelectedModelName] = useState<string>(defaultModelName)
+  const hasData = data.models.length > 0 && data.strategies.length > 0
+
+  const selectedModel = useMemo(() => {
+    if (!hasData) {
+      return null
+    }
+
+    return data.models.find((model) => model.name === selectedModelName) || data.models[0]
+  }, [data.models, hasData, selectedModelName])
+
+  if (!hasData || !selectedModel) {
     return (
       <Card className="panel-card" bordered={false}>
         <Title level={4}>模型准确率</Title>
@@ -45,15 +59,6 @@ const ModelArena = ({ data }: ModelArenaProps) => {
       </Card>
     )
   }
-
-  const modelOptions = data.models.map((model) => ({ value: model.name, label: model.name }))
-  const defaultModelName = modelOptions.find((item) => item.value === 'Average')?.value || modelOptions[0]?.value
-  const [selectedModelName, setSelectedModelName] = useState<string>(defaultModelName || data.models[0].name)
-
-  const selectedModel = useMemo(
-    () => data.models.find((model) => model.name === selectedModelName) || data.models[0],
-    [data.models, selectedModelName],
-  )
 
   const strategyLabels = data.strategies.map((s) => s.label)
   const maeRaw = data.strategies.map((s) => selectedModel.metrics[s.key]?.mae ?? 0)

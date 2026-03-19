@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+﻿import { useEffect, useMemo, useRef, useState } from 'react'
 import { Card, Col, Empty, Row, Typography, Space, Tag, Divider, Tooltip } from 'antd'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import ReactECharts from 'echarts-for-react'
@@ -29,7 +29,6 @@ interface PatternNode {
 }
 
 interface PatternEdge {
-  id: string
   source: string
   target: string
   weight?: number
@@ -123,8 +122,26 @@ const modeHintMap: Record<
   },
 }
 
+function buildMarkerIcon(
+  AMap: any,
+  color: string,
+  active: boolean,
+) {
+  const size = active ? 18 : 14
+  const radius = active ? 7 : 5.5
+
+  return new AMap.Icon({
+    size: new AMap.Size(size, size),
+    image:
+      'data:image/svg+xml;utf8,' +
+      encodeURIComponent(
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 20 20"><circle cx="10" cy="10" r="${radius}" fill="${color}" stroke="#ffffff" stroke-width="1.2"/></svg>`,
+      ),
+    imageSize: new AMap.Size(size, size),
+  })
+}
+
 function buildModeCardOption(
-  title: string,
   scenario: ModeGraphScenario,
   selectedNodeId: string,
   textColor: string,
@@ -195,16 +212,6 @@ function buildModeCardOption(
 
   return {
     backgroundColor: 'transparent',
-    title: {
-      text: title,
-      left: 'center',
-      top: 2,
-      textStyle: {
-        color: textColor,
-        fontSize: 13,
-        fontWeight: 600,
-      },
-    },
     tooltip: {
       formatter: (params: any) => {
         if (params.dataType === 'node') return `结点：${params.data.id}`
@@ -344,7 +351,7 @@ const CausalDetectionPage = () => {
 
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
   const mapInstanceRef = useRef<any>(null)
-  const markersRef = useRef<Array<{ marker: any; nodeId: string }>>([])
+  const markersRef = useRef<Map<string, any>>(new Map())
   const hoverInfoWindowRef = useRef<any>(null)
 
   const amapKey = import.meta.env.VITE_AMAP_KEY as string | undefined
@@ -371,7 +378,7 @@ const CausalDetectionPage = () => {
       })
       .catch(() => {
         if (!mounted) return
-        setDataError('模式解析数据加载失败，请检查 /public/data/pattern-analysis-v2/*')
+        setDataError('模式解析数据加载失败，请检查 /public/data/pattern-analysis/*')
       })
 
     return () => {
@@ -494,8 +501,8 @@ const CausalDetectionPage = () => {
         setMapReady(false)
       }
       hoverInfoWindowRef.current = null
-      markersRef.current.forEach(({ marker }) => marker.setMap(null))
-      markersRef.current = []
+      markersRef.current.forEach((marker) => marker.setMap(null))
+      markersRef.current.clear()
     }
   }, [amapKey, amapSecurity, mode, nodes])
 
@@ -504,11 +511,9 @@ const CausalDetectionPage = () => {
     const AMap = window.AMap
     if (!map || !AMap || !mapReady) return
 
-    markersRef.current.forEach(({ marker }) => marker.setMap(null))
-    markersRef.current = []
-
     nodes.forEach((node) => {
-      const active = selectedClusterId === node.id
+      if (markersRef.current.has(node.id)) return
+
       const marker = new AMap.Marker({
         position: [node.lng, node.lat],
         anchor: 'center',
@@ -516,18 +521,6 @@ const CausalDetectionPage = () => {
       })
 
       marker.setMap(map)
-      marker.setIcon(
-        new AMap.Icon({
-          size: new AMap.Size(active ? 18 : 14, active ? 18 : 14),
-          image:
-            'data:image/svg+xml;utf8,' +
-            encodeURIComponent(
-              `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"${active ? 18 : 14}\" height=\"${active ? 18 : 14}\" viewBox=\"0 0 20 20\"><circle cx=\"10\" cy=\"10\" r=\"${active ? 7 : 5.5}\" fill=\"${resolveMarkerColor(node.id)}\" stroke=\"#ffffff\" stroke-width=\"1.2\"/></svg>`,
-            ),
-          imageSize: new AMap.Size(active ? 18 : 14, active ? 18 : 14),
-        }),
-      )
-
       marker.on('click', () => setSelectedClusterId(node.id))
       marker.on('mouseover', () => {
         const mapIns = mapInstanceRef.current
@@ -541,11 +534,31 @@ const CausalDetectionPage = () => {
       marker.on('mouseout', () => {
         hoverInfoWindowRef.current?.close()
       })
-      markersRef.current.push({ marker, nodeId: node.id })
+
+      markersRef.current.set(node.id, marker)
+    })
+
+    const validNodeIds = new Set(nodes.map((node) => node.id))
+    markersRef.current.forEach((marker, nodeId) => {
+      if (validNodeIds.has(nodeId)) return
+      marker.setMap(null)
+      markersRef.current.delete(nodeId)
+    })
+  }, [mapReady, nodes])
+
+  useEffect(() => {
+    const AMap = window.AMap
+    if (!AMap || !mapReady) return
+
+    nodes.forEach((node) => {
+      const marker = markersRef.current.get(node.id)
+      if (!marker) return
+      const active = selectedClusterId === node.id
+      marker.setIcon(buildMarkerIcon(AMap, resolveMarkerColor(node.id), active))
     })
 
     if (selectedNode) {
-      map.setCenter([selectedNode.lng, selectedNode.lat])
+      mapInstanceRef.current?.setCenter([selectedNode.lng, selectedNode.lat])
     }
   }, [mapReady, nodes, selectedClusterId, selectedNode, membershipByNodeId])
 
@@ -660,25 +673,11 @@ const CausalDetectionPage = () => {
     const title = modeTitleMap[modeKey]
     const modeGraph = modeGraphs[modeKey]
     const isEnabled = selectedClusterId && selectedModes.includes(modeKey)
-    const hint = modeHintMap[modeKey]
 
     if (!selectedClusterId || !isEnabled || !modeGraph) {
       return (
         <div className="mode-panel-shell">
-          <Tooltip
-            title={
-              <div className="mode-hint-content">
-                <div><strong>算法由来</strong>：{hint.origin}</div>
-                <div><strong>外形约束</strong>：{hint.shape}</div>
-                <div><strong>解释目标</strong>：{hint.why}</div>
-              </div>
-            }
-            placement="topRight"
-          >
-            <span className="mode-hint-trigger" aria-label={`${title}说明`}>
-              <InfoCircleOutlined />
-            </span>
-          </Tooltip>
+          <div className="mode-panel-title">{title}</div>
           <div className="mode-card-empty">
             <Empty description={`当前结点未识别出${title}模式`} />
           </div>
@@ -687,27 +686,30 @@ const CausalDetectionPage = () => {
     }
 
     const normalizedModeGraph = normalizeModeScenario(modeKey, modeGraph, selectedClusterId)
-    const option = buildModeCardOption(title, normalizedModeGraph, selectedClusterId, textColor)
+    const option = buildModeCardOption(normalizedModeGraph, selectedClusterId, textColor)
     return (
       <div className="mode-panel-shell">
-        <Tooltip
-          title={
-            <div className="mode-hint-content">
-              <div><strong>算法由来</strong>：{hint.origin}</div>
-              <div><strong>外形约束</strong>：{hint.shape}</div>
-              <div><strong>解释目标</strong>：{hint.why}</div>
-            </div>
-          }
-          placement="topRight"
-        >
-          <span className="mode-hint-trigger" aria-label={`${title}说明`}>
-            <InfoCircleOutlined />
-          </span>
-        </Tooltip>
+        <div className="mode-panel-title">{title}</div>
         <ReactECharts option={option} style={{ width: '100%', height: '220px' }} />
       </div>
     )
   }
+
+  const modeHintSummary = (
+    <div className="mode-hint-content">
+      {(['causalChain', 'hubNode', 'community', 'keyNode'] as ModeType[]).map((modeKey) => {
+        const hint = modeHintMap[modeKey]
+        return (
+          <div key={modeKey} className="mode-hint-section">
+            <div className="mode-hint-title">{modeTitleMap[modeKey]}</div>
+            <div><strong>算法由来</strong>：{hint.origin}</div>
+            <div><strong>外形约束</strong>：{hint.shape}</div>
+            <div><strong>解释目标</strong>：{hint.why}</div>
+          </div>
+        )
+      })}
+    </div>
+  )
 
   return (
     <div className="page-shell">
@@ -762,7 +764,18 @@ const CausalDetectionPage = () => {
         </Col>
 
         <Col xs={24} lg={8}>
-          <Card title="模式子图" className="panel-card" bordered={false}>
+          <Card
+            title="模式子图"
+            className="panel-card"
+            bordered={false}
+            extra={
+              <Tooltip title={modeHintSummary} placement="leftTop">
+                <span className="mode-hint-trigger mode-hint-trigger-global" aria-label="模式说明">
+                  <InfoCircleOutlined />
+                </span>
+              </Tooltip>
+            }
+          >
             <Row gutter={[12, 12]}>
               <Col span={12}>
                 <Card size="small" className="mode-card" bordered>

@@ -1,0 +1,353 @@
+{
+  "modeGraphs": {
+    "causalChain": {
+      "description": "因果链",
+      "anchors": [
+        "cluster_6",
+        "cluster_96"
+      ],
+      "graph": {
+        "nodes": [
+          {
+            "id": "cluster_6",
+            "role": "anchor"
+          },
+          {
+            "id": "cluster_4",
+            "role": "member"
+          },
+          {
+            "id": "cluster_3",
+            "role": "member"
+          },
+          {
+            "id": "cluster_29",
+            "role": "member"
+          },
+          {
+            "id": "cluster_96",
+            "role": "anchor"
+          },
+          {
+            "id": "cluster_1",
+            "role": "member"
+          },
+          {
+            "id": "cluster_84",
+            "role": "member"
+          },
+          {
+            "id": "cluster_47",
+            "role": "member"
+          }
+        ],
+        "edges": [
+          {
+            "source": "cluster_6",
+            "target": "cluster_4",
+            "weight": 0.3034
+          },
+          {
+            "source": "cluster_4",
+            "target": "cluster_3",
+            "weight": 0.1911
+          },
+          {
+            "source": "cluster_3",
+            "target": "cluster_29",
+            "weight": 0.2981
+          },
+          {
+            "source": "cluster_96",
+            "target": "cluster_1",
+            "weight": 0.3861
+          },
+          {
+            "source": "cluster_1",
+            "target": "cluster_84",
+            "weight": 0.1974
+          },
+          {
+            "source": "cluster_84",
+            "target": "cluster_47",
+            "weight": 0.3605
+          }
+        ]
+      }
+    },
+    "hubNode": {
+      "description": "枢纽节点",
+      "anchors": [
+        "cluster_160",
+        "cluster_17"
+      ],
+      "graph": {
+        "nodes": [
+          {
+            "id": "cluster_160",
+            "role": "anchor"
+          },
+          {
+            "id": "cluster_0",
+            "role": "member"
+          },
+          {
+            "id": "cluster_2",
+            "role": "member"
+          },
+          {
+            "id": "cluster_5",
+            "role": "member"
+          },
+          {
+            "id": "cluster_7",
+            "role": "member"
+          },
+          {
+            "id": "cluster_17",
+            "role": "anchor"
+          },
+          {
+            "id": "cluster_8",
+            "role": "member"
+          },
+          {
+            "id": "cluster_9",
+            "role": "member"
+          },
+          {
+            "id": "cluster_10",
+            "role": "member"
+          },
+          {
+            "id": "cluster_11",
+            "role": "member"
+          }
+        ],
+        "edges": [
+          {
+            "source": "cluster_160",
+            "target": "cluster_0",
+            "weight": 0.7485
+          },
+          {
+            "source": "cluster_160",
+            "target": "cluster_2",
+            "weight": 0.332
+          },
+          {
+            "source": "cluster_160",
+            "target": "cluster_5",
+            "weight": 0.3729
+          },
+          {
+            "source": "cluster_160",
+            "target": "cluster_7",
+            "weight": 0.3099
+          },
+          {
+            "source": "cluster_17",
+            "target": "cluster_8",
+            "weight": 0.3343
+          },
+          {
+            "source": "cluster_17",
+            "target": "cluster_9",
+            "weight": 0.3983
+          },
+          {
+            "source": "cluster_17",
+            "target": "cluster_10",
+            "weight": 0.3931
+          },
+          {
+            "source": "cluster_17",
+            "target": "cluster_11",
+            "weight": 0.2845
+          }
+        ]
+      }
+    },
+    "community": {
+      "description": "社区结构",
+      "anchors": [
+        "cluster_138"
+      ],
+      "graph": {
+        "nodes": [
+          {
+            "id": "cluster_138",
+            "role": "anchor"
+          },
+          {
+            "id": "cluster_135",
+            "role": "member"
+          },
+          {
+            "id": "cluster_126",
+            "role": "member"
+          },
+          {
+            "id": "cluster_43",
+            "role": "member"
+          },
+          {
+            "id": "cluster_57",
+            "role": "member"
+          }
+        ],
+        "edges": [
+          {
+            "source": "cluster_138",
+            "target": "cluster_43",
+            "weight": 0.4516
+          },
+          {
+            "source": "cluster_138",
+            "target": "cluster_57",
+            "weight": 0.288
+          },
+          {
+            "source": "cluster_138",
+            "target": "cluster_126",
+            "weight": 0.4211
+          },
+          {
+            "source": "cluster_138",
+            "target": "cluster_135",
+            "weight": 0.4851
+          },
+          {
+            "source": "cluster_126",
+            "target": "cluster_43",
+            "weight": 0.4113
+          },
+          {
+            "source": "cluster_126",
+            "target": "cluster_57",
+            "weight": 0.3286
+          },
+          {
+            "source": "cluster_126",
+            "target": "cluster_135",
+            "weight": 0.5058
+          },
+          {
+            "source": "cluster_126",
+            "target": "cluster_138",
+            "weight": 0.4895
+          },
+          {
+            "source": "cluster_43",
+            "target": "cluster_57",
+            "weight": 0.7757
+          },
+          {
+            "source": "cluster_43",
+            "target": "cluster_126",
+            "weight": 0.4025
+          },
+          {
+            "source": "cluster_43",
+            "target": "cluster_135",
+            "weight": 0.8685
+          },
+          {
+            "source": "cluster_43",
+            "target": "cluster_138",
+            "weight": 0.8823
+          },
+          {
+            "source": "cluster_57",
+            "target": "cluster_43",
+            "weight": 0.3459
+          },
+          {
+            "source": "cluster_57",
+            "target": "cluster_126",
+            "weight": 0.2902
+          },
+          {
+            "source": "cluster_57",
+            "target": "cluster_135",
+            "weight": 0.1983
+          },
+          {
+            "source": "cluster_57",
+            "target": "cluster_138",
+            "weight": 0.3188
+          },
+          {
+            "source": "cluster_135",
+            "target": "cluster_43",
+            "weight": 0.375
+          },
+          {
+            "source": "cluster_135",
+            "target": "cluster_57",
+            "weight": 0.2898
+          },
+          {
+            "source": "cluster_135",
+            "target": "cluster_126",
+            "weight": 0.4069
+          },
+          {
+            "source": "cluster_135",
+            "target": "cluster_138",
+            "weight": 0.4902
+          }
+        ]
+      }
+    },
+    "keyNode": {
+      "description": "关键节点",
+      "anchors": [
+        "cluster_95",
+        "cluster_110"
+      ],
+      "graph": {
+        "nodes": [
+          {
+            "id": "cluster_95",
+            "role": "anchor"
+          },
+          {
+            "id": "cluster_12",
+            "role": "context"
+          },
+          {
+            "id": "cluster_110",
+            "role": "anchor"
+          },
+          {
+            "id": "cluster_13",
+            "role": "context"
+          }
+        ],
+        "edges": [
+          {
+            "source": "cluster_12",
+            "target": "cluster_95",
+            "weight": 0.4237
+          },
+          {
+            "source": "cluster_95",
+            "target": "cluster_12",
+            "weight": 0.4133
+          },
+          {
+            "source": "cluster_13",
+            "target": "cluster_110",
+            "weight": 0.2831
+          },
+          {
+            "source": "cluster_110",
+            "target": "cluster_13",
+            "weight": 0.2782
+          }
+        ]
+      }
+    }
+  }
+}

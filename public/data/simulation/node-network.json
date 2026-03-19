@@ -1,0 +1,91 @@
+{
+  "nodes": [
+    {
+      "id": "zone_1",
+      "label": "北侧入口",
+      "value": 920
+    },
+    {
+      "id": "zone_2",
+      "label": "主安检厅",
+      "value": 1480
+    },
+    {
+      "id": "zone_3",
+      "label": "东通道",
+      "value": 760
+    },
+    {
+      "id": "zone_4",
+      "label": "西通道",
+      "value": 690
+    },
+    {
+      "id": "zone_5",
+      "label": "中央集散区",
+      "value": 1120
+    },
+    {
+      "id": "zone_6",
+      "label": "北出口",
+      "value": 540
+    },
+    {
+      "id": "zone_7",
+      "label": "南出口",
+      "value": 510
+    },
+    {
+      "id": "zone_8",
+      "label": "VIP 区",
+      "value": 360
+    }
+  ],
+  "edges": [
+    {
+      "source": "zone_1",
+      "target": "zone_2",
+      "value": 0.95
+    },
+    {
+      "source": "zone_2",
+      "target": "zone_3",
+      "value": 0.62
+    },
+    {
+      "source": "zone_2",
+      "target": "zone_4",
+      "value": 0.58
+    },
+    {
+      "source": "zone_2",
+      "target": "zone_5",
+      "value": 0.85
+    },
+    {
+      "source": "zone_3",
+      "target": "zone_6",
+      "value": 0.74
+    },
+    {
+      "source": "zone_4",
+      "target": "zone_7",
+      "value": 0.72
+    },
+    {
+      "source": "zone_5",
+      "target": "zone_6",
+      "value": 0.46
+    },
+    {
+      "source": "zone_5",
+      "target": "zone_7",
+      "value": 0.44
+    },
+    {
+      "source": "zone_5",
+      "target": "zone_8",
+      "value": 0.28
+    }
+  ]
+}

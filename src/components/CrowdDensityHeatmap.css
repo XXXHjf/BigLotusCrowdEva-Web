@@ -1,0 +1,188 @@
+@import url('/maplibre/maplibre-gl.css');
+
+.crowd-map-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  background:
+    linear-gradient(180deg, rgba(7, 15, 31, 0.2), rgba(7, 15, 31, 0)),
+    radial-gradient(circle at top left, rgba(76, 195, 255, 0.18), transparent 26%);
+}
+
+.crowd-map-toolbar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.crowd-map-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(92px, 1fr));
+  gap: 10px;
+  flex: 1;
+  min-width: min(100%, 420px);
+}
+
+.crowd-map-summary > div,
+.crowd-map-actions {
+  border: 1px solid rgba(76, 195, 255, 0.14);
+  background: rgba(6, 16, 34, 0.72);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.crowd-map-toolbar-label {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.crowd-map-toolbar-value {
+  color: var(--text-strong, #e8f4ff);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.crowd-map-summary > div {
+  padding: 10px 12px;
+}
+
+.crowd-map-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  flex-wrap: wrap;
+}
+
+.crowd-map-actions .ant-segmented {
+  background: rgba(15, 28, 61, 0.9);
+}
+
+.crowd-map-stage {
+  position: relative;
+  flex: 1;
+  min-height: 340px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(76, 195, 255, 0.16);
+  background: rgba(7, 15, 31, 0.72);
+}
+
+.crowd-map-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.crowd-map-stage-badge {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.crowd-map-stage-badge span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--text-strong, #e8f4ff);
+  background: rgba(7, 15, 31, 0.74);
+  border: 1px solid rgba(76, 195, 255, 0.16);
+}
+
+.crowd-map-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(6, 12, 25, 0.5);
+  z-index: 12;
+}
+
+.crowd-map-timeline {
+  padding: 10px 12px 4px;
+  border-radius: 12px;
+  border: 1px solid rgba(76, 195, 255, 0.14);
+  background: rgba(6, 16, 34, 0.72);
+}
+
+.crowd-map-timeline-labels {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 2px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.crowd-map-panel .maplibregl-ctrl-group {
+  border: 1px solid rgba(76, 195, 255, 0.16);
+  box-shadow: 0 10px 24px rgba(4, 9, 30, 0.24);
+}
+
+.crowd-map-panel .maplibregl-ctrl button {
+  background-color: rgba(255, 255, 255, 0.92);
+}
+
+.crowd-map-panel .maplibregl-ctrl-attrib {
+  background: rgba(255, 255, 255, 0.72);
+  color: #23354d;
+}
+
+.crowd-map-panel--light {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0)),
+    radial-gradient(circle at top left, rgba(76, 195, 255, 0.12), transparent 26%);
+}
+
+.crowd-map-panel--light .crowd-map-summary > div,
+.crowd-map-panel--light .crowd-map-actions,
+.crowd-map-panel--light .crowd-map-timeline {
+  background: rgba(255, 255, 255, 0.86);
+  border-color: rgba(76, 195, 255, 0.1);
+}
+
+.crowd-map-panel--light .crowd-map-stage {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(76, 195, 255, 0.1);
+}
+
+.crowd-map-panel--light .crowd-map-stage-badge span {
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--text-base, #1f2d3d);
+}
+
+@media (max-width: 960px) {
+  .crowd-map-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .crowd-map-panel {
+    padding: 8px;
+  }
+
+  .crowd-map-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .crowd-map-actions {
+    width: 100%;
+  }
+
+  .crowd-map-stage {
+    min-height: 300px;
+  }
+}

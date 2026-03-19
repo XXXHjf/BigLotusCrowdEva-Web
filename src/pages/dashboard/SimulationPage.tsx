@@ -1,92 +1,155 @@
-// src/pages/dashboard/SimulationPage.tsx
-import { useState } from 'react'
-import { Row, Col, Button, Card } from 'antd'
+import { useEffect, useMemo, useState } from 'react'
+import { Row, Col, Button, Card, Alert } from 'antd'
 import { SimulationGraph } from '../../components/SimulationGraph'
 import NodeControlPanel from '../../components/NodeControlPanel'
 import ImpactAssessmentPanel from '../../components/ImpactAssessmentPanel'
-import { generateGraphData, generateZones } from '../../utils/mockData'
+import {
+  getSimulationCounterfactualResults,
+  getSimulationNodeNetwork,
+} from '../../api/dataService'
+import type { GraphData } from '../../types/chart'
 
-// 简单的下游节点查找逻辑
-const getDownstreamNodeIds = (startNodeId: string, edges: any[]): string[] => {
-    const downstreamNodes = new Set<string>();
-    const nodesToVisit = [startNodeId];
+interface SimulationNodeNetworkResponse extends GraphData {}
 
-    while(nodesToVisit.length > 0) {
-        const currentNodeId = nodesToVisit.pop()!;
-        edges.forEach(edge => {
-            if(edge.source === currentNodeId && !downstreamNodes.has(edge.target)) {
-                downstreamNodes.add(edge.target);
-                nodesToVisit.push(edge.target);
-            }
-        });
-    }
-    return Array.from(downstreamNodes);
+interface CounterfactualNodeUpdate {
+  nodeId: string
+  value: number
 }
 
+interface CounterfactualEdgeUpdate {
+  source: string
+  target: string
+  style: 'solid' | 'dashed'
+}
+
+interface CounterfactualResult {
+  nodeId: string
+  limitPercent: number
+  summary: string
+  nodeUpdates: CounterfactualNodeUpdate[]
+  edgeUpdates?: CounterfactualEdgeUpdate[]
+}
+
+interface CounterfactualResultsResponse {
+  results: CounterfactualResult[]
+}
+
+const defaultTip = '选择左侧节点并执行操作后，这里会显示推演影响评估。'
 
 const SimulationPage = () => {
-  const initialGraphData = generateGraphData(generateZones())
-  const [graphData, setGraphData] = useState(initialGraphData)
+  const [initialGraphData, setInitialGraphData] = useState<GraphData>({ nodes: [], edges: [] })
+  const [graphData, setGraphData] = useState<GraphData>({ nodes: [], edges: [] })
+  const [counterfactualResults, setCounterfactualResults] = useState<CounterfactualResult[]>([])
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null)
-  const defaultTip = '选择左侧节点并执行操作后，这里会显示推演影响评估。'
+  const [graphUpdateMode, setGraphUpdateMode] = useState<'select' | 'data'>('select')
   const [simulationResult, setSimulationResult] = useState<string | null>(defaultTip)
+  const [dataError, setDataError] = useState<string | null>(null)
 
-  const selectedNode =
-    graphData.nodes.find((n) => n.id === selectedNodeId) || null
+  useEffect(() => {
+    let mounted = true
+
+    Promise.all([
+      getSimulationNodeNetwork<SimulationNodeNetworkResponse>(),
+      getSimulationCounterfactualResults<CounterfactualResultsResponse>(),
+    ])
+      .then(([networkRes, resultRes]) => {
+        if (!mounted) return
+        const network = {
+          nodes: networkRes.nodes || [],
+          edges: networkRes.edges || [],
+        }
+        setInitialGraphData(network)
+        setGraphData(network)
+        setCounterfactualResults(resultRes.results || [])
+      })
+      .catch(() => {
+        if (!mounted) return
+        setDataError('沙盘推演数据加载失败，请检查 /public/data/simulation/*')
+      })
+
+    return () => {
+      mounted = false
+    }
+  }, [])
+
+  const resultByKey = useMemo(() => {
+    const map = new Map<string, CounterfactualResult>()
+    counterfactualResults.forEach((item) => {
+      map.set(`${item.nodeId}_${item.limitPercent}`, item)
+    })
+    return map
+  }, [counterfactualResults])
+
+  const selectedNode = graphData.nodes.find((n) => n.id === selectedNodeId) || null
 
   const handleNodeClick = (nodeId: string) => {
+    setGraphUpdateMode('select')
     setSelectedNodeId(nodeId)
-    // 重置评估结果
-    setSimulationResult(null) 
+    if (simulationResult !== null) {
+      setSimulationResult(null)
+    }
   }
 
   const handleSimulationAction = (
     nodeId: string,
-    actionType: 'CLOSE' | 'LIMIT',
+    actionType: 'LIMIT',
     limitPercent?: number,
   ) => {
-    const newGraphData = JSON.parse(JSON.stringify(graphData)) // 深拷贝
-    const downstreamIds = getDownstreamNodeIds(nodeId, newGraphData.edges);
+    if (actionType !== 'LIMIT') return
 
-    let impactMessage = '';
+    const limitText = limitPercent ?? 50
+    const result = resultByKey.get(`${nodeId}_${limitText}`)
 
-    if (actionType === 'CLOSE') {
-      // 改变所有下游连接线的样式
-      newGraphData.edges.forEach((edge: any) => {
-        if (edge.source === nodeId) {
-          edge.style = 'dashed'
-        }
-      })
-      impactMessage = `关闭 '${selectedNode?.label}' 将导致其下游 ${downstreamIds.length} 个节点的人流中断，可能引发上游区域拥堵风险。`
+    if (!result) {
+      setSimulationResult(`未找到结点 '${selectedNode?.label || nodeId}' 在 ${limitText}% 档位下的静态推演结果。`)
+      setGraphData(initialGraphData)
+      return
     }
 
-    if (actionType === 'LIMIT') {
-      // 改变下游节点的样式
-      newGraphData.nodes.forEach((node: any) => {
-        if (downstreamIds.includes(node.id)) {
-          node.style = 'dashed'
-        }
-      })
-      const limitText = limitPercent ?? 50
-      impactMessage = `对 '${selectedNode?.label}' 限流至 ${limitText}% 将降低下游区域 ${downstreamIds.length} 个节点的人流通过率，预计排队时间增加约 5-8 分钟。`
+    const nodeUpdateMap = new Map(result.nodeUpdates.map((item) => [item.nodeId, item]))
+    const edgeUpdateMap = new Map(
+      (result.edgeUpdates || []).map((item) => [`${item.source}->${item.target}`, item]),
+    )
+
+    const nextGraphData: GraphData = {
+      nodes: initialGraphData.nodes.map((node) => ({
+        ...node,
+        value: nodeUpdateMap.get(node.id)?.value ?? node.value,
+        style: undefined,
+      })),
+      edges: initialGraphData.edges.map((edge) => ({
+        ...edge,
+        style: edgeUpdateMap.get(`${edge.source}->${edge.target}`)?.style,
+      })),
     }
-    
-    setGraphData(newGraphData)
-    setSimulationResult(impactMessage)
+
+    setGraphUpdateMode('data')
+    setGraphData(nextGraphData)
+    setSimulationResult(result.summary)
   }
 
   const handleReset = () => {
-    setGraphData(initialGraphData);
-    setSelectedNodeId(null);
-    setSimulationResult(defaultTip);
+    setGraphUpdateMode('data')
+    setGraphData(initialGraphData)
+    setSelectedNodeId(null)
+    setSimulationResult(defaultTip)
   }
-
 
   return (
     <div className="page-shell">
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}>
         <Button onClick={handleReset}>重置沙盘</Button>
       </div>
+
+      {dataError && (
+        <Alert
+          type="error"
+          showIcon
+          message="数据加载失败"
+          description={dataError}
+          style={{ marginBottom: 12 }}
+        />
+      )}
 
       <Row gutter={24}>
         <Col span={16}>
@@ -100,12 +163,14 @@ const SimulationPage = () => {
             <SimulationGraph
               nodes={graphData.nodes}
               edges={graphData.edges}
+              baselineNodes={initialGraphData.nodes}
               onNodeClick={handleNodeClick}
               selectedNodeId={selectedNodeId || undefined}
+              updateMode={graphUpdateMode}
             />
           </Card>
         </Col>
-        <Col span={8} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <Col xs={24} lg={8} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <NodeControlPanel node={selectedNode} onAction={handleSimulationAction} />
           <ImpactAssessmentPanel result={simulationResult} />
         </Col>

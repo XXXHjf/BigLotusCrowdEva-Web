@@ -1,0 +1,193 @@
+{
+  "memberships": [
+    {
+      "nodeId": "cluster_138",
+      "modes": [
+        "community"
+      ],
+      "isAnchor": true
+    },
+    {
+      "nodeId": "cluster_135",
+      "modes": [
+        "community"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_47",
+      "modes": [
+        "causalChain"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_126",
+      "modes": [
+        "community"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_43",
+      "modes": [
+        "community"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_57",
+      "modes": [
+        "community"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_29",
+      "modes": [
+        "causalChain"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_160",
+      "modes": [
+        "hubNode"
+      ],
+      "isAnchor": true
+    },
+    {
+      "nodeId": "cluster_6",
+      "modes": [
+        "causalChain"
+      ],
+      "isAnchor": true
+    },
+    {
+      "nodeId": "cluster_12",
+      "modes": [
+        "keyNode"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_5",
+      "modes": [
+        "hubNode"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_2",
+      "modes": [
+        "hubNode"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_17",
+      "modes": [
+        "hubNode"
+      ],
+      "isAnchor": true
+    },
+    {
+      "nodeId": "cluster_95",
+      "modes": [
+        "keyNode"
+      ],
+      "isAnchor": true
+    },
+    {
+      "nodeId": "cluster_4",
+      "modes": [
+        "causalChain"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_1",
+      "modes": [
+        "causalChain"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_10",
+      "modes": [
+        "hubNode"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_110",
+      "modes": [
+        "keyNode"
+      ],
+      "isAnchor": true
+    },
+    {
+      "nodeId": "cluster_9",
+      "modes": [
+        "hubNode"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_7",
+      "modes": [
+        "hubNode"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_8",
+      "modes": [
+        "hubNode"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_11",
+      "modes": [
+        "hubNode"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_13",
+      "modes": [
+        "keyNode"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_84",
+      "modes": [
+        "causalChain"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_96",
+      "modes": [
+        "causalChain"
+      ],
+      "isAnchor": true
+    },
+    {
+      "nodeId": "cluster_3",
+      "modes": [
+        "causalChain"
+      ],
+      "isAnchor": false
+    },
+    {
+      "nodeId": "cluster_0",
+      "modes": [
+        "hubNode"
+      ],
+      "isAnchor": false
+    }
+  ]
+}
