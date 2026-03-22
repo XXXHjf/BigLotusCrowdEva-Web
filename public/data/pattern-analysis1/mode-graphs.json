@@ -1,7 +1,7 @@
 {
   "modeGraphs": {
-    "causalChain": {
-      "description": "因果链",
+    "causal_chain": {
+      "description": "因果链传导模式",
       "anchors": [
         "cluster_6",
         "cluster_96"
@@ -75,8 +75,8 @@
         ]
       }
     },
-    "hubNode": {
-      "description": "枢纽节点",
+    "hub_node": {
+      "description": "枢纽辐射模式",
       "anchors": [
         "cluster_160",
         "cluster_17"
@@ -169,7 +169,7 @@
       }
     },
     "community": {
-      "description": "社区结构",
+      "description": "社区协同扰动模式",
       "anchors": [
         "cluster_138"
       ],
@@ -300,8 +300,8 @@
         ]
       }
     },
-    "keyNode": {
-      "description": "关键节点",
+    "critical_node": {
+      "description": "关键节点压力模式",
       "anchors": [
         "cluster_95",
         "cluster_110"

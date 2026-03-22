@@ -34,8 +34,9 @@ export function SimulationGraph({
     id: node.id,
     delta: node.value - (baselineValueByNodeId.get(node.id) ?? node.value),
   }))
-  const positiveDeltas = deltas.filter((item) => item.delta > 0)
-  const negativeDeltas = deltas.filter((item) => item.delta < 0)
+  const comparableDeltas = deltas.filter((item) => item.id !== selectedNodeId)
+  const positiveDeltas = comparableDeltas.filter((item) => item.delta > 0)
+  const negativeDeltas = comparableDeltas.filter((item) => item.delta < 0)
   const maxIncreaseNodeId =
     positiveDeltas.length > 0
       ? positiveDeltas.reduce((max, item) => (item.delta > max.delta ? item : max)).id
@@ -49,38 +50,68 @@ export function SimulationGraph({
   const minValue = values.length ? Math.min(...values) : 0
   const maxValue = values.length ? Math.max(...values) : 0
 
-  const indegreeMap = new Map<string, number>()
-  nodes.forEach((node) => indegreeMap.set(node.id, 0))
-  edges.forEach((edge) => indegreeMap.set(edge.target, (indegreeMap.get(edge.target) || 0) + 1))
+  const degreeByNodeId = useMemo(() => {
+    const map = new Map<string, number>()
+    nodes.forEach((node) => map.set(node.id, 0))
+    edges.forEach((edge) => {
+      map.set(edge.source, (map.get(edge.source) || 0) + 1)
+      map.set(edge.target, (map.get(edge.target) || 0) + 1)
+    })
+    return map
+  }, [edges, nodes])
 
-  const levelMap = new Map<string, number>()
-  const rootIds = nodes
-    .filter((node) => (indegreeMap.get(node.id) || 0) === 0)
-    .map((node) => node.id)
+  const positionByNodeId = useMemo(() => {
+    const rankedNodes = [...nodes].sort((a, b) => {
+      const degreeDiff = (degreeByNodeId.get(b.id) || 0) - (degreeByNodeId.get(a.id) || 0)
+      if (degreeDiff !== 0) return degreeDiff
+      return a.id.localeCompare(b.id, undefined, { numeric: true })
+    })
 
-  const queue: Array<{ id: string; level: number }> = rootIds.map((id) => ({ id, level: 0 }))
-  while (queue.length > 0) {
-    const current = queue.shift()!
-    const knownLevel = levelMap.get(current.id)
-    if (knownLevel !== undefined && knownLevel <= current.level) continue
-    levelMap.set(current.id, current.level)
+    const totalNodes = rankedNodes.length
+    const innerCount = totalNodes <= 8 ? Math.min(4, totalNodes) : Math.max(5, Math.round(totalNodes * 0.2))
+    const remainingAfterInner = Math.max(0, totalNodes - innerCount)
+    const middleCount =
+      remainingAfterInner <= 8 ? remainingAfterInner : Math.max(8, Math.round(totalNodes * 0.33))
 
-    edges
-      .filter((edge) => edge.source === current.id)
-      .forEach((edge) => queue.push({ id: edge.target, level: current.level + 1 }))
-  }
+    const rings = [
+      {
+        nodes: rankedNodes.slice(0, innerCount),
+        radiusX: 150,
+        radiusY: 96,
+      },
+      {
+        nodes: rankedNodes.slice(innerCount, innerCount + middleCount),
+        radiusX: 300,
+        radiusY: 188,
+      },
+      {
+        nodes: rankedNodes.slice(innerCount + middleCount),
+        radiusX: 432,
+        radiusY: 272,
+      },
+    ]
 
-  nodes.forEach((node) => {
-    if (!levelMap.has(node.id)) levelMap.set(node.id, 0)
-  })
+    const map = new Map<string, { x: number; y: number }>()
+    const centerX = 520
+    const centerY = 320
 
-  const nodesByLevel = new Map<number, typeof nodes>()
-  nodes.forEach((node) => {
-    const level = levelMap.get(node.id) || 0
-    const list = nodesByLevel.get(level) || []
-    list.push(node)
-    nodesByLevel.set(level, list)
-  })
+    rings.forEach((ring, ringIndex) => {
+      const ringNodes = ring.nodes
+      const total = ringNodes.length
+      if (total === 0) return
+
+      ringNodes.forEach((node, index) => {
+        const angleOffset = ringIndex % 2 === 0 ? -Math.PI / 2 : -Math.PI / 2 + Math.PI / total
+        const angle = angleOffset + (Math.PI * 2 * index) / total
+        map.set(node.id, {
+          x: centerX + ring.radiusX * Math.cos(angle),
+          y: centerY + ring.radiusY * Math.sin(angle),
+        })
+      })
+    })
+
+    return map
+  }, [degreeByNodeId, nodes])
 
   const resolveSymbolSize = (value: number) => {
     if (maxValue === minValue) return 56
@@ -97,23 +128,14 @@ export function SimulationGraph({
   const echartsNodes = useMemo(
     () =>
       nodes.map((node) => {
-        const level = levelMap.get(node.id) || 0
-        const siblings = (nodesByLevel.get(level) || [])
-          .slice()
-          .sort((a, b) => a.id.localeCompare(b.id))
-        const index = siblings.findIndex((item) => item.id === node.id)
-        const total = siblings.length
-        const x = 120 + level * 220
-        const centerY = 320
-        const verticalGap = 120
-        const y = centerY + (index - (total - 1) / 2) * verticalGap
+        const position = positionByNodeId.get(node.id) || { x: 520, y: 320 }
 
         return {
           id: node.id,
           name: node.label,
           value: node.value,
-          x,
-          y,
+          x: position.x,
+          y: position.y,
           symbolSize: resolveSymbolSize(node.value),
           itemStyle: {
             color: resolveNodeColor(node.id),
@@ -135,7 +157,7 @@ export function SimulationGraph({
           },
         }
       }),
-    [levelMap, nodes, nodesByLevel, selectedNodeId],
+    [nodes, positionByNodeId, selectedNodeId],
   )
 
   const echartsEdges = useMemo(
@@ -144,10 +166,28 @@ export function SimulationGraph({
         source: edge.source,
         target: edge.target,
         lineStyle: {
-          width: Math.max(2, edge.value * 4),
-          color: edge.style === 'dashed' ? '#ff6b6b' : edgeBase,
-          type: edge.style === 'dashed' ? 'dashed' : 'solid',
-          curveness: 0.2,
+          width:
+            edge.style === 'boosted'
+              ? Math.max(2.5, edge.value * 4)
+              : edge.style === 'limited'
+                ? Math.max(2, edge.value * 3.4)
+                : Math.max(1, edge.value * 3),
+          color:
+            edge.style === 'dashed'
+              ? '#ff6b6b'
+              : edge.style === 'limited'
+                ? '#faad14'
+                : edge.style === 'boosted'
+                  ? '#4cc3ff'
+                  : edgeBase,
+          type: edge.style === 'dashed' || edge.style === 'limited' ? 'dashed' : 'solid',
+          opacity:
+            edge.style === 'dashed'
+              ? 0.95
+              : edge.style === 'limited' || edge.style === 'boosted'
+                ? 0.88
+                : 0.28,
+          curveness: 0.12,
         },
       })),
     [edgeBase, edges],

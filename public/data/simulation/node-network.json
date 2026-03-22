@@ -1,91 +1,1236 @@
 {
   "nodes": [
     {
-      "id": "zone_1",
-      "label": "北侧入口",
-      "value": 920
+      "id": "cluster_138",
+      "label": "点位_138",
+      "value": 470
     },
     {
-      "id": "zone_2",
-      "label": "主安检厅",
-      "value": 1480
+      "id": "cluster_135",
+      "label": "点位_135",
+      "value": 356
     },
     {
-      "id": "zone_3",
-      "label": "东通道",
-      "value": 760
+      "id": "cluster_47",
+      "label": "点位_47",
+      "value": 406
     },
     {
-      "id": "zone_4",
-      "label": "西通道",
-      "value": 690
+      "id": "cluster_126",
+      "label": "点位_126",
+      "value": 587
     },
     {
-      "id": "zone_5",
-      "label": "中央集散区",
-      "value": 1120
+      "id": "cluster_43",
+      "label": "点位_43",
+      "value": 721
     },
     {
-      "id": "zone_6",
-      "label": "北出口",
-      "value": 540
+      "id": "cluster_57",
+      "label": "点位_57",
+      "value": 794
     },
     {
-      "id": "zone_7",
-      "label": "南出口",
+      "id": "cluster_29",
+      "label": "点位_29",
+      "value": 656
+    },
+    {
+      "id": "cluster_160",
+      "label": "点位_160",
+      "value": 789
+    },
+    {
+      "id": "cluster_6",
+      "label": "点位_6",
+      "value": 797
+    },
+    {
+      "id": "cluster_12",
+      "label": "点位_12",
+      "value": 466
+    },
+    {
+      "id": "cluster_5",
+      "label": "点位_5",
+      "value": 622
+    },
+    {
+      "id": "cluster_2",
+      "label": "点位_2",
+      "value": 610
+    },
+    {
+      "id": "cluster_17",
+      "label": "点位_17",
+      "value": 708
+    },
+    {
+      "id": "cluster_95",
+      "label": "点位_95",
+      "value": 345
+    },
+    {
+      "id": "cluster_4",
+      "label": "点位_4",
+      "value": 675
+    },
+    {
+      "id": "cluster_1",
+      "label": "点位_1",
+      "value": 646
+    },
+    {
+      "id": "cluster_10",
+      "label": "点位_10",
+      "value": 610
+    },
+    {
+      "id": "cluster_110",
+      "label": "点位_110",
+      "value": 762
+    },
+    {
+      "id": "cluster_9",
+      "label": "点位_9",
+      "value": 684
+    },
+    {
+      "id": "cluster_7",
+      "label": "点位_7",
+      "value": 739
+    },
+    {
+      "id": "cluster_8",
+      "label": "点位_8",
+      "value": 706
+    },
+    {
+      "id": "cluster_11",
+      "label": "点位_11",
+      "value": 670
+    },
+    {
+      "id": "cluster_13",
+      "label": "点位_13",
       "value": 510
     },
     {
-      "id": "zone_8",
-      "label": "VIP 区",
-      "value": 360
+      "id": "cluster_84",
+      "label": "点位_84",
+      "value": 752
+    },
+    {
+      "id": "cluster_96",
+      "label": "点位_96",
+      "value": 600
+    },
+    {
+      "id": "cluster_3",
+      "label": "点位_3",
+      "value": 710
+    },
+    {
+      "id": "cluster_0",
+      "label": "点位_0",
+      "value": 495
     }
   ],
   "edges": [
     {
-      "source": "zone_1",
-      "target": "zone_2",
-      "value": 0.95
+      "source": "cluster_138",
+      "target": "cluster_1",
+      "value": 0.45
     },
     {
-      "source": "zone_2",
-      "target": "zone_3",
-      "value": 0.62
+      "source": "cluster_138",
+      "target": "cluster_2",
+      "value": 0.42
     },
     {
-      "source": "zone_2",
-      "target": "zone_4",
-      "value": 0.58
+      "source": "cluster_138",
+      "target": "cluster_3",
+      "value": 0.41
     },
     {
-      "source": "zone_2",
-      "target": "zone_5",
+      "source": "cluster_138",
+      "target": "cluster_5",
+      "value": 0.37
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_7",
+      "value": 0.47
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_8",
+      "value": 0.45
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_9",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_10",
+      "value": 0.26
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_13",
+      "value": 0.22
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_17",
+      "value": 0.25
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_43",
+      "value": 0.45
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_57",
+      "value": 0.29
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_95",
+      "value": 0.71
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_96",
+      "value": 0.34
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_110",
+      "value": 0.38
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_126",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_135",
+      "value": 0.49
+    },
+    {
+      "source": "cluster_138",
+      "target": "cluster_160",
+      "value": 0.24
+    },
+    {
+      "source": "cluster_47",
+      "target": "cluster_4",
+      "value": 0.23
+    },
+    {
+      "source": "cluster_47",
+      "target": "cluster_6",
+      "value": 0.47
+    },
+    {
+      "source": "cluster_47",
+      "target": "cluster_12",
+      "value": 0.45
+    },
+    {
+      "source": "cluster_47",
+      "target": "cluster_84",
+      "value": 0.91
+    },
+    {
+      "source": "cluster_47",
+      "target": "cluster_95",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_47",
+      "target": "cluster_110",
+      "value": 0.26
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_1",
+      "value": 0.34
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_2",
+      "value": 0.41
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_3",
+      "value": 0.4
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_5",
+      "value": 0.34
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_7",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_8",
+      "value": 0.51
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_9",
+      "value": 0.43
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_10",
+      "value": 0.31
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_13",
+      "value": 0.29
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_17",
+      "value": 0.34
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_29",
+      "value": 0.26
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_43",
+      "value": 0.41
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_57",
+      "value": 0.33
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_96",
+      "value": 0.27
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_110",
+      "value": 0.3
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_135",
+      "value": 0.51
+    },
+    {
+      "source": "cluster_126",
+      "target": "cluster_160",
+      "value": 0.24
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_1",
+      "value": 0.49
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_2",
+      "value": 0.87
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_3",
       "value": 0.85
     },
     {
-      "source": "zone_3",
-      "target": "zone_6",
-      "value": 0.74
+      "source": "cluster_43",
+      "target": "cluster_4",
+      "value": 0.29
     },
     {
-      "source": "zone_4",
-      "target": "zone_7",
-      "value": 0.72
+      "source": "cluster_43",
+      "target": "cluster_5",
+      "value": 0.34
     },
     {
-      "source": "zone_5",
-      "target": "zone_6",
-      "value": 0.46
+      "source": "cluster_43",
+      "target": "cluster_7",
+      "value": 0.93
     },
     {
-      "source": "zone_5",
-      "target": "zone_7",
+      "source": "cluster_43",
+      "target": "cluster_8",
+      "value": 0.89
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_9",
+      "value": 0.38
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_10",
+      "value": 0.33
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_13",
+      "value": 0.29
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_17",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_29",
+      "value": 0.33
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_57",
+      "value": 0.78
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_84",
+      "value": 0.2
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_95",
+      "value": 0.7
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_96",
+      "value": 0.24
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_110",
+      "value": 0.31
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_135",
+      "value": 0.87
+    },
+    {
+      "source": "cluster_43",
+      "target": "cluster_160",
+      "value": 0.84
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_0",
+      "value": 0.32
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_1",
+      "value": 0.39
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_2",
+      "value": 0.31
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_3",
+      "value": 0.39
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_5",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_7",
+      "value": 0.36
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_8",
+      "value": 0.31
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_9",
+      "value": 0.31
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_10",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_11",
+      "value": 0.25
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_13",
       "value": 0.44
     },
     {
-      "source": "zone_5",
-      "target": "zone_8",
+      "source": "cluster_57",
+      "target": "cluster_17",
+      "value": 0.37
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_95",
+      "value": 0.33
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_96",
+      "value": 0.32
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_135",
+      "value": 0.2
+    },
+    {
+      "source": "cluster_57",
+      "target": "cluster_160",
+      "value": 0.43
+    },
+    {
+      "source": "cluster_29",
+      "target": "cluster_1",
+      "value": 0.18
+    },
+    {
+      "source": "cluster_29",
+      "target": "cluster_3",
+      "value": 0.23
+    },
+    {
+      "source": "cluster_29",
+      "target": "cluster_7",
+      "value": 0.32
+    },
+    {
+      "source": "cluster_29",
+      "target": "cluster_8",
+      "value": 0.33
+    },
+    {
+      "source": "cluster_29",
+      "target": "cluster_10",
+      "value": 0.36
+    },
+    {
+      "source": "cluster_29",
+      "target": "cluster_11",
+      "value": 0.15
+    },
+    {
+      "source": "cluster_29",
+      "target": "cluster_17",
       "value": 0.28
+    },
+    {
+      "source": "cluster_29",
+      "target": "cluster_96",
+      "value": 0.4
+    },
+    {
+      "source": "cluster_29",
+      "target": "cluster_160",
+      "value": 0.2
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_0",
+      "value": 0.75
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_1",
+      "value": 0.34
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_2",
+      "value": 0.33
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_3",
+      "value": 0.32
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_4",
+      "value": 0.37
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_5",
+      "value": 0.37
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_7",
+      "value": 0.31
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_8",
+      "value": 0.21
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_9",
+      "value": 0.39
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_10",
+      "value": 0.41
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_11",
+      "value": 0.79
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_12",
+      "value": 0.19
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_13",
+      "value": 0.33
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_17",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_95",
+      "value": 0.39
+    },
+    {
+      "source": "cluster_160",
+      "target": "cluster_135",
+      "value": 0.24
+    },
+    {
+      "source": "cluster_6",
+      "target": "cluster_4",
+      "value": 0.3
+    },
+    {
+      "source": "cluster_6",
+      "target": "cluster_12",
+      "value": 0.43
+    },
+    {
+      "source": "cluster_6",
+      "target": "cluster_84",
+      "value": 0.81
+    },
+    {
+      "source": "cluster_6",
+      "target": "cluster_95",
+      "value": 0.38
+    },
+    {
+      "source": "cluster_6",
+      "target": "cluster_110",
+      "value": 0.25
+    },
+    {
+      "source": "cluster_12",
+      "target": "cluster_4",
+      "value": 0.29
+    },
+    {
+      "source": "cluster_12",
+      "target": "cluster_84",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_12",
+      "target": "cluster_95",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_12",
+      "target": "cluster_110",
+      "value": 0.25
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_0",
+      "value": 0.19
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_1",
+      "value": 0.36
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_2",
+      "value": 0.32
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_3",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_4",
+      "value": 0.18
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_7",
+      "value": 0.38
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_8",
+      "value": 0.28
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_9",
+      "value": 0.37
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_10",
+      "value": 0.36
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_13",
+      "value": 0.43
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_17",
+      "value": 0.39
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_110",
+      "value": 0.18
+    },
+    {
+      "source": "cluster_5",
+      "target": "cluster_135",
+      "value": 0.43
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_1",
+      "value": 0.47
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_3",
+      "value": 0.34
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_7",
+      "value": 0.39
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_8",
+      "value": 0.4
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_9",
+      "value": 0.44
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_10",
+      "value": 0.31
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_13",
+      "value": 0.32
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_17",
+      "value": 0.36
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_95",
+      "value": 0.73
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_96",
+      "value": 0.28
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_110",
+      "value": 0.31
+    },
+    {
+      "source": "cluster_2",
+      "target": "cluster_135",
+      "value": 0.45
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_0",
+      "value": 0.24
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_1",
+      "value": 0.39
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_3",
+      "value": 0.28
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_4",
+      "value": 0.25
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_7",
+      "value": 0.34
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_8",
+      "value": 0.33
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_9",
+      "value": 0.4
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_10",
+      "value": 0.39
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_11",
+      "value": 0.28
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_13",
+      "value": 0.37
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_84",
+      "value": 0.28
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_95",
+      "value": 0.3
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_96",
+      "value": 0.3
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_110",
+      "value": 0.22
+    },
+    {
+      "source": "cluster_17",
+      "target": "cluster_135",
+      "value": 0.22
+    },
+    {
+      "source": "cluster_95",
+      "target": "cluster_0",
+      "value": 0.26
+    },
+    {
+      "source": "cluster_95",
+      "target": "cluster_1",
+      "value": 0.18
+    },
+    {
+      "source": "cluster_95",
+      "target": "cluster_3",
+      "value": 0.27
+    },
+    {
+      "source": "cluster_95",
+      "target": "cluster_4",
+      "value": 0.36
+    },
+    {
+      "source": "cluster_95",
+      "target": "cluster_9",
+      "value": 0.25
+    },
+    {
+      "source": "cluster_95",
+      "target": "cluster_10",
+      "value": 0.36
+    },
+    {
+      "source": "cluster_95",
+      "target": "cluster_11",
+      "value": 0.23
+    },
+    {
+      "source": "cluster_95",
+      "target": "cluster_13",
+      "value": 0.28
+    },
+    {
+      "source": "cluster_95",
+      "target": "cluster_84",
+      "value": 0.25
+    },
+    {
+      "source": "cluster_95",
+      "target": "cluster_110",
+      "value": 0.26
+    },
+    {
+      "source": "cluster_95",
+      "target": "cluster_135",
+      "value": 0.21
+    },
+    {
+      "source": "cluster_4",
+      "target": "cluster_3",
+      "value": 0.19
+    },
+    {
+      "source": "cluster_4",
+      "target": "cluster_9",
+      "value": 0.23
+    },
+    {
+      "source": "cluster_4",
+      "target": "cluster_13",
+      "value": 0.32
+    },
+    {
+      "source": "cluster_4",
+      "target": "cluster_110",
+      "value": 0.38
+    },
+    {
+      "source": "cluster_1",
+      "target": "cluster_3",
+      "value": 0.51
+    },
+    {
+      "source": "cluster_1",
+      "target": "cluster_7",
+      "value": 0.46
+    },
+    {
+      "source": "cluster_1",
+      "target": "cluster_8",
+      "value": 0.39
+    },
+    {
+      "source": "cluster_1",
+      "target": "cluster_9",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_1",
+      "target": "cluster_10",
+      "value": 0.44
+    },
+    {
+      "source": "cluster_1",
+      "target": "cluster_13",
+      "value": 0.41
+    },
+    {
+      "source": "cluster_1",
+      "target": "cluster_84",
+      "value": 0.2
+    },
+    {
+      "source": "cluster_1",
+      "target": "cluster_96",
+      "value": 0.36
+    },
+    {
+      "source": "cluster_1",
+      "target": "cluster_110",
+      "value": 0.26
+    },
+    {
+      "source": "cluster_1",
+      "target": "cluster_135",
+      "value": 0.34
+    },
+    {
+      "source": "cluster_10",
+      "target": "cluster_3",
+      "value": 0.41
+    },
+    {
+      "source": "cluster_10",
+      "target": "cluster_7",
+      "value": 0.32
+    },
+    {
+      "source": "cluster_10",
+      "target": "cluster_8",
+      "value": 0.22
+    },
+    {
+      "source": "cluster_10",
+      "target": "cluster_9",
+      "value": 0.28
+    },
+    {
+      "source": "cluster_10",
+      "target": "cluster_11",
+      "value": 0.32
+    },
+    {
+      "source": "cluster_10",
+      "target": "cluster_13",
+      "value": 0.4
+    },
+    {
+      "source": "cluster_10",
+      "target": "cluster_96",
+      "value": 0.22
+    },
+    {
+      "source": "cluster_10",
+      "target": "cluster_135",
+      "value": 0.22
+    },
+    {
+      "source": "cluster_110",
+      "target": "cluster_3",
+      "value": 0.36
+    },
+    {
+      "source": "cluster_110",
+      "target": "cluster_7",
+      "value": 0.3
+    },
+    {
+      "source": "cluster_110",
+      "target": "cluster_8",
+      "value": 0.27
+    },
+    {
+      "source": "cluster_110",
+      "target": "cluster_9",
+      "value": 0.32
+    },
+    {
+      "source": "cluster_110",
+      "target": "cluster_13",
+      "value": 0.28
+    },
+    {
+      "source": "cluster_110",
+      "target": "cluster_135",
+      "value": 0.34
+    },
+    {
+      "source": "cluster_9",
+      "target": "cluster_3",
+      "value": 0.45
+    },
+    {
+      "source": "cluster_9",
+      "target": "cluster_7",
+      "value": 0.39
+    },
+    {
+      "source": "cluster_9",
+      "target": "cluster_8",
+      "value": 0.43
+    },
+    {
+      "source": "cluster_9",
+      "target": "cluster_13",
+      "value": 0.3
+    },
+    {
+      "source": "cluster_9",
+      "target": "cluster_96",
+      "value": 0.17
+    },
+    {
+      "source": "cluster_9",
+      "target": "cluster_135",
+      "value": 0.4
+    },
+    {
+      "source": "cluster_7",
+      "target": "cluster_3",
+      "value": 0.46
+    },
+    {
+      "source": "cluster_7",
+      "target": "cluster_8",
+      "value": 0.46
+    },
+    {
+      "source": "cluster_7",
+      "target": "cluster_13",
+      "value": 0.26
+    },
+    {
+      "source": "cluster_7",
+      "target": "cluster_84",
+      "value": 0.24
+    },
+    {
+      "source": "cluster_7",
+      "target": "cluster_96",
+      "value": 0.38
+    },
+    {
+      "source": "cluster_7",
+      "target": "cluster_135",
+      "value": 0.87
+    },
+    {
+      "source": "cluster_8",
+      "target": "cluster_3",
+      "value": 0.43
+    },
+    {
+      "source": "cluster_8",
+      "target": "cluster_13",
+      "value": 0.25
+    },
+    {
+      "source": "cluster_8",
+      "target": "cluster_96",
+      "value": 0.29
+    },
+    {
+      "source": "cluster_8",
+      "target": "cluster_135",
+      "value": 0.38
+    },
+    {
+      "source": "cluster_11",
+      "target": "cluster_13",
+      "value": 0.21
+    },
+    {
+      "source": "cluster_11",
+      "target": "cluster_135",
+      "value": 0.17
+    },
+    {
+      "source": "cluster_13",
+      "target": "cluster_3",
+      "value": 0.43
+    },
+    {
+      "source": "cluster_13",
+      "target": "cluster_84",
+      "value": 0.26
+    },
+    {
+      "source": "cluster_13",
+      "target": "cluster_135",
+      "value": 0.36
+    },
+    {
+      "source": "cluster_84",
+      "target": "cluster_3",
+      "value": 0.22
+    },
+    {
+      "source": "cluster_96",
+      "target": "cluster_3",
+      "value": 0.29
+    },
+    {
+      "source": "cluster_96",
+      "target": "cluster_135",
+      "value": 0.32
+    },
+    {
+      "source": "cluster_3",
+      "target": "cluster_135",
+      "value": 0.42
+    },
+    {
+      "source": "cluster_0",
+      "target": "cluster_1",
+      "value": 0.21
+    },
+    {
+      "source": "cluster_0",
+      "target": "cluster_4",
+      "value": 0.25
+    },
+    {
+      "source": "cluster_0",
+      "target": "cluster_10",
+      "value": 0.45
+    },
+    {
+      "source": "cluster_0",
+      "target": "cluster_11",
+      "value": 0.47
+    },
+    {
+      "source": "cluster_0",
+      "target": "cluster_13",
+      "value": 0.26
     }
   ]
 }

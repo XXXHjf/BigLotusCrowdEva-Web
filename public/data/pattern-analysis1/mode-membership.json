@@ -1,0 +1,164 @@
+{
+  "cluster_138": {
+    "causal_chain": false,
+    "hub_node": false,
+    "community": true,
+    "critical_node": false
+  },
+  "cluster_135": {
+    "causal_chain": false,
+    "hub_node": false,
+    "community": true,
+    "critical_node": false
+  },
+  "cluster_47": {
+    "causal_chain": true,
+    "hub_node": false,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_126": {
+    "causal_chain": false,
+    "hub_node": false,
+    "community": true,
+    "critical_node": false
+  },
+  "cluster_43": {
+    "causal_chain": false,
+    "hub_node": false,
+    "community": true,
+    "critical_node": false
+  },
+  "cluster_57": {
+    "causal_chain": false,
+    "hub_node": false,
+    "community": true,
+    "critical_node": false
+  },
+  "cluster_29": {
+    "causal_chain": true,
+    "hub_node": false,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_160": {
+    "causal_chain": false,
+    "hub_node": true,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_6": {
+    "causal_chain": true,
+    "hub_node": false,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_12": {
+    "causal_chain": false,
+    "hub_node": false,
+    "community": false,
+    "critical_node": true
+  },
+  "cluster_5": {
+    "causal_chain": false,
+    "hub_node": true,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_2": {
+    "causal_chain": false,
+    "hub_node": true,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_17": {
+    "causal_chain": false,
+    "hub_node": true,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_95": {
+    "causal_chain": false,
+    "hub_node": false,
+    "community": false,
+    "critical_node": true
+  },
+  "cluster_4": {
+    "causal_chain": true,
+    "hub_node": false,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_1": {
+    "causal_chain": true,
+    "hub_node": false,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_10": {
+    "causal_chain": false,
+    "hub_node": true,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_110": {
+    "causal_chain": false,
+    "hub_node": false,
+    "community": false,
+    "critical_node": true
+  },
+  "cluster_9": {
+    "causal_chain": false,
+    "hub_node": true,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_7": {
+    "causal_chain": false,
+    "hub_node": true,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_8": {
+    "causal_chain": false,
+    "hub_node": true,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_11": {
+    "causal_chain": false,
+    "hub_node": true,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_13": {
+    "causal_chain": false,
+    "hub_node": false,
+    "community": false,
+    "critical_node": true
+  },
+  "cluster_84": {
+    "causal_chain": true,
+    "hub_node": false,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_96": {
+    "causal_chain": true,
+    "hub_node": false,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_3": {
+    "causal_chain": true,
+    "hub_node": false,
+    "community": false,
+    "critical_node": false
+  },
+  "cluster_0": {
+    "causal_chain": false,
+    "hub_node": true,
+    "community": false,
+    "critical_node": false
+  }
+}
