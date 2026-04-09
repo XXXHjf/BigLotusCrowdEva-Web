@@ -37,7 +37,7 @@ const NodeControlPanel = ({ node, actionableNodeIds = [], onAction }: NodeContro
       <Typography.Text type={isActionable ? undefined : 'secondary'}>
         {isActionable
           ? '选择一项操作来模拟其对网络的影响。'
-          : '该节点当前没有对应的静态推演结果，不能执行限流操作。'}
+          : '该节点属于非关键节点，对其他结点的人流影响较小，当前不建议执行推演操作。'}
       </Typography.Text>
       <div style={{ marginTop: '24px' }}>
         <Space direction="vertical" style={{ width: '100%' }}>

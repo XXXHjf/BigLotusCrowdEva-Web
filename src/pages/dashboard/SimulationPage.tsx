@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Row, Col, Button, Card, Alert, Tag } from 'antd'
+import { Row, Col, Button, Card, Alert } from 'antd'
 import { SimulationGraph } from '../../components/SimulationGraph'
 import NodeControlPanel from '../../components/NodeControlPanel'
 import ImpactAssessmentPanel from '../../components/ImpactAssessmentPanel'
@@ -136,7 +136,7 @@ const SimulationPage = () => {
     if (!actionableNodeIds.includes(nodeId)) {
       const clickedNode = graphData.nodes.find((node) => node.id === nodeId)
       setSimulationResult(
-        `当前静态推演结果只覆盖 ${actionableNodeIds.length} 个关键节点。结点 '${clickedNode?.label || nodeId}' 暂无可用结果。`,
+        `结点 '${clickedNode?.label || nodeId}' 属于非关键节点，对其他结点的人流影响较小，当前无需进行推演操作。`,
       )
       return
     }
@@ -211,16 +211,6 @@ const SimulationPage = () => {
         <Button onClick={handleReset}>重置沙盘</Button>
       </div>
 
-      <div style={{ marginBottom: 12 }}>
-        <Tag color="blue">当前仅支持 {actionableNodeIds.length} 个关键节点进行静态推演</Tag>
-        {actionableNodeIds.map((nodeId) => {
-          const node = initialGraphData.nodes.find((item) => item.id === nodeId)
-          return (
-            <Tag key={nodeId}>{node?.label || nodeId}</Tag>
-          )
-        })}
-      </div>
-
       {dataError && (
         <Alert
           type="error"
@@ -246,6 +236,7 @@ const SimulationPage = () => {
               baselineNodes={initialGraphData.nodes}
               onNodeClick={handleNodeClick}
               selectedNodeId={selectedNodeId || undefined}
+              actionableNodeIds={actionableNodeIds}
               updateMode={graphUpdateMode}
             />
           </Card>

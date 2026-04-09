@@ -88,10 +88,10 @@ const ModelArena = ({ data }: ModelArenaProps) => {
     <Card className="panel-card" bordered={false}>
       <Space align="center" style={{ width: '100%', justifyContent: 'space-between' }}>
         <Title level={4} style={{ margin: 0 }}>
-          模型准确率雷达
+          结果对比
         </Title>
         <Space>
-          <Text type="secondary">展示模型</Text>
+          <Text type="secondary">基础预测模型</Text>
           <Select
             style={{ minWidth: 170 }}
             value={selectedModel.name}
@@ -105,9 +105,9 @@ const ModelArena = ({ data }: ModelArenaProps) => {
         <Col span={16}>
           <Row gutter={[16, 16]}>
             <Col span={12}>
-              <Title level={5} style={{ textAlign: 'center' }}>
+              {/* <Title level={5} style={{ textAlign: 'center' }}>
                 MAE策略对比得分
-              </Title>
+              </Title> */}
               <ModelScoreRadar
                 indicators={strategyLabels}
                 series={[
@@ -121,9 +121,9 @@ const ModelArena = ({ data }: ModelArenaProps) => {
               />
             </Col>
             <Col span={12}>
-              <Title level={5} style={{ textAlign: 'center' }}>
+              {/* <Title level={5} style={{ textAlign: 'center' }}>
                 RMSE策略对比得分
-              </Title>
+              </Title> */}
               <ModelScoreRadar
                 indicators={strategyLabels}
                 series={[
@@ -142,13 +142,9 @@ const ModelArena = ({ data }: ModelArenaProps) => {
         <Col span={8}>
           <Divider type="vertical" style={{ height: '100%' }} />
           <div style={{ paddingLeft: '24px' }}>
-            <Title level={5}>系统推荐</Title>
+            {/* <Title level={5}>系统推荐</Title> */}
             <Paragraph>
-              在 <Text strong>{selectedModel.name}</Text> 模型下，综合 MAE/RMSE 得分后推荐使用{' '}
-              <Text strong style={{ color: '#4cc3ff' }}>
-                {recommended.label}
-              </Text>
-              。
+              使用 HCC 数据增强后，在 <Text strong>{selectedModel.name}</Text> 预测模型下
             </Paragraph>
             <Paragraph>
               相比 Baseline：MAE 改善 <Text strong>{maeImprove}%</Text>，RMSE 改善{' '}

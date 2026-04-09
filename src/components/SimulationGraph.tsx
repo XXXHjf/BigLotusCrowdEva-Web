@@ -10,6 +10,7 @@ interface SimulationGraphProps {
   baselineNodes?: GraphNode[]
   onNodeClick?: (nodeId: string) => void
   selectedNodeId?: string
+  actionableNodeIds?: string[]
   updateMode?: 'select' | 'data'
 }
 
@@ -19,6 +20,7 @@ export function SimulationGraph({
   baselineNodes,
   onNodeClick,
   selectedNodeId,
+  actionableNodeIds = [],
   updateMode = 'select',
 }: SimulationGraphProps) {
   const { mode } = useThemeMode()
@@ -28,6 +30,9 @@ export function SimulationGraph({
   const baseNodeColor = '#3498db'
   const surgeNodeColor = '#ff6b6b'
   const dropNodeColor = '#f7b500'
+  const actionableNodeColor = '#7cf0ff'
+  const nonActionableNodeColor = mode === 'dark' ? '#244a68' : '#8ca7c2'
+  const actionableNodeSet = useMemo(() => new Set(actionableNodeIds), [actionableNodeIds])
 
   const baselineValueByNodeId = new Map(baselineNodes?.map((node) => [node.id, node.value]) || [])
   const deltas = nodes.map((node) => ({
@@ -120,6 +125,8 @@ export function SimulationGraph({
   }
 
   const resolveNodeColor = (nodeId: string) => {
+    if (actionableNodeSet.has(nodeId)) return actionableNodeColor
+    if (!selectedNodeId) return nonActionableNodeColor
     if (nodeId === maxIncreaseNodeId) return surgeNodeColor
     if (nodeId === maxDecreaseNodeId) return dropNodeColor
     return baseNodeColor
@@ -142,13 +149,22 @@ export function SimulationGraph({
             borderColor:
               selectedNodeId === node.id
                 ? '#ffffff'
-                : node.style === 'dashed'
-                  ? '#f5222d'
-                  : '#8fd3ff',
-            borderWidth: selectedNodeId === node.id ? 3 : node.style === 'dashed' ? 2 : 1,
-            borderType: 'dashed',
-            shadowBlur: selectedNodeId === node.id ? 18 : 0,
-            shadowColor: selectedNodeId === node.id ? '#4cc3ff' : 'transparent',
+                : actionableNodeSet.has(node.id)
+                  ? '#d8fbff'
+                  : node.style === 'dashed'
+                    ? '#f5222d'
+                    : '#4d6178',
+            borderWidth:
+              selectedNodeId === node.id ? 3 : actionableNodeSet.has(node.id) ? 4 : node.style === 'dashed' ? 2 : 1,
+            borderType: actionableNodeSet.has(node.id) ? 'solid' : 'dashed',
+            shadowBlur: selectedNodeId === node.id ? 18 : actionableNodeSet.has(node.id) ? 22 : 0,
+            shadowColor:
+              selectedNodeId === node.id
+                ? '#4cc3ff'
+                : actionableNodeSet.has(node.id)
+                  ? 'rgba(124, 240, 255, 0.95)'
+                  : 'transparent',
+            opacity: actionableNodeSet.has(node.id) || selectedNodeId === node.id ? 1 : 0.78,
           },
           label: {
             show: true,
@@ -157,7 +173,7 @@ export function SimulationGraph({
           },
         }
       }),
-    [nodes, positionByNodeId, selectedNodeId],
+    [actionableNodeColor, actionableNodeSet, maxDecreaseNodeId, maxIncreaseNodeId, nodes, nonActionableNodeColor, positionByNodeId, selectedNodeId],
   )
 
   const echartsEdges = useMemo(
