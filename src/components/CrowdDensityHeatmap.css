@@ -68,19 +68,27 @@
 .crowd-map-stage {
   position: relative;
   flex: 1;
-  min-height: 340px;
+  min-height: 560px;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid rgba(76, 195, 255, 0.16);
   background: rgba(7, 15, 31, 0.72);
 }
 
+.crowd-map-map-shell {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
 .crowd-map-canvas {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 .crowd-map-canvas,
+.crowd-map-canvas > div,
 .crowd-map-canvas .amap-maps,
 .crowd-map-canvas .amap-layers,
 .crowd-map-canvas .amap-layer,
@@ -89,15 +97,16 @@
   height: 100% !important;
 }
 
-.crowd-map-canvas > div {
-  width: 100%;
-  height: 100%;
-}
-
-.crowd-map-canvas .amap-heatmap-layer,
-.crowd-map-canvas .amap-heatmap-layer canvas,
+.crowd-map-heat-overlay,
 .crowd-map-stage-badge {
   pointer-events: none;
+}
+
+.crowd-map-heat-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .crowd-map-stage-badge {
@@ -203,6 +212,6 @@
   }
 
   .crowd-map-stage {
-    min-height: 300px;
+    height: 360px;
   }
 }

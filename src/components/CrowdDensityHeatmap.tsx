@@ -59,17 +59,62 @@ const formatFrameTimeShort = (value: string) =>
     hour12: false,
   }).format(new Date(value))
 
-const buildHeatmapDataset = (
-  points: CrowdHeatmapPoint[],
-  globalMaxValue: number,
-) => ({
-  max: Math.max(1, Math.round(globalMaxValue)),
-  data: points.map(([lng, lat, count]) => ({
-    lng,
-    lat,
-    count: Number(count.toFixed(2)),
-  })),
-})
+const HEATMAP_COLOR_STOPS = [
+  { stop: 0, color: [17, 70, 125] as const },
+  { stop: 0.18, color: [27, 122, 194] as const },
+  { stop: 0.36, color: [44, 212, 230] as const },
+  { stop: 0.56, color: [151, 247, 159] as const },
+  { stop: 0.76, color: [255, 214, 92] as const },
+  { stop: 0.9, color: [255, 154, 72] as const },
+  { stop: 1, color: [255, 84, 84] as const },
+]
+
+const interpolateChannel = (from: number, to: number, ratio: number) =>
+  Math.round(from + (to - from) * ratio)
+
+const resolveHeatColor = (value: number) => {
+  const normalized = Math.max(0, Math.min(1, value))
+
+  for (let index = 1; index < HEATMAP_COLOR_STOPS.length; index += 1) {
+    const previous = HEATMAP_COLOR_STOPS[index - 1]
+    const current = HEATMAP_COLOR_STOPS[index]
+    if (normalized <= current.stop) {
+      const range = current.stop - previous.stop || 1
+      const ratio = (normalized - previous.stop) / range
+      return [
+        interpolateChannel(previous.color[0], current.color[0], ratio),
+        interpolateChannel(previous.color[1], current.color[1], ratio),
+        interpolateChannel(previous.color[2], current.color[2], ratio),
+      ] as const
+    }
+  }
+
+  return HEATMAP_COLOR_STOPS[HEATMAP_COLOR_STOPS.length - 1].color
+}
+
+const drawHeatPoint = (
+  context: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  normalizedValue: number,
+  baseRadius: number,
+) => {
+  const clampedValue = Math.max(0, Math.min(1, normalizedValue))
+  const radius = baseRadius * (0.78 + clampedValue * 0.68)
+  const [red, green, blue] = resolveHeatColor(clampedValue)
+  const innerAlpha = 0.18 + clampedValue * 0.4
+  const outerAlpha = 0.06 + clampedValue * 0.12
+  const gradient = context.createRadialGradient(x, y, 0, x, y, radius)
+
+  gradient.addColorStop(0, `rgba(${red}, ${green}, ${blue}, ${innerAlpha})`)
+  gradient.addColorStop(0.4, `rgba(${red}, ${green}, ${blue}, ${outerAlpha})`)
+  gradient.addColorStop(1, `rgba(${red}, ${green}, ${blue}, 0)`)
+
+  context.fillStyle = gradient
+  context.beginPath()
+  context.arc(x, y, radius, 0, Math.PI * 2)
+  context.fill()
+}
 
 const interpolatePoints = (
   fromPoints: CrowdHeatmapPoint[],
@@ -159,14 +204,16 @@ const CrowdDensityHeatmap = () => {
   const { mode } = useThemeMode()
   const location = useLocation()
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
+  const heatmapCanvasRef = useRef<HTMLCanvasElement | null>(null)
   const mapRef = useRef<any>(null)
-  const heatmapRef = useRef<any>(null)
   const resizeObserverRef = useRef<ResizeObserver | null>(null)
   const animationFrameRef = useRef<number | null>(null)
   const lastTickRef = useRef<number | null>(null)
   const playbackAccumulatedMsRef = useRef(0)
   const lastMapUpdateRef = useRef(0)
   const latestPointsRef = useRef<CrowdHeatmapPoint[]>(EMPTY_POINTS)
+  const latestGlobalMaxValueRef = useRef(1)
+  const renderHeatmapRef = useRef<(() => void) | null>(null)
   const [playbackData, setPlaybackData] = useState<CrowdHeatmapPlaybackData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -267,6 +314,10 @@ const CrowdDensityHeatmap = () => {
   useEffect(() => {
     latestPointsRef.current = interpolatedPoints
   }, [interpolatedPoints])
+
+  useEffect(() => {
+    latestGlobalMaxValueRef.current = globalMaxValue
+  }, [globalMaxValue])
 
   useEffect(() => {
     retainedPlaybackPosition = playbackPosition
@@ -409,41 +460,77 @@ const CrowdDensityHeatmap = () => {
 
           mapRef.current = map
 
-          window.requestAnimationFrame(() => {
-            map.resize?.()
-          })
-
-          AMap.plugin(['AMap.HeatMap'], () => {
-            if (cancelled || !mapRef.current) {
+          renderHeatmapRef.current = () => {
+            if (!wrapper || !mapRef.current || !heatmapCanvasRef.current) {
               return
             }
 
-            heatmapRef.current = new AMap.HeatMap(map, {
-              radius: Math.round((playbackData.meta.radius ?? 25) * 0.8),
-              opacity: [0.3, 1],
-              zooms: [3, 20],
-              gradient: {
-                0.18: 'rgba(19, 93, 143, 0.42)',
-                0.4: '#1db2d6',
-                0.62: '#7cf0ff',
-                0.82: '#ffd166',
-                1: '#ff7f50',
-              },
+            const canvas = heatmapCanvasRef.current
+            const context = canvas.getContext('2d')
+            if (!context) {
+              return
+            }
+
+            const { width, height } = wrapper.getBoundingClientRect()
+            const safeWidth = Math.max(1, Math.round(width))
+            const safeHeight = Math.max(1, Math.round(height))
+            const dpr = window.devicePixelRatio || 1
+
+            if (canvas.width !== Math.round(safeWidth * dpr)) {
+              canvas.width = Math.round(safeWidth * dpr)
+            }
+            if (canvas.height !== Math.round(safeHeight * dpr)) {
+              canvas.height = Math.round(safeHeight * dpr)
+            }
+
+            canvas.style.width = `${safeWidth}px`
+            canvas.style.height = `${safeHeight}px`
+            context.setTransform(dpr, 0, 0, dpr, 0, 0)
+            context.clearRect(0, 0, safeWidth, safeHeight)
+            context.globalCompositeOperation = 'lighter'
+
+            const points = latestPointsRef.current
+            const maxValue = Math.max(1, latestGlobalMaxValueRef.current)
+            const baseRadius = Math.max(14, Math.round((playbackData.meta.radius ?? 25) * 0.85))
+
+            points.forEach(([lng, lat, count]) => {
+              const pixel = mapRef.current.lngLatToContainer?.([lng, lat])
+              if (!pixel) {
+                return
+              }
+
+              const x = Number(pixel.x)
+              const y = Number(pixel.y)
+              if (!Number.isFinite(x) || !Number.isFinite(y)) {
+                return
+              }
+
+              drawHeatPoint(context, x, y, count / maxValue, baseRadius)
             })
 
-            heatmapRef.current.setDataSet(
-              buildHeatmapDataset(latestPointsRef.current, globalMaxValue),
-            )
+            context.globalCompositeOperation = 'source-over'
+          }
 
-            setLoading(false)
-
+          const requestRender = () => {
             window.requestAnimationFrame(() => {
-              map.resize?.()
+              renderHeatmapRef.current?.()
             })
+          }
+
+          window.requestAnimationFrame(() => {
+            map.resize?.()
+            requestRender()
           })
+          setLoading(false)
+
+          map.on?.('mapmove', requestRender)
+          map.on?.('zoomchange', requestRender)
+          map.on?.('moveend', requestRender)
+          map.on?.('zoomend', requestRender)
 
           resizeObserverRef.current = new ResizeObserver(() => {
             map.resize()
+            requestRender()
           })
           resizeObserverRef.current.observe(wrapper)
         }
@@ -495,10 +582,7 @@ const CrowdDensityHeatmap = () => {
       cancelled = true
       resizeObserverRef.current?.disconnect()
       resizeObserverRef.current = null
-      if (heatmapRef.current) {
-        heatmapRef.current.setMap?.(null)
-        heatmapRef.current = null
-      }
+      renderHeatmapRef.current = null
       if (mapRef.current) {
         mapRef.current.destroy?.()
         mapRef.current = null
@@ -507,7 +591,7 @@ const CrowdDensityHeatmap = () => {
   }, [amapKey, amapSecurity, globalMaxValue, initialView, mode, playbackData])
 
   useEffect(() => {
-    if (!mapRef.current || !heatmapRef.current) {
+    if (!mapRef.current) {
       return
     }
 
@@ -519,7 +603,7 @@ const CrowdDensityHeatmap = () => {
       lastMapUpdateRef.current = now
     }
 
-    heatmapRef.current.setDataSet(buildHeatmapDataset(interpolatedPoints, globalMaxValue))
+    renderHeatmapRef.current?.()
   }, [globalMaxValue, interpolatedPoints, isPlaying, isScrubbing])
 
   const handleResetView = () => {
@@ -539,24 +623,6 @@ const CrowdDensityHeatmap = () => {
       mode === 'dark' ? 'amap://styles/darkblue' : 'amap://styles/whitesmoke',
     )
   }, [mode])
-
-  useEffect(() => {
-    if (!heatmapRef.current || !playbackData) {
-      return
-    }
-
-    heatmapRef.current.setOptions?.({
-      radius: Math.round((playbackData.meta.radius ?? 25) * 0.8),
-      opacity: [0.3, 1],
-      gradient: {
-        0.18: 'rgba(19, 93, 143, 0.42)',
-        0.4: '#1db2d6',
-        0.62: '#7cf0ff',
-        0.82: '#ffd166',
-        1: '#ff7f50',
-      },
-    })
-  }, [playbackData])
 
   useEffect(() => {
     if (!mapRef.current || !initialView) {
@@ -627,7 +693,10 @@ const CrowdDensityHeatmap = () => {
       </div>
 
       <div className="crowd-map-stage">
-        <div ref={mapContainerRef} className="crowd-map-canvas" />
+        <div className="crowd-map-map-shell">
+          <div ref={mapContainerRef} className="crowd-map-canvas" />
+          <canvas ref={heatmapCanvasRef} className="crowd-map-heat-overlay" />
+        </div>
 
         {loading ? (
           <div className="crowd-map-overlay">
