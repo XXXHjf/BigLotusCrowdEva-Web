@@ -27,7 +27,7 @@ export function getOverviewCrowdHeatmapData<T = unknown>(): Promise<T> {
     return overviewCrowdHeatmapDataPromise as Promise<T>
   }
 
-  overviewCrowdHeatmapDataPromise = fetchJson<T>('/data/overview/crowd-heatmap-30s.json')
+  overviewCrowdHeatmapDataPromise = fetchJson<T>('/data/overview/crowd-heatmap-30s-gcj02.json')
     .then((data) => {
       overviewCrowdHeatmapDataCache = data
       return data

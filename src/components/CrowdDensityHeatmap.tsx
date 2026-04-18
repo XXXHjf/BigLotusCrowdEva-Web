@@ -15,12 +15,17 @@ import type {
   CrowdHeatmapPlaybackData,
   CrowdHeatmapPoint,
 } from '../types/crowdHeatmap'
-import type { HeatmapFeatureCollection, MapLibreMap } from '../types/maplibre'
-import { loadMapLibre } from '../utils/loadMapLibre'
 
-const DATA_PATH = '/data/overview/crowd-heatmap-30s.json'
-const HEATMAP_SOURCE_ID = 'crowd-heatmap-source'
-const HEATMAP_LAYER_ID = 'crowd-heatmap-layer'
+declare global {
+  interface Window {
+    AMap?: any
+    _AMapSecurityConfig?: {
+      securityJsCode?: string
+    }
+  }
+}
+
+const DATA_PATH = '/data/overview/crowd-heatmap-30s-gcj02.json'
 const BASE_FRAME_DURATION_MS = 900
 const PLAYBACK_UPDATE_INTERVAL_MS = 100
 const MAP_UPDATE_INTERVAL_MS = 120
@@ -32,44 +37,9 @@ const PLAYBACK_RATES = [
 ]
 const EMPTY_FRAMES: CrowdHeatmapFrame[] = []
 const EMPTY_POINTS: CrowdHeatmapPoint[] = []
-const MIN_VISIBLE_WEIGHT = 0.5
-let retainedMapHost: HTMLDivElement | null = null
-let retainedMapInstance: MapLibreMap | null = null
-let retainedMapParkingContainer: HTMLDivElement | null = null
 let retainedPlaybackPosition = 0
 let retainedPlaybackRate = 1
 let retainedWasPlaying = true
-
-const ensureRetainedMapParkingContainer = () => {
-  if (retainedMapParkingContainer) {
-    return retainedMapParkingContainer
-  }
-
-  const parkingContainer = document.createElement('div')
-  parkingContainer.style.position = 'fixed'
-  parkingContainer.style.left = '-99999px'
-  parkingContainer.style.top = '0'
-  parkingContainer.style.width = '1px'
-  parkingContainer.style.height = '1px'
-  parkingContainer.style.opacity = '0'
-  parkingContainer.style.pointerEvents = 'none'
-  parkingContainer.style.overflow = 'hidden'
-  document.body.appendChild(parkingContainer)
-  retainedMapParkingContainer = parkingContainer
-  return parkingContainer
-}
-
-const ensureRetainedMapHost = () => {
-  if (retainedMapHost) {
-    return retainedMapHost
-  }
-
-  const host = document.createElement('div')
-  host.style.width = '100%'
-  host.style.height = '100%'
-  retainedMapHost = host
-  return host
-}
 
 const formatFrameTime = (value: string) =>
   new Intl.DateTimeFormat('zh-CN', {
@@ -89,21 +59,15 @@ const formatFrameTimeShort = (value: string) =>
     hour12: false,
   }).format(new Date(value))
 
-const buildFeatureCollection = (
+const buildHeatmapDataset = (
   points: CrowdHeatmapPoint[],
   globalMaxValue: number,
-): HeatmapFeatureCollection => ({
-  type: 'FeatureCollection',
-  features: points.map(([lng, lat, count]) => ({
-    type: 'Feature',
-    geometry: {
-      type: 'Point',
-      coordinates: [lng, lat],
-    },
-    properties: {
-      count,
-      weight: Math.max(0.05, count / globalMaxValue),
-    },
+) => ({
+  max: Math.max(1, Math.round(globalMaxValue)),
+  data: points.map(([lng, lat, count]) => ({
+    lng,
+    lat,
+    count: Number(count.toFixed(2)),
   })),
 })
 
@@ -112,14 +76,16 @@ const interpolatePoints = (
   toPoints: CrowdHeatmapPoint[],
   blend: number,
 ) => {
-  const pointMap = new Map<string, { lng: number; lat: number; from: number; to: number }>()
+  const pointMap = new Map<
+    string,
+    { lng: number; lat: number; from?: number; to?: number }
+  >()
 
   fromPoints.forEach(([lng, lat, value]) => {
     pointMap.set(`${lng.toFixed(6)},${lat.toFixed(6)}`, {
       lng,
       lat,
       from: value,
-      to: 0,
     })
   })
 
@@ -134,24 +100,67 @@ const interpolatePoints = (
     pointMap.set(key, {
       lng,
       lat,
-      from: 0,
       to: value,
     })
   })
 
   return Array.from(pointMap.values())
     .map(({ lng, lat, from, to }) => {
-      const value = from + (to - from) * blend
+      let value = 0
+
+      if (typeof from === 'number' && typeof to === 'number') {
+        value = from + (to - from) * blend
+      } else if (typeof from === 'number') {
+        value = from
+      } else if (typeof to === 'number') {
+        value = to
+      }
+
       return [lng, lat, Number(value.toFixed(2))] as CrowdHeatmapPoint
     })
-    .filter((point) => point[2] >= MIN_VISIBLE_WEIGHT)
+    .filter((point) => point[2] > 0)
+}
+
+const resolveInitialView = (playbackData: CrowdHeatmapPlaybackData) => {
+  const firstFramePoints = playbackData.frames[0]?.points ?? EMPTY_POINTS
+
+  if (!firstFramePoints.length) {
+    return {
+      center: playbackData.meta.center,
+      zoom: 16,
+    }
+  }
+
+  const bounds = firstFramePoints.reduce(
+    (result, [lng, lat]) => ({
+      minLng: Math.min(result.minLng, lng),
+      maxLng: Math.max(result.maxLng, lng),
+      minLat: Math.min(result.minLat, lat),
+      maxLat: Math.max(result.maxLat, lat),
+    }),
+    {
+      minLng: Number.POSITIVE_INFINITY,
+      maxLng: Number.NEGATIVE_INFINITY,
+      minLat: Number.POSITIVE_INFINITY,
+      maxLat: Number.NEGATIVE_INFINITY,
+    },
+  )
+
+  return {
+    center: [
+      Number(((bounds.minLng + bounds.maxLng) / 2).toFixed(6)),
+      Number(((bounds.minLat + bounds.maxLat) / 2).toFixed(6)),
+    ] as [number, number],
+    zoom: 16,
+  }
 }
 
 const CrowdDensityHeatmap = () => {
   const { mode } = useThemeMode()
   const location = useLocation()
   const mapContainerRef = useRef<HTMLDivElement | null>(null)
-  const mapRef = useRef<MapLibreMap | null>(null)
+  const mapRef = useRef<any>(null)
+  const heatmapRef = useRef<any>(null)
   const resizeObserverRef = useRef<ResizeObserver | null>(null)
   const animationFrameRef = useRef<number | null>(null)
   const lastTickRef = useRef<number | null>(null)
@@ -166,6 +175,8 @@ const CrowdDensityHeatmap = () => {
   const [sliderPosition, setSliderPosition] = useState(retainedPlaybackPosition)
   const [isScrubbing, setIsScrubbing] = useState(false)
   const [playbackRate, setPlaybackRate] = useState<number>(retainedPlaybackRate)
+  const amapKey = import.meta.env.VITE_AMAP_KEY as string | undefined
+  const amapSecurity = import.meta.env.VITE_AMAP_SECURITY as string | undefined
 
   useEffect(() => {
     let active = true
@@ -242,6 +253,11 @@ const CrowdDensityHeatmap = () => {
 
     return maxValue > 0 ? maxValue : 1
   }, [frames])
+
+  const initialView = useMemo(
+    () => (playbackData ? resolveInitialView(playbackData) : null),
+    [playbackData],
+  )
 
   const interpolatedPoints = useMemo(
     () => interpolatePoints(currentFramePoints, nextFramePoints, frameBlend),
@@ -357,134 +373,112 @@ const CrowdDensityHeatmap = () => {
       return undefined
     }
 
+    if (!amapKey) {
+      setError('请在 .env.local 配置 VITE_AMAP_KEY（高德 Web JS API Key）')
+      return undefined
+    }
+
     let cancelled = false
-
     const wrapper = mapContainerRef.current
-    const mapHost = ensureRetainedMapHost()
-    if (mapHost.parentElement !== wrapper) {
-      wrapper.replaceChildren(mapHost)
-    }
-
-    if (retainedMapInstance) {
-      mapRef.current = retainedMapInstance
-      setLoading(false)
-      window.requestAnimationFrame(() => {
-        retainedMapInstance?.resize()
-      })
-
-      resizeObserverRef.current = new ResizeObserver(() => {
-        retainedMapInstance?.resize()
-      })
-      resizeObserverRef.current.observe(wrapper)
-
-      return () => {
-        resizeObserverRef.current?.disconnect()
-        resizeObserverRef.current = null
-        const parkingContainer = ensureRetainedMapParkingContainer()
-        if (mapHost.parentElement !== parkingContainer) {
-          parkingContainer.replaceChildren(mapHost)
-        }
-      }
-    }
 
     const initializeMap = async () => {
       try {
-        const maplibre = await loadMapLibre()
-        if (cancelled || !wrapper) {
+        const buildMap = () => {
+          const AMap = window.AMap
+          if (!AMap || cancelled || !wrapper || mapRef.current) {
+            return
+          }
+
+          const map = new AMap.Map(wrapper, {
+            viewMode: '3D',
+            zoom: initialView?.zoom ?? playbackData.meta.zoom,
+            center: initialView?.center ?? playbackData.meta.center,
+            mapStyle: mode === 'dark' ? 'amap://styles/darkblue' : 'amap://styles/whitesmoke',
+            dragEnable: true,
+            zoomEnable: true,
+            pitchEnable: false,
+          })
+
+          map.setStatus?.({
+            dragEnable: true,
+            zoomEnable: true,
+            doubleClickZoom: true,
+            keyboardEnable: true,
+            scrollWheel: true,
+          })
+
+          mapRef.current = map
+
+          window.requestAnimationFrame(() => {
+            map.resize?.()
+          })
+
+          AMap.plugin(['AMap.HeatMap'], () => {
+            if (cancelled || !mapRef.current) {
+              return
+            }
+
+            heatmapRef.current = new AMap.HeatMap(map, {
+              radius: Math.round((playbackData.meta.radius ?? 30) * 1),
+              opacity: [0.3, 1],
+              zooms: [3, 20],
+              gradient: {
+                0.18: 'rgba(19, 93, 143, 0.42)',
+                0.4: '#1db2d6',
+                0.62: '#7cf0ff',
+                0.82: '#ffd166',
+                1: '#ff7f50',
+              },
+            })
+
+            heatmapRef.current.setDataSet(
+              buildHeatmapDataset(latestPointsRef.current, globalMaxValue),
+            )
+
+            setLoading(false)
+
+            window.requestAnimationFrame(() => {
+              map.resize?.()
+            })
+          })
+
+          resizeObserverRef.current = new ResizeObserver(() => {
+            map.resize()
+          })
+          resizeObserverRef.current.observe(wrapper)
+        }
+
+        if (window.AMap) {
+          buildMap()
           return
         }
 
-        const map = new maplibre.Map({
-          container: mapHost,
-          style: '/map-style.json',
-          center: playbackData.meta.center,
-          zoom: playbackData.meta.zoom,
-          attributionControl: true,
-        })
-
-        mapRef.current = map
-        retainedMapInstance = map
-        map.addControl(new maplibre.NavigationControl({ showCompass: false }), 'top-right')
-
-        map.once('load', () => {
-          if (!map.getSource(HEATMAP_SOURCE_ID)) {
-            map.addSource(HEATMAP_SOURCE_ID, {
-              type: 'geojson',
-              data: buildFeatureCollection(latestPointsRef.current, globalMaxValue),
-            })
+        if (amapSecurity) {
+          window._AMapSecurityConfig = {
+            securityJsCode: amapSecurity,
           }
+        }
 
-          if (!map.getLayer(HEATMAP_LAYER_ID)) {
-            map.addLayer({
-              id: HEATMAP_LAYER_ID,
-              type: 'heatmap',
-              source: HEATMAP_SOURCE_ID,
-              maxzoom: 18,
-              paint: {
-                'heatmap-weight': ['interpolate', ['linear'], ['get', 'weight'], 0, 0, 1, 1],
-                'heatmap-intensity': [
-                  'interpolate',
-                  ['linear'],
-                  ['zoom'],
-                  9,
-                  playbackData.meta.intensity ?? 1.05,
-                  13,
-                  (playbackData.meta.intensity ?? 1.05) * 1.18,
-                  16,
-                  (playbackData.meta.intensity ?? 1.05) * 1.32,
-                  18,
-                  (playbackData.meta.intensity ?? 1.05) * 1.45,
-                ],
-                'heatmap-radius': [
-                  'interpolate',
-                  ['linear'],
-                  ['zoom'],
-                  9,
-                  Math.max(14, Math.round((playbackData.meta.radius ?? 30) * 0.55)),
-                  12,
-                  Math.round((playbackData.meta.radius ?? 30) * 0.95),
-                  15,
-                  Math.round((playbackData.meta.radius ?? 30) * 1.35),
-                  18,
-                  Math.round((playbackData.meta.radius ?? 30) * 1.9),
-                ],
-                'heatmap-opacity': [
-                  'interpolate',
-                  ['linear'],
-                  ['zoom'],
-                  9,
-                  0.88,
-                  14,
-                  0.92,
-                  18,
-                  0.96,
-                ],
-                'heatmap-color': [
-                  'interpolate',
-                  ['linear'],
-                  ['heatmap-density'],
-                  0,
-                  'rgba(15, 28, 61, 0)',
-                  0.2,
-                  '#135d8f',
-                  0.45,
-                  '#1db2d6',
-                  0.7,
-                  '#7cf0ff',
-                  0.9,
-                  '#ffd166',
-                  1,
-                  '#ff7f50',
-                ],
-              },
-            })
+        const scriptId = 'amap-sdk'
+        const existing = document.getElementById(scriptId) as HTMLScriptElement | null
+
+        if (existing) {
+          const onLoad = () => buildMap()
+          existing.addEventListener('load', onLoad)
+          return
+        }
+
+        const script = document.createElement('script')
+        script.id = scriptId
+        script.src = `https://webapi.amap.com/maps?v=2.0&key=${amapKey}`
+        script.async = true
+        script.onload = buildMap
+        script.onerror = () => {
+          if (!cancelled) {
+            setError('高德地图脚本加载失败，请检查网络或 Key')
           }
-        })
-
-        resizeObserverRef.current = new ResizeObserver(() => {
-          map.resize()
-        })
-        resizeObserverRef.current.observe(wrapper)
+        }
+        document.body.appendChild(script)
       } catch (mapError) {
         if (cancelled) {
           return
@@ -501,19 +495,19 @@ const CrowdDensityHeatmap = () => {
       cancelled = true
       resizeObserverRef.current?.disconnect()
       resizeObserverRef.current = null
-
-      if (retainedMapHost) {
-        const parkingContainer = ensureRetainedMapParkingContainer()
-        if (retainedMapHost.parentElement !== parkingContainer) {
-          parkingContainer.replaceChildren(retainedMapHost)
-        }
+      if (heatmapRef.current) {
+        heatmapRef.current.setMap?.(null)
+        heatmapRef.current = null
       }
-      mapRef.current = retainedMapInstance
+      if (mapRef.current) {
+        mapRef.current.destroy?.()
+        mapRef.current = null
+      }
     }
-  }, [globalMaxValue, playbackData])
+  }, [amapKey, amapSecurity, globalMaxValue, initialView, mode, playbackData])
 
   useEffect(() => {
-    if (!mapRef.current || !mapRef.current.isStyleLoaded()) {
+    if (!mapRef.current || !heatmapRef.current) {
       return
     }
 
@@ -525,23 +519,52 @@ const CrowdDensityHeatmap = () => {
       lastMapUpdateRef.current = now
     }
 
-    const source = mapRef.current.getSource(HEATMAP_SOURCE_ID)
-    if (source?.setData) {
-      source.setData(buildFeatureCollection(interpolatedPoints, globalMaxValue))
-    }
+    heatmapRef.current.setDataSet(buildHeatmapDataset(interpolatedPoints, globalMaxValue))
   }, [globalMaxValue, interpolatedPoints, isPlaying, isScrubbing])
 
   const handleResetView = () => {
-    if (!mapRef.current || !playbackData) {
+    if (!mapRef.current || !playbackData || !initialView) {
       return
     }
 
-    mapRef.current.flyTo({
-      center: playbackData.meta.center,
-      zoom: playbackData.meta.zoom,
-      essential: true,
-    })
+    mapRef.current.setZoomAndCenter(initialView.zoom, initialView.center)
   }
+
+  useEffect(() => {
+    if (!mapRef.current) {
+      return
+    }
+
+    mapRef.current.setMapStyle(
+      mode === 'dark' ? 'amap://styles/darkblue' : 'amap://styles/whitesmoke',
+    )
+  }, [mode])
+
+  useEffect(() => {
+    if (!heatmapRef.current || !playbackData) {
+      return
+    }
+
+    heatmapRef.current.setOptions?.({
+      radius: Math.round((playbackData.meta.radius ?? 30) * 1),
+      opacity: [0.3, 1],
+      gradient: {
+        0.18: 'rgba(19, 93, 143, 0.42)',
+        0.4: '#1db2d6',
+        0.62: '#7cf0ff',
+        0.82: '#ffd166',
+        1: '#ff7f50',
+      },
+    })
+  }, [playbackData])
+
+  useEffect(() => {
+    if (!mapRef.current || !initialView) {
+      return
+    }
+
+    mapRef.current.setZoomAndCenter(initialView.zoom, initialView.center)
+  }, [initialView])
 
   return (
     <div className={`crowd-map-panel crowd-map-panel--${mode}`}>

@@ -80,6 +80,26 @@
   height: 100%;
 }
 
+.crowd-map-canvas,
+.crowd-map-canvas .amap-maps,
+.crowd-map-canvas .amap-layers,
+.crowd-map-canvas .amap-layer,
+.crowd-map-canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.crowd-map-canvas > div {
+  width: 100%;
+  height: 100%;
+}
+
+.crowd-map-canvas .amap-heatmap-layer,
+.crowd-map-canvas .amap-heatmap-layer canvas,
+.crowd-map-stage-badge {
+  pointer-events: none;
+}
+
 .crowd-map-stage-badge {
   position: absolute;
   left: 14px;
