@@ -419,7 +419,7 @@ const CrowdDensityHeatmap = () => {
             }
 
             heatmapRef.current = new AMap.HeatMap(map, {
-              radius: Math.round((playbackData.meta.radius ?? 30) * 1),
+              radius: Math.round((playbackData.meta.radius ?? 25) * 0.8),
               opacity: [0.3, 1],
               zooms: [3, 20],
               gradient: {
@@ -546,7 +546,7 @@ const CrowdDensityHeatmap = () => {
     }
 
     heatmapRef.current.setOptions?.({
-      radius: Math.round((playbackData.meta.radius ?? 30) * 1),
+      radius: Math.round((playbackData.meta.radius ?? 25) * 0.8),
       opacity: [0.3, 1],
       gradient: {
         0.18: 'rgba(19, 93, 143, 0.42)',
